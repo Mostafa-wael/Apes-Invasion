@@ -51,3 +51,6 @@ CMakeSettings.json
 
 # Visual Studio Code specific files
 .vscode/
+
+# cache specific files
+.cache/
