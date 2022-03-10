@@ -6,7 +6,7 @@
     {
       "label": "CMake: Build Debug",
       "type": "shell",
-      "command": "cmake --build ./build --target GAME_APPLICATION --config debug",
+      "command": "cmake --build ./build --target GAME_APPLICATION --config debug -j 6",
       "problemMatcher": [],
       "group": {
         "kind": "build",
