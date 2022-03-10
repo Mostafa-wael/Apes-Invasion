@@ -33,6 +33,7 @@
 # build directories
 cmake-build-*/
 build/
+bin/
 out/
 
 # imgui saved state
