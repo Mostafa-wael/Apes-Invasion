@@ -1,0 +1,458 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/include/GLFW/glfw3.h
+stddef.h
+-
+stdint.h
+-
+vulkan/vulkan.h
+-
+GLES/gl.h
+-
+GLES/glext.h
+-
+GLES2/gl2.h
+-
+GLES2/gl2ext.h
+-
+GLES3/gl3.h
+-
+GLES2/gl2ext.h
+-
+GLES3/gl31.h
+-
+GLES2/gl2ext.h
+-
+GLES3/gl32.h
+-
+GLES2/gl2ext.h
+-
+OpenGL/gl3.h
+-
+OpenGL/gl3ext.h
+-
+GL/glcorearb.h
+-
+OpenGL/gl.h
+-
+OpenGL/glu.h
+-
+GL/gl.h
+-
+GL/glext.h
+-
+GL/glu.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/cocoa_joystick.h
+IOKit/IOKitLib.h
+-
+IOKit/IOCFPlugIn.h
+-
+IOKit/hid/IOHIDLib.h
+-
+IOKit/hid/IOHIDKeys.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/cocoa_platform.h
+stdint.h
+-
+dlfcn.h
+-
+Carbon/Carbon.h
+-
+Cocoa/Cocoa.h
+-
+posix_thread.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_thread.h
+cocoa_joystick.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/cocoa_joystick.h
+nsgl_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/nsgl_context.h
+egl_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/egl_context.h
+osmesa_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/osmesa_context.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/context.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+assert.h
+-
+stdio.h
+-
+string.h
+-
+limits.h
+-
+stdio.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/egl_context.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+assert.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/egl_context.h
+EGL/eglplatform.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/glx_context.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+string.h
+-
+stdlib.h
+-
+assert.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/glx_context.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/init.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+mappings.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/mappings.h
+string.h
+-
+stdlib.h
+-
+stdio.h
+-
+stdarg.h
+-
+assert.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/input.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+assert.h
+-
+float.h
+-
+math.h
+-
+stdlib.h
+-
+string.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+glfw_config.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/glfw_config.h
+../include/GLFW/glfw3.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/include/GLFW/glfw3.h
+cocoa_platform.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/cocoa_platform.h
+win32_platform.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/win32_platform.h
+x11_platform.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/x11_platform.h
+wl_platform.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wl_platform.h
+null_platform.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/null_platform.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/linux_joystick.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+sys/types.h
+-
+sys/stat.h
+-
+sys/inotify.h
+-
+fcntl.h
+-
+errno.h
+-
+dirent.h
+-
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+unistd.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/linux_joystick.h
+linux/input.h
+-
+linux/limits.h
+-
+regex.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/mappings.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/monitor.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+assert.h
+-
+math.h
+-
+float.h
+-
+string.h
+-
+stdlib.h
+-
+limits.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/nsgl_context.h
+stdatomic.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/null_joystick.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/null_platform.h
+dlfcn.h
+-
+osmesa_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/osmesa_context.h
+posix_time.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_time.h
+posix_thread.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_thread.h
+null_joystick.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/null_joystick.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/osmesa_context.c
+stdlib.h
+-
+string.h
+-
+assert.h
+-
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/osmesa_context.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_thread.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+assert.h
+-
+string.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_thread.h
+pthread.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_time.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+sys/time.h
+-
+time.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_time.h
+stdint.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/vulkan.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+assert.h
+-
+string.h
+-
+stdlib.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wgl_context.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/win32_joystick.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/win32_platform.h
+wctype.h
+-
+windows.h
+-
+dinput.h
+-
+xinput.h
+-
+dbt.h
+-
+dwmapi.h
+-
+win32_joystick.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/win32_joystick.h
+wgl_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wgl_context.h
+egl_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/egl_context.h
+osmesa_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/osmesa_context.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/window.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+assert.h
+-
+string.h
+-
+stdlib.h
+-
+float.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wl_platform.h
+wayland-client.h
+-
+xkbcommon/xkbcommon.h
+-
+xkbcommon/xkbcommon-compose.h
+-
+dlfcn.h
+-
+posix_thread.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_thread.h
+posix_time.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_time.h
+linux_joystick.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/linux_joystick.h
+null_joystick.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/null_joystick.h
+xkb_unicode.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/xkb_unicode.h
+egl_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/egl_context.h
+osmesa_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/osmesa_context.h
+wayland-xdg-shell-client-protocol.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wayland-xdg-shell-client-protocol.h
+wayland-xdg-decoration-client-protocol.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wayland-xdg-decoration-client-protocol.h
+wayland-viewporter-client-protocol.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wayland-viewporter-client-protocol.h
+wayland-relative-pointer-unstable-v1-client-protocol.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wayland-relative-pointer-unstable-v1-client-protocol.h
+wayland-pointer-constraints-unstable-v1-client-protocol.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wayland-pointer-constraints-unstable-v1-client-protocol.h
+wayland-idle-inhibit-unstable-v1-client-protocol.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/wayland-idle-inhibit-unstable-v1-client-protocol.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/x11_init.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+X11/Xresource.h
+-
+stdlib.h
+-
+string.h
+-
+limits.h
+-
+stdio.h
+-
+locale.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/x11_monitor.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+limits.h
+-
+stdlib.h
+-
+string.h
+-
+math.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/x11_platform.h
+unistd.h
+-
+signal.h
+-
+stdint.h
+-
+dlfcn.h
+-
+X11/Xlib.h
+-
+X11/keysym.h
+-
+X11/Xatom.h
+-
+X11/Xcursor/Xcursor.h
+-
+X11/extensions/Xrandr.h
+-
+X11/XKBlib.h
+-
+X11/extensions/Xinerama.h
+-
+X11/extensions/XInput2.h
+-
+posix_thread.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_thread.h
+posix_time.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/posix_time.h
+xkb_unicode.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/xkb_unicode.h
+glx_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/glx_context.h
+egl_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/egl_context.h
+osmesa_context.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/osmesa_context.h
+linux_joystick.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/linux_joystick.h
+null_joystick.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/null_joystick.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/x11_window.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+X11/cursorfont.h
+-
+X11/Xmd.h
+-
+sys/select.h
+-
+string.h
+-
+stdio.h
+-
+stdlib.h
+-
+limits.h
+-
+errno.h
+-
+assert.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/xkb_unicode.c
+internal.h
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/internal.h
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glfw/src/xkb_unicode.h
+
+vendor/glfw/src/glfw_config.h
+

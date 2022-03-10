@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../vendor/glad/include/KHR/khrplatform.h
+stdint.h
+-
+inttypes.h
+-
+stdint.h
+-
+
+../vendor/glad/include/glad/gl.h
+winapifamily.h
+-
+KHR/khrplatform.h
+-
+
+/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/Second Term/CG/project/CMP3060 Phase 1 - Student Version/vendor/glad/src/gl.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+glad/gl.h
+-
+
