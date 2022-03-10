@@ -1,5 +1,6 @@
 #pragma once
 
+#include "glad/gl.h"
 #include <application.hpp>
 #include <shader/shader.hpp>
 
@@ -16,6 +17,7 @@ class FullscreenTriangleState: public our::State {
     
     our::ShaderProgram program;
     //TODO: Add a variable in which we will store the name (ID) for a vertex array
+    GLuint vertixID;
 
     // onInitialize() function is called once before the state starts
     void onInitialize() override {
@@ -54,6 +56,7 @@ class FullscreenTriangleState: public our::State {
         }
 
         //TODO: Create a vertex Array
+        glGenVertexArrays(1, &vertixID);
 
         // We set the clear color to be black
         glClearColor(0.0, 0.0, 0.0, 1.0);
@@ -65,6 +68,9 @@ class FullscreenTriangleState: public our::State {
         glClear(GL_COLOR_BUFFER_BIT);
 
         //TODO: Draw a triangle using the vertex array and the program
+        glBindVertexArray(vertixID);
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
     }
 
