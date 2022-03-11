@@ -72,6 +72,17 @@ class FullscreenTriangleState : public our::State {
           program.set(name, value);
         }
       }
+
+      // Line intitialzation
+      if (getApp()->getConfig()["window"]["title"] == "Line") {
+        line.slope = getApp()
+                         ->getConfig()["scene"]["uniforms"]["slope"]["value"]
+                         .get<float>();
+        line.intercept =
+            getApp()
+                ->getConfig()["scene"]["uniforms"]["intercept"]["value"]
+                .get<float>();
+      }
     }
 
     // TODO: Create a vertex Array
@@ -136,8 +147,8 @@ class FullscreenTriangleState : public our::State {
       ImGui::SetWindowSize(ImVec2(200, 100));
       ImGui::SliderFloat("Intercept", &line.intercept,
                          -getApp()->getWindowSize().x,
-                         getApp()->getWindowSize().x / 2.0);
-      ImGui::SliderFloat("Slope", &line.slope, 0, 10);
+                         getApp()->getWindowSize().x);
+      ImGui::SliderFloat("Slope", &line.slope, -1, 1);
     }
   }
 };

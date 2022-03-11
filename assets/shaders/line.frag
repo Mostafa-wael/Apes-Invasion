@@ -11,7 +11,7 @@ uniform float slope = 1.0;
 uniform float intercept = 0.0;
 
 void main(){
-    float y = slope * gl_FragCoord.x - intercept;
+    float y = slope * gl_FragCoord.x + intercept;
 
     // Aspect ratio correction, needs resolution to be passed.
     // y = y*(iResolution.y/iResolution.x);  
