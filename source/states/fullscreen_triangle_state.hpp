@@ -1,7 +1,9 @@
 #pragma once
 
+#include "Utils.h"
 #include "glad/gl.h"
 #include <application.hpp>
+#include <iostream>
 #include <shader/shader.hpp>
 
 // This function allows us to read glm vectors from json 
@@ -47,6 +49,9 @@ class FullscreenTriangleState: public our::State {
                     program.set(name, value);
                 } else if(type == "vec2"){
                     glm::vec2 value = uniform.value("value", glm::vec2(0,0));
+                    program.set(name, value);
+                } else if(type == "vec3"){
+                    glm::vec3 value = uniform.value("value", glm::vec3(0,0,0));
                     program.set(name, value);
                 } else if(type == "vec4"){
                     glm::vec4 value = uniform.value("value", glm::vec4(0,0,0,0));
