@@ -14,7 +14,7 @@ namespace our {
 // source:
 // https://stackoverflow.com/questions/2342162/stdstring-formatting-like-sprintf
 template <typename... Args>
-string FormatString(const string &format, Args... args) {
+string formatString(const string &format, Args... args) {
   int size_s = std::snprintf(nullptr, 0, format.c_str(), args...) +
                1; // Extra space for '\0'
   if (size_s <= 0) {

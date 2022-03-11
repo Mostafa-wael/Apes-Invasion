@@ -39,7 +39,7 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
     
     // Here we check for compilation errors
     //TODO: Uncomment this if block
-    if(std::string error = checkForShaderCompilationErrors(shaderID); error.size() != 0){
+    if(std::string error = checkForShaderCompilationErrors(shaderID); !error.empty()){
         std::cerr << "ERROR IN " << filename << std::endl;
         std::cerr << error << std::endl;
         glDeleteShader(shaderID);

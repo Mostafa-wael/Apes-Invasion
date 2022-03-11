@@ -25,7 +25,7 @@ class ClearColorState: public our::State {
         g =  clear_color.at("g");
         b =  clear_color.at("b");
         a =  clear_color.at("a");
-        std::cout << our::FormatString("r= %.2f, g= %.2f, b= %.2f, a= %.2f\n", r,g,b,a);
+        std::cout << our::formatString("r= %.2f, g= %.2f, b= %.2f, a= %.2f\n", r,g,b,a);
     }
 
     // onDraw(deltaTime) function is called every frame 

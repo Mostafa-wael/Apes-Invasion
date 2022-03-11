@@ -59,6 +59,9 @@ namespace our {
 
         //TODO: Delete the copy constructor and assignment operator
         //Question: Why do we do this? Hint: Look at the deconstructor
+        // So no two shaders can point to the same program
+        // If they both have the same shader ID value and one gets destroyed, the other won't know
+        ShaderProgram(const ShaderProgram& other) = delete;
     };
 
 }
