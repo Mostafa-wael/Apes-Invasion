@@ -2,6 +2,7 @@
 
 #include <application.hpp>
 #include <iostream>
+#include "Utils.h"
 
 class ClearColorState: public our::State {
     private:
@@ -14,7 +15,7 @@ class ClearColorState: public our::State {
     // onInitialize() function is called once before the state starts
     void onInitialize() override {
         //TODO: Read the color from the configuration file and use it to set the clear color for the window
-        //HINT: you can the configuration for the whole application using "getApp()->getConfig()"
+        //HINT: you can read the configuration for the whole application using "getApp()->getConfig()"
         //To see how the clear color is written in the json files, see "config/blue-screen.json"
         //To know how read data from a nlohmann::json object, 
         //look at the following documentation: https://json.nlohmann.me/features/element_access/
@@ -24,7 +25,7 @@ class ClearColorState: public our::State {
         g =  clear_color.at("g");
         b =  clear_color.at("b");
         a =  clear_color.at("a");
-        std::cerr << "r= " << r << " g= " << g << " b= " << b << " a= " << a <<std::endl;
+        std::cout << our::FormatString("r= %.2f, g= %.2f, b= %.2f, a= %.2f\n", r,g,b,a);
     }
 
     // onDraw(deltaTime) function is called every frame 
