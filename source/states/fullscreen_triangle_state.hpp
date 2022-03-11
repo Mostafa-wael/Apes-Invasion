@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Utils.h"
 #include "glad/gl.h"
 #include "glm/ext/vector_float2.hpp"
 #include "imgui.h"
 #include "input/keyboard.hpp"
 #include "json/json.hpp"
 #include <application.hpp>
+#include <iostream>
 #include <shader/shader.hpp>
 
 // This function allows us to read glm vectors from json
