@@ -7,11 +7,15 @@ out vec4 frag_color;
 uniform vec4 inside_color = vec4(1.0, 0.0, 0.0, 1.0);
 uniform vec4 outside_color = vec4(0.0, 0.0, 0.0, 1.0);
 
+uniform float slope = 1.0;
+uniform float intercept = 0.0;
+
 void main(){
-    //TODO: Write code that will draw the square
-    if(gl_FragCoord.x <= 256){
-        frag_color = inside_color;
-    } else {
-        frag_color = outside_color;
-    }
+    float y = slope * gl_FragCoord.x - intercept;
+
+    // Aspect ratio correction, needs resolution to be passed.
+    // y = y*(iResolution.y/iResolution.x);  
+    
+    float above = float(gl_FragCoord.y <= y);
+    frag_color=mix(outside_color,inside_color,above);
 }
