@@ -9,6 +9,7 @@
 #include <application.hpp>
 #include <iostream>
 #include <shader/shader.hpp>
+#include <string>
 
 // This function allows us to read glm vectors from json
 namespace glm {
@@ -24,6 +25,11 @@ struct Line {
   float slope = 1.0;
 };
 
+struct Diamond {
+  glm::vec2 center = glm::vec2(0, 0);
+  float side_length = 0.0;
+};
+
 class FullscreenTriangleState : public our::State {
 
   our::ShaderProgram program;
@@ -32,6 +38,7 @@ class FullscreenTriangleState : public our::State {
   GLuint vertArrID;
 
   Line line;
+  Diamond diamond;
 
   // onInitialize() function is called once before the state starts
   void onInitialize() override {
@@ -74,7 +81,9 @@ class FullscreenTriangleState : public our::State {
       }
 
       // Line intitialzation
-      if (getApp()->getConfig()["window"]["title"] == "Line") {
+      std::string scenetitle = getApp()->getConfig()["window"]["title"];
+      auto &sceneUniformList = getApp()->getConfig()["scene"]["uniforms"];
+      if (scenetitle == "Line") {
         line.slope = getApp()
                          ->getConfig()["scene"]["uniforms"]["slope"]["value"]
                          .get<float>();
@@ -82,6 +91,11 @@ class FullscreenTriangleState : public our::State {
             getApp()
                 ->getConfig()["scene"]["uniforms"]["intercept"]["value"]
                 .get<float>();
+      } else if (scenetitle == "Diamond") {
+        diamond.center =
+            sceneUniformList["center"].value("value", glm::vec2(0, 0));
+        diamond.side_length =
+            sceneUniformList["side_length"].value("value", 0.0f);
       }
     }
 
@@ -117,7 +131,8 @@ class FullscreenTriangleState : public our::State {
   // Confirmed working, just left it to help if you need an example
   void CheckInputs(float deltaTime) {
     const auto keyboard = getApp()->getKeyboard();
-    if (getApp()->getConfig()["window"]["title"] == "Line") {
+    std::string scenetitle = getApp()->getConfig()["window"]["title"];
+    if (scenetitle == "Line") {
       if (keyboard.isPressed(GLFW_KEY_W)) {
         if (line.slope < 1.0f)
           line.slope += 0.1f * deltaTime;
@@ -129,26 +144,48 @@ class FullscreenTriangleState : public our::State {
       } else if (keyboard.isPressed(GLFW_KEY_D)) {
         line.intercept += 10.0f * deltaTime;
       }
+    } else if (scenetitle == "Diamond") {
+      if (keyboard.isPressed(GLFW_KEY_W)) {
+
+      } else if (keyboard.isPressed(GLFW_KEY_S)) {
+
+      } else if (keyboard.isPressed(GLFW_KEY_A)) {
+
+      } else if (keyboard.isPressed(GLFW_KEY_D)) {
+      }
     }
   }
 
   // Updates uniforms
   void UpdateUniforms() {
-    if (getApp()->getConfig()["window"]["title"] == "Line") {
+    std::string scenetitle = getApp()->getConfig()["window"]["title"];
+    if (scenetitle == "Line") {
       program.set("slope", line.slope);
       program.set("intercept", line.intercept);
+    } else {
+      program.set("center", diamond.center);
+      program.set("side_length", diamond.side_length);
     }
   }
 
   // Sets up ImGui layout and updates parameters from it.
   void onImmediateGui() override {
-    if (getApp()->getConfig()["window"]["title"] == "Line") {
-
+    std::string scenetitle = getApp()->getConfig()["window"]["title"];
+    if (scenetitle == "Line") {
       ImGui::SetWindowSize(ImVec2(200, 100));
       ImGui::SliderFloat("Intercept", &line.intercept,
                          -getApp()->getWindowSize().x,
                          getApp()->getWindowSize().x);
       ImGui::SliderFloat("Slope", &line.slope, -1, 1);
+    } else if (scenetitle == "Diamond") {
+      ImGui::SetWindowSize(ImVec2(200, 100));
+      ImGui::SliderFloat("Center X", &diamond.center.x,
+                         -getApp()->getWindowSize().x,
+                         getApp()->getWindowSize().x);
+      ImGui::SliderFloat("Center Y", &diamond.center.y,
+                         -getApp()->getWindowSize().y,
+                         getApp()->getWindowSize().y);
+      ImGui::SliderFloat("Side Length", &diamond.side_length, 0, 512);
     }
   }
 };
