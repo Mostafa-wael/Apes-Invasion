@@ -56,4 +56,5 @@ CMakeSettings.json
 .cache/
 
 #################################################
-screenshots
+screenshots/
+errors/
