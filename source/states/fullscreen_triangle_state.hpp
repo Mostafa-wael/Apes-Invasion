@@ -162,7 +162,7 @@ class FullscreenTriangleState : public our::State {
     if (scenetitle == "Line") {
       program.set("slope", line.slope);
       program.set("intercept", line.intercept);
-    } else {
+    } else if (scenetitle == "Diamond") {
       program.set("center", diamond.center);
       program.set("side_length", diamond.side_length);
     }
