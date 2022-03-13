@@ -36,7 +36,7 @@ namespace our {
         virtual void onImmediateGui(){}                 // Called every frame to draw the Immediate GUI (if any).
         virtual void onDraw(double deltaTime){}         // Called every frame in the game loop passing the time taken to draw the frame "Delta time".
         virtual void onDestroy(){}                      // Called once after the game loop ends for house cleaning.
-
+        virtual void CheckInputs(double deltatTime){}
 
         // Override these functions to get mouse and keyboard event.
         virtual void onKeyEvent(int key, int scancode, int action, int mods){}      

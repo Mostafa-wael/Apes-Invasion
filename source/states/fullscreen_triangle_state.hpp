@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GLFW/glfw3.h"
 #include "Utils.h"
 #include "glad/gl.h"
 #include "glm/ext/vector_float2.hpp"
@@ -10,6 +11,7 @@
 #include <iostream>
 #include <shader/shader.hpp>
 #include <string>
+#include <valarray>
 
 // This function allows us to read glm vectors from json
 namespace glm {
@@ -129,29 +131,33 @@ class FullscreenTriangleState : public our::State {
 
   // Keyboard input example
   // Confirmed working, just left it to help if you need an example
-  void CheckInputs(float deltaTime) {
+  void CheckInputs(double deltaTime) override {
     const auto keyboard = getApp()->getKeyboard();
     std::string scenetitle = getApp()->getConfig()["window"]["title"];
     if (scenetitle == "Line") {
       if (keyboard.isPressed(GLFW_KEY_W)) {
         if (line.slope < 1.0f)
-          line.slope += 0.1f * deltaTime;
+          line.slope += 0.1f * (float)deltaTime;
       } else if (keyboard.isPressed(GLFW_KEY_S)) {
         if (line.slope > 0.0f)
-          line.slope -= 0.1f * deltaTime;
+          line.slope -= 0.1f * (float)deltaTime;
       } else if (keyboard.isPressed(GLFW_KEY_A)) {
-        line.intercept -= 10.0f * deltaTime;
+        line.intercept -= 10.0f * (float)deltaTime;
       } else if (keyboard.isPressed(GLFW_KEY_D)) {
-        line.intercept += 10.0f * deltaTime;
+        line.intercept += 10.0f * (float)deltaTime;
       }
     } else if (scenetitle == "Diamond") {
-      if (keyboard.isPressed(GLFW_KEY_W)) {
-
-      } else if (keyboard.isPressed(GLFW_KEY_S)) {
-
-      } else if (keyboard.isPressed(GLFW_KEY_A)) {
-
-      } else if (keyboard.isPressed(GLFW_KEY_D)) {
+      if (keyboard.isPressed(GLFW_KEY_W) && diamond.center.y +(diamond.side_length/2) + 100.0f * (float)deltaTime <= getApp()->getWindowSize().y) {
+        diamond.center.y += 100.0f * (float)deltaTime;
+      }  
+      if (keyboard.isPressed(GLFW_KEY_S) && diamond.center.y -(diamond.side_length/2) - 100.0f * (float)deltaTime >= 0) {
+        diamond.center.y -= 100.0f * (float)deltaTime;
+      }  
+      if (keyboard.isPressed(GLFW_KEY_A) && diamond.center.x -(diamond.side_length/2) - 100.0f * (float)deltaTime >= 0) {
+        diamond.center.x -= 100.0f * (float)deltaTime;
+      }  
+      if (keyboard.isPressed(GLFW_KEY_D) && diamond.center.x +(diamond.side_length/2) + 100.0f * (float)deltaTime <= getApp()->getWindowSize().x) {
+        diamond.center.x += 100.0f * (float)deltaTime;
       }
     }
   }
@@ -166,6 +172,7 @@ class FullscreenTriangleState : public our::State {
       program.set("center", diamond.center);
       program.set("side_length", diamond.side_length);
     }
+    program.set("time", (float)glfwGetTime());
   }
 
   // Sets up ImGui layout and updates parameters from it.

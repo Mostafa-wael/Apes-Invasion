@@ -265,6 +265,8 @@ int our::Application::run(int run_for_frames) {
         // Get the current time (the time at which we are starting the current frame).
         double current_frame_time = glfwGetTime();
 
+        if(currentState) currentState->CheckInputs(current_frame_time - last_frame_time);
+
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if(currentState) currentState->onDraw(current_frame_time - last_frame_time);
         last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
