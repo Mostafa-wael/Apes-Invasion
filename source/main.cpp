@@ -18,6 +18,9 @@ int main(int argc, char** argv) {
     // This is useful for testing multiple configurations in a batch
     // Default: 0 where the application runs indefinitely until manually closed
     int run_for_frames = args.get<int>("f", 0);
+    
+    bool enableIMGUI = args.get<bool>("imgui", false);
+
 
     // Open the config file and exit if failed
     std::ifstream file_in(config_path);
@@ -43,5 +46,5 @@ int main(int argc, char** argv) {
 
     // Finally run the application
     // Here, the application loop will run till the terminatio condition is statisfied
-    return app.run(run_for_frames);
+    return app.run(run_for_frames, enableIMGUI);
 }

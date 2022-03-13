@@ -79,7 +79,7 @@ namespace our {
         ~Application(){ for (auto &it : states) delete it.second; }
 
         // This is the main class function that run the whole application (Initialize, Game loop, House cleaning).
-        int run(int run_for_frames = 0);
+        int run(int run_for_frames = 0, bool enableIMGUI =false);
 
         // Register a state for use by the application
         // The state is uniquely identified by its name

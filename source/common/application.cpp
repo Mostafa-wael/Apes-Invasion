@@ -148,7 +148,7 @@ our::WindowConfiguration our::Application::getWindowConfiguration() {
 // This is the main class function that run the whole application (Initialize, Game loop, House cleaning).
 // run_for_frames decides how many frames should be run before the application automatically closes.
 // if run_for_frames == 0, the application runs indefinitely till manually closed.
-int our::Application::run(int run_for_frames) {
+int our::Application::run(int run_for_frames, bool enableIMGUI) {
 
     // Set the function to call when an error occurs.
     glfwSetErrorCallback(glfw_error_callback);
@@ -247,7 +247,7 @@ int our::Application::run(int run_for_frames) {
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
+        if(currentState && enableIMGUI) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
         // If ImGui is using the mouse or keyboard, then we don't want the captured events to affect our keyboard and mouse objects.
         // For example, if you're focusing on an input and writing "W", the keyboard object shouldn't record this event.
