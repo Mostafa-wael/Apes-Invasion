@@ -29,6 +29,10 @@ struct Diamond {
   glm::vec2 center = glm::vec2(0, 0);
   float side_length = 0.0;
 };
+struct Square {
+  glm::vec2 center = glm::vec2(0, 0);
+  float side_length = 0.0;
+};
 
 class FullscreenTriangleState : public our::State {
 
@@ -39,6 +43,7 @@ class FullscreenTriangleState : public our::State {
 
   Line line;
   Diamond diamond;
+  Square square;
 
   // onInitialize() function is called once before the state starts
   void onInitialize() override {
@@ -96,6 +101,11 @@ class FullscreenTriangleState : public our::State {
             sceneUniformList["center"].value("value", glm::vec2(0, 0));
         diamond.side_length =
             sceneUniformList["side_length"].value("value", 0.0f);
+      } else if (scenetitle == "Square") {
+        square.center =
+            sceneUniformList["center"].value("value", glm::vec2(0, 0));
+        square.side_length =
+            sceneUniformList["side_length"].value("value", 0.0f);
       }
     }
 
@@ -144,7 +154,18 @@ class FullscreenTriangleState : public our::State {
       } else if (keyboard.isPressed(GLFW_KEY_D)) {
         line.intercept += 10.0f * deltaTime;
       }
-    } else if (scenetitle == "Diamond") {
+    } 
+    else if (scenetitle == "Diamond") {
+      if (keyboard.isPressed(GLFW_KEY_W)) {
+
+      } else if (keyboard.isPressed(GLFW_KEY_S)) {
+
+      } else if (keyboard.isPressed(GLFW_KEY_A)) {
+
+      } else if (keyboard.isPressed(GLFW_KEY_D)) {
+      }
+    }
+    else if (scenetitle == "Sqaure") {
       if (keyboard.isPressed(GLFW_KEY_W)) {
 
       } else if (keyboard.isPressed(GLFW_KEY_S)) {
@@ -165,6 +186,9 @@ class FullscreenTriangleState : public our::State {
     } else if (scenetitle == "Diamond") {
       program.set("center", diamond.center);
       program.set("side_length", diamond.side_length);
+    } else if (scenetitle == "Sqaure") {
+      program.set("center", square.center);
+      program.set("side_length", square.side_length);
     }
   }
 
@@ -186,6 +210,15 @@ class FullscreenTriangleState : public our::State {
                          -getApp()->getWindowSize().y,
                          getApp()->getWindowSize().y);
       ImGui::SliderFloat("Side Length", &diamond.side_length, 0, 512);
+    } else if (scenetitle == "Sqaure") {
+      ImGui::SetWindowSize(ImVec2(200, 100));
+      ImGui::SliderFloat("Center X", &sqaure.center.x,
+                         -getApp()->getWindowSize().x,
+                         getApp()->getWindowSize().x);
+      ImGui::SliderFloat("Center Y", &sqaure.center.y,
+                         -getApp()->getWindowSize().y,
+                         getApp()->getWindowSize().y);
+      ImGui::SliderFloat("Side Length", &sqaure.side_length, 0, 512);
     }
   }
 };
