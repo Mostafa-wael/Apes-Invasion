@@ -212,13 +212,13 @@ class FullscreenTriangleState : public our::State {
       ImGui::SliderFloat("Side Length", &diamond.side_length, 0, 512);
     } else if (scenetitle == "Sqaure") {
       ImGui::SetWindowSize(ImVec2(200, 100));
-      ImGui::SliderFloat("Center X", &sqaure.center.x,
+      ImGui::SliderFloat("Center X", &square.center.x,
                          -getApp()->getWindowSize().x,
                          getApp()->getWindowSize().x);
-      ImGui::SliderFloat("Center Y", &sqaure.center.y,
+      ImGui::SliderFloat("Center Y", &square.center.y,
                          -getApp()->getWindowSize().y,
                          getApp()->getWindowSize().y);
-      ImGui::SliderFloat("Side Length", &sqaure.side_length, 0, 512);
+      ImGui::SliderFloat("Side Length", &square.side_length, 0, 512);
     }
   }
 };
