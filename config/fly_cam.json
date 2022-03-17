@@ -1,0 +1,15 @@
+{
+  "start-scene": "fly-cam",
+  "window": {
+    "title": "Flycam",
+    "size": {
+      "width": 1280,
+      "height": 720
+    },
+    "fullscreen": false
+  },
+  "scene": {
+    "vertex-shader": "assets/shaders/simple.vert",
+    "fragment-shader": "assets/shaders/simple.frag"
+  }
+}

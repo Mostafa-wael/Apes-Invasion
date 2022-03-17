@@ -6,6 +6,7 @@
 #include <application.hpp>
 
 #include "states/clear_color_state.hpp"
+#include "states/fly_cam.hpp"
 #include "states/fullscreen_triangle_state.hpp"
 
 int main(int argc, char** argv) {
@@ -39,6 +40,7 @@ int main(int argc, char** argv) {
     // Register all the states of the project in the application
     app.registerState<ClearColorState>("clear-color");
     app.registerState<FullscreenTriangleState>("fullscreen-triangle");
+    app.registerState<FlyCam>("fly-cam");
     // Then choose the state to run based on the option "start-scene" in the config
     if(app_config.contains(std::string{"start-scene"})){
         app.changeState(app_config["start-scene"].get<std::string>());

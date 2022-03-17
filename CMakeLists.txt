@@ -53,6 +53,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin)
 
 set(SCENES_SOURCES
         #Add source files for scenes here if needed
+        source/states/fly_cam/Camera.cpp
 )
 
 # For each example, we add an executable target
