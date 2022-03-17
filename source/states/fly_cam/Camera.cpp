@@ -5,14 +5,8 @@
 #include "input/keyboard.hpp"
 #include "input/mouse.hpp"
 
-// Defines several possible options for camera movement. Used as abstraction to
-// stay away from window-system specific input methods
-enum Camera_Movement { FORWARD, BACKWARD, LEFT, RIGHT, UP, DOWN };
-
-Camera::Camera(bool &firstMouse, float &lastX, float &lastY, glm::vec3 pos,
-               glm::vec3 up, float yaw, float pitch)
-    : firstMouse(firstMouse), lastX(lastX), lastY(lastY),
-      frnt(glm::vec3(0.0f, 0.0f, -1.0f)), moveSpeed(SPEED),
+Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch)
+    : frnt(glm::vec3(0.0f, 0.0f, -1.0f)), moveSpeed(SPEED),
       mouseSens(SENSITIVITY), zoom(ZOOM) {
 
   this->pos = pos;
@@ -23,27 +17,14 @@ Camera::Camera(bool &firstMouse, float &lastX, float &lastY, glm::vec3 pos,
   updateCameraVectors();
 }
 
-Camera::Camera(bool &firstMouse, float &lastX, float &lastY, float posX,
-               float posY, float posZ, float upX, float upY, float upZ,
-               float yaw, float pitch)
-    : firstMouse(firstMouse), lastX(lastX), lastY(lastY),
-      frnt(glm::vec3(0.0f, 0.0f, -1.0f)), moveSpeed(SPEED),
-      mouseSens(SENSITIVITY), zoom(ZOOM) {
-  pos = glm::vec3(posX, posY, posZ);
-  wrldUp = glm::vec3(upX, upY, upZ);
-  this->yaw = yaw;
-  this->pitch = pitch;
-  updateCameraVectors();
-}
-
-void Camera::ProcessMouseMovement(const glm::vec2& delta,
+void Camera::ProcessMouseMovement(const glm::vec2 &delta,
                                   GLboolean constrainPitch) {
 
   if (!rMouseDown)
     return;
 
   yaw += delta.x * mouseSens;
-  pitch += delta.y *mouseSens;
+  pitch += delta.y * mouseSens;
 
   if (constrainPitch) {
     if (pitch > 89.0f)
@@ -55,8 +36,8 @@ void Camera::ProcessMouseMovement(const glm::vec2& delta,
   updateCameraVectors();
 }
 
-void Camera::ProcessButtonPress(float dT, const our::Keyboard &keeb, const our::Mouse &maus,
-                             GLFWwindow *window) {
+void Camera::ProcessButtonPress(float dT, const our::Keyboard &keeb,
+                                const our::Mouse &maus, GLFWwindow *window) {
 
   float velocity = moveSpeed * dT;
 
@@ -100,4 +81,10 @@ void Camera::updateCameraVectors() {
 
   rgt = glm::normalize(glm::cross(frnt, wrldUp));
   up = glm::normalize(glm::cross(rgt, frnt));
+}
+
+void Camera::updateProjAndView(Shader &shader) {
+  shader.use();
+  shader.set("projection", projection);
+  shader.set("view", GetViewMatrix());
 }

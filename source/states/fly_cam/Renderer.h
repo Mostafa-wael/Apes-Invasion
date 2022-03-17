@@ -94,13 +94,8 @@ public:
 
     ClearScreen(clearColor);
 
-    trisShader.use();
-    trisShader.set("projection", camera->projection);
-    trisShader.set("view", camera->GetViewMatrix());
-
-    linesShader.use();
-    linesShader.set("projection", camera->projection);
-    linesShader.set("view", camera->GetViewMatrix());
+    camera->updateProjAndView(trisShader);
+    camera->updateProjAndView(linesShader);
   }
 
   void RenderCube(glm::vec3 translation = glm::vec3(0),
@@ -109,12 +104,8 @@ public:
 
     cubeDrawer.bind(trisShader, &textures);
 
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-    model = eulerRotation(model, rotation);
-
-    model = glm::scale(model, scale);
-
-    trisShader.set("model", model);
+    glm::mat4 model = transform(translation, rotation, scale);
+    linesShader.set("model", model);
 
     glDrawArrays(GL_TRIANGLES, 0, 36);
   }
@@ -129,11 +120,7 @@ public:
     // Color change can also be done through a uniform
     cubeEdgesDrawer.ChangeColors(color);
 
-    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-    model = eulerRotation(model, rotation);
-
-    model = glm::scale(model, scale);
-
+    glm::mat4 model = transform(translation, rotation, scale);
     linesShader.set("model", model);
 
     glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
@@ -149,26 +136,20 @@ public:
     ImGui::ColorPicker4("Background clear color", (float *)&clearColor);
     ImGui::ColorPicker3("Cube edge colors (if you're rendering cube edges)",
                         (float *)&cubeEdgeColor);
-    ImGui::SliderFloat("Object scale", (float *)&objectScale.x, 0.1f, 5.0f);
+    ImGui::SliderFloat("Cube edge scale", (float *)&objectScale.x, 0.1f, 5.0f);
     objectScale.y = objectScale.z = objectScale.x;
   }
 
-  void EndRender(GLFWwindow *window) {
-    // ImGui::End();
-    glBindVertexArray(0);
-  }
+  void EndRender(GLFWwindow *window) { glBindVertexArray(0); }
 
   void ClearScreen(glm::vec4 color) {
     glClearColor(color.r, color.g, color.b, color.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   }
 
-  ~Renderer() {
-    // glDeleteBuffers(1, &cubeVAO);
-    // glDeleteBuffers(1, &cubeVBO);
-  }
+  ~Renderer() {}
 
-  glm::mat4 eulerRotation(glm::mat4 &model, glm::vec3 &rotation) {
+  static glm::mat4 eulerRotation(glm::mat4 &model, glm::vec3 &rotation) {
 
     model = glm::rotate(model, glm::radians(rotation.x),
                         glm::vec3(1.0f, 0.0f, 0.0f));
@@ -178,5 +159,14 @@ public:
                         glm::vec3(0.0f, 0.0f, 1.0f));
 
     return model;
+  }
+
+  static glm::mat4 transform(glm::vec3 translation = glm::vec3(0),
+                             glm::vec3 rotation = glm::vec3(0),
+                             glm::vec3 scale = glm::vec3(1)) {
+
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+    model = eulerRotation(model, rotation);
+    return glm::scale(model, scale);
   }
 };

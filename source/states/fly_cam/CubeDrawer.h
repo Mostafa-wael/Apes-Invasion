@@ -8,54 +8,56 @@
 class CubeDrawer : public Drawer {
 public:
   // clang-format off
-// Effectively draws 6 faces individually
-// Might be useful if we want hard edges later on since each vertex must have 
-// its own normal. Corner vertices will be actually 3 vertices with 3 normals.
+  // Effectively draws 6 faces individually
+  // Might be useful if we want hard edges later on since each vertex must have 
+  // its own normal. Corner vertices will be actually 3 vertices with 3 normals.
+  // Copy-pasted from learnopengl.com
   float cubeVertices[36 *5] = {
-      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-      0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+      -0.5f, -0.5f, -0.5f, +0.0f, +0.0f,
+      +0.5f, -0.5f, -0.5f, +1.0f, +0.0f,
+      +0.5f, +0.5f, -0.5f, +1.0f, +1.0f,
+      +0.5f, +0.5f, -0.5f, +1.0f, +1.0f,
+      -0.5f, +0.5f, -0.5f, +0.0f, +1.0f,
+      -0.5f, -0.5f, -0.5f, +0.0f, +0.0f,
 
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+      -0.5f, -0.5f, +0.5f, +0.0f, +0.0f,
+      +0.5f, -0.5f, +0.5f, +1.0f, +0.0f,
+      +0.5f, +0.5f, +0.5f, +1.0f, +1.0f,
+      +0.5f, +0.5f, +0.5f, +1.0f, +1.0f,
+      -0.5f, +0.5f, +0.5f, +0.0f, +1.0f,
+      -0.5f, -0.5f, +0.5f, +0.0f, +0.0f,
 
-      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      -0.5f, +0.5f, +0.5f, +1.0f, +0.0f,
+      -0.5f, +0.5f, -0.5f, +1.0f, +1.0f,
+      -0.5f, -0.5f, -0.5f, +0.0f, +1.0f,
+      -0.5f, -0.5f, -0.5f, +0.0f, +1.0f,
+      -0.5f, -0.5f, +0.5f, +0.0f, +0.0f,
+      -0.5f, +0.5f, +0.5f, +1.0f, +0.0f,
 
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+      +0.5f, +0.5f, +0.5f, +1.0f, +0.0f,
+      +0.5f, +0.5f, -0.5f, +1.0f, +1.0f,
+      +0.5f, -0.5f, -0.5f, +0.0f, +1.0f,
+      +0.5f, -0.5f, -0.5f, +0.0f, +1.0f,
+      +0.5f, -0.5f, +0.5f, +0.0f, +0.0f,
+      +0.5f, +0.5f, +0.5f, +1.0f, +0.0f,
 
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f, +0.0f, +1.0f,
+      +0.5f, -0.5f, -0.5f, +1.0f, +1.0f,
+      +0.5f, -0.5f, +0.5f, +1.0f, +0.0f,
+      +0.5f, -0.5f, +0.5f, +1.0f, +0.0f,
+      -0.5f, -0.5f, +0.5f, +0.0f, +0.0f,
+      -0.5f, -0.5f, -0.5f, +0.0f, +1.0f,
 
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+      -0.5f, +0.5f, -0.5f, +0.0f, +1.0f,
+      +0.5f, +0.5f, -0.5f, +1.0f, +1.0f,
+      +0.5f, +0.5f, +0.5f, +1.0f, +0.0f,
+      +0.5f, +0.5f, +0.5f, +1.0f, +0.0f,
+      -0.5f, +0.5f, +0.5f, +0.0f, +0.0f,
+      -0.5f, +0.5f, -0.5f, +0.0f, +1.0f
   };
+  // clang-format on
 
-  // clang-format ons
+  // Check CubeEdgeDraw for details on `init()` and `bind()`
   virtual void init() override {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -75,16 +77,10 @@ public:
                           (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
   }
+  
   virtual void bind(Shader &shader, std::vector<Texture> *textures) override {
     shader.use();
     glBindVertexArray(VAO);
-    // glBindBuffer(GL_ARRAY_BUFFER,VBO);
-    // if(EBO)
-    //   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,EBO);
-
-    // glEnableVertexAttribArray(0);
-    // glEnableVertexAttribArray(1);
-
 
     if (textures) {
       for (int i = 0; i < textures->size(); i++) {

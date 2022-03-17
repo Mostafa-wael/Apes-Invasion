@@ -1,10 +1,10 @@
 #pragma once
 
+#include "fly_cam/Camera.h"
+#include "GLFW/glfw3.h"
+#include "Utils.h"
 #include "fly_cam/CubeEdgesDrawer.h"
 #include "fly_cam/Renderer.h"
-#include "Utils.h"
-#include "GLFW/glfw3.h"
-#include "fly_cam/Camera.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/ext/vector_int2.hpp"
 #include "glm/fwd.hpp"
@@ -21,8 +21,6 @@ private:
 
   float currentFrame, lastFrame;
 
-  bool firstMouse;
-  float lastX, lastY;
   Camera cam;
 
   glm::vec2 lastMousePos;
@@ -44,8 +42,7 @@ private:
   // clang-format on
 
 public:
-  FlyCam()
-      : firstMouse(true), lastX(-1), lastY(-1), cam(firstMouse, lastX, lastY){};
+  FlyCam() : cam(){};
 
   // onInitialize() function is called once before the state starts
   void onInitialize() override {
@@ -63,25 +60,20 @@ public:
 
     processInput(deltaTime);
 
-
     rend.BeginRender();
 
     for (int i = 0; i < 10; i++) {
       float angle = 20.0f * i;
       rend.RenderCube(cubePositions[i], glm::vec3(1.0f, 0.3f, 0.5f) * angle);
-      rend.RenderCubeEdges(cubePositions[i], glm::vec3(1.0f, 0.3f, 0.5f) * angle, rend.objectScale, rend.cubeEdgeColor);
+      rend.RenderCubeEdges(cubePositions[i],
+                           glm::vec3(1.0f, 0.3f, 0.5f) * angle,
+                           rend.objectScale, rend.cubeEdgeColor);
     }
 
     rend.EndRender(rend.window);
   }
 
-  void onImmediateGui() override {
-    ImGui::Text("Mouse deltas: %f, %f", getApp()->getMouse().getMouseDelta().x,
-                getApp()->getMouse().getMouseDelta().y);
-    ImGui::Text("Mouse pos: %f, %f", getApp()->getMouse().getMousePosition().x,
-                getApp()->getMouse().getMousePosition().y);
-    rend.onImGui();
-  }
+  void onImmediateGui() override { rend.onImGui(); }
 
   void processInput(float dT) {
     auto keeb = getApp()->getKeyboard();
