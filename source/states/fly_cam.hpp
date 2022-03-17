@@ -1,9 +1,11 @@
 #pragma once
 
-#include "GLFW/glfw3.h"
-#include "Utils.h"
-#include "fly_cam/Camera.h"
+#include "fly_cam/CubeEdgesDrawer.h"
 #include "fly_cam/Renderer.h"
+#include "Utils.h"
+#include "GLFW/glfw3.h"
+#include "fly_cam/Camera.h"
+#include "glm/ext/vector_float3.hpp"
 #include "glm/ext/vector_int2.hpp"
 #include "glm/fwd.hpp"
 #include <application.hpp>
@@ -57,16 +59,17 @@ public:
   // onDraw(deltaTime) function is called every frame
   void onDraw(double deltaTime) override {
 
-    rend.Prerender();
     float currentFrame = glfwGetTime();
 
     processInput(deltaTime);
+
 
     rend.BeginRender();
 
     for (int i = 0; i < 10; i++) {
       float angle = 20.0f * i;
       rend.RenderCube(cubePositions[i], glm::vec3(1.0f, 0.3f, 0.5f) * angle);
+      rend.RenderCubeEdges(cubePositions[i], glm::vec3(1.0f, 0.3f, 0.5f) * angle, rend.objectScale, rend.cubeEdgeColor);
     }
 
     rend.EndRender(rend.window);
@@ -77,7 +80,6 @@ public:
                 getApp()->getMouse().getMouseDelta().y);
     ImGui::Text("Mouse pos: %f, %f", getApp()->getMouse().getMousePosition().x,
                 getApp()->getMouse().getMousePosition().y);
-
     rend.onImGui();
   }
 

@@ -2,8 +2,11 @@
 #include "Shader.h"
 
 #include "Camera.h"
+#include "CubeDrawer.h"
+#include "CubeEdgesDrawer.h"
 #include "Texture.h"
 #include "application.hpp"
+#include "glad/gl.h"
 #include "glm/detail/qualifier.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
@@ -13,52 +16,27 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/trigonometric.hpp"
 #include "imgui.h"
+#include <GL/gl.h>
 #include <vector>
 
 // clang-format off
-float vertices[] = {
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+float cubeVertices[] = {
+    // Front
+    -0.5f,    -0.5f,    +0.5f,
+    +0.5f,    -0.5f,    +0.5f,
+    +0.5f,    +0.5f,    +0.5f,
+    -0.5f,    +0.5f,    +0.5f,
 
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-     0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    // Back
+    -0.5f,    -0.5f,    -0.5f,
+    +0.5f,    -0.5f,    -0.5f,
+    +0.5f,    +0.5f,    -0.5f,
+    -0.5f,    +0.5f,    -0.5f,
 };
+
+GLuint cubeIndices[] = {0, 1, 1, 2, 2, 3, 3, 0, // Front
+                        4, 5, 5, 6, 6, 7, 7, 4, // Back
+                        0, 4, 1, 5, 2, 6, 3, 7};
 // clang-format on
 
 class Renderer {
@@ -66,13 +44,23 @@ public:
   GLuint cubeVAO;
   GLuint cubeVBO;
   std::vector<Texture> textures;
-  Shader shader;
   Camera *camera;
   GLFWwindow *window;
 
   int resX, resY;
 
+  CubeDrawer cubeDrawer;
+  CubeEdgesDrawer cubeEdgesDrawer;
+
   glm::vec4 clearColor = glm::vec4(0.5, 0.2, 0.5, 1.0);
+  glm::vec3 cubeEdgeColor = glm::vec3(0.3, 0.5, 0.7);
+
+  glm::vec3 objectScale = glm::vec3(1.0f);
+
+  // Renders triangles without indices, each 3 vertices sent to the gpu will be
+  // treated as a triangle
+  Shader trisShader;
+  Shader linesShader;
 
   Renderer() = default;
 
@@ -81,38 +69,19 @@ public:
 
     camera->UpdateProjectionMatrix(resX, resY);
 
-    shader = Shader("assets/shaders/simple.vert", "assets/shaders/simple.frag");
+    trisShader = Shader("assets/shaders/CubeFaces.vert",
+                        "assets/shaders/CubeFaces.frag");
+    linesShader = Shader("assets/shaders/CubeEdges.vert",
+                         "assets/shaders/CubeEdges.frag");
 
     glEnable(GL_DEPTH_TEST);
-
-    glGenVertexArrays(1, &cubeVAO);
-    glBindVertexArray(cubeVAO);
-
-    glGenBuffers(1, &cubeVBO);
-    glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_DYNAMIC_DRAW);
-
-    // Vertex positions
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void *)0);
-    glEnableVertexAttribArray(0);
-
-    // Texture coordinates
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
+    cubeDrawer.init();
+    cubeEdgesDrawer.init();
   }
 
   Renderer &AddTexture(const Texture tex) {
     textures.push_back(tex);
     return *this;
-  }
-
-  void Prerender() {
-    shader.use();
-    for (int i = 0; i < textures.size(); i++) {
-      shader.set("texture" + std::to_string(i + 1), i);
-    }
   }
 
   void BeginRender() {
@@ -123,46 +92,70 @@ public:
       textures[i].use(GL_TEXTURE0 + i);
     }
 
-    glBindVertexArray(cubeVAO);
-
     ClearScreen(clearColor);
 
-    shader.set("projection", camera->projection);
-    shader.set("view", camera->GetViewMatrix());
+    trisShader.use();
+    trisShader.set("projection", camera->projection);
+    trisShader.set("view", camera->GetViewMatrix());
+
+    linesShader.use();
+    linesShader.set("projection", camera->projection);
+    linesShader.set("view", camera->GetViewMatrix());
   }
 
   void RenderCube(glm::vec3 translation = glm::vec3(0),
                   glm::vec3 rotation = glm::vec3(0),
-                  glm::vec3 scale = glm::vec3(1.0f)) const {
+                  glm::vec3 scale = glm::vec3(1.0f)) {
+
+    cubeDrawer.bind(trisShader, &textures);
 
     glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-
-    model = glm::rotate(model, glm::radians(rotation.x),
-                        glm::vec3(1.0f, 0.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(rotation.y),
-                        glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, glm::radians(rotation.z),
-                        glm::vec3(0.0f, 0.0f, 1.0f));
+    model = eulerRotation(model, rotation);
 
     model = glm::scale(model, scale);
 
-    shader.set("model", model);
+    trisShader.set("model", model);
 
     glDrawArrays(GL_TRIANGLES, 0, 36);
+  }
+
+  void RenderCubeEdges(glm::vec3 translation = glm::vec3(0),
+                       glm::vec3 rotation = glm::vec3(0),
+                       glm::vec3 scale = glm::vec3(1.0f),
+                       glm::vec3 color = glm::vec3(1.0f)) {
+
+    cubeEdgesDrawer.bind(linesShader, nullptr);
+
+    // Color change can also be done through a uniform
+    cubeEdgesDrawer.ChangeColors(color);
+
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
+    model = eulerRotation(model, rotation);
+
+    model = glm::scale(model, scale);
+
+    linesShader.set("model", model);
+
+    glDrawElements(GL_LINES, 24, GL_UNSIGNED_INT, 0);
   }
 
   void onImGui() {
     ImGui::TextWrapped(
         "%s", "Press WASD to move\n"
-              "SPACE to go up\n" 
+              "SPACE to go up\n"
               "LCTRL to go down\n"
               "Hold the right mouse button to pan the camera\n"
               "(Yes you can interact with ImGui with the mouse hidden)\n");
     ImGui::ColorPicker4("Background clear color", (float *)&clearColor);
+    ImGui::ColorPicker3("Cube edge colors (if you're rendering cube edges)",
+                        (float *)&cubeEdgeColor);
+    ImGui::SliderFloat("Object scale", (float *)&objectScale.x, 0.1f, 5.0f);
+    objectScale.y = objectScale.z = objectScale.x;
   }
 
   void EndRender(GLFWwindow *window) {
     // ImGui::End();
+    glBindVertexArray(0);
   }
 
   void ClearScreen(glm::vec4 color) {
@@ -175,26 +168,15 @@ public:
     // glDeleteBuffers(1, &cubeVBO);
   }
 
-  GLFWwindow *InitGLFW(int resX, int resY) {
-    if (glfwInit() == 0) {
-      std::cerr << "Failed to initialize GLFW" << std::endl;
-      exit(-1);
-    }
+  glm::mat4 eulerRotation(glm::mat4 &model, glm::vec3 &rotation) {
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHintString(GLFW_FLOATING, "GLFW_TRUE");
+    model = glm::rotate(model, glm::radians(rotation.x),
+                        glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotation.y),
+                        glm::vec3(0.0f, 1.0f, 0.0f));
+    model = glm::rotate(model, glm::radians(rotation.z),
+                        glm::vec3(0.0f, 0.0f, 1.0f));
 
-    window = glfwCreateWindow(resX, resY, "Example 1", nullptr, nullptr);
-
-    if (window == nullptr) {
-      std::cerr << "Failed to create window" << std::endl;
-      glfwTerminate();
-      exit(-1);
-    }
-
-    glfwMakeContextCurrent(window);
-    // glfwSetKeyCallback(window, key_callback);
-    return window;
+    return model;
   }
 };
