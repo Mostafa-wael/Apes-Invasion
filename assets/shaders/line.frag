@@ -10,6 +10,9 @@ uniform vec4 outside_color = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float slope = 1.0;
 uniform float intercept = 0.0;
 
+
+// Substitues in the line eqn with the point's x coordinate, getting the line's y coordinate .
+// Then checks if the point's y coordinate is above or below the line.
 void main(){
     float y = slope * gl_FragCoord.x + intercept;
 
