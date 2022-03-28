@@ -116,6 +116,11 @@ class FullscreenTriangleState : public our::State {
             sceneUniformList["center"].value("value", glm::vec2(0, 0));
         square.side_length =
             sceneUniformList["side_length"].value("value", 0.0f);
+      } else if (scenetitle == "Circle") {
+        circle.center =
+            sceneUniformList["center"].value("value", glm::vec2(0, 0));
+        circle.radius =
+            sceneUniformList["radius"].value("value", 0.0f);
       }
     }
 
