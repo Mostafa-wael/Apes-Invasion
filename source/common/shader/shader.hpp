@@ -28,39 +28,64 @@ namespace our {
 
         void use() { 
             //TODO: call opengl to use the program identified by this->program
+            
+            // Use the glUseProgram function to use the current program assigned to this object
+            // so that the shaders linked to it can be used to draw on the screen
             glUseProgram(this->program);
         }
 
         GLuint getUniformLocation(const std::string &name) {
             //TODO: call opengl to get the uniform location for the uniform defined by name from this->program
+            
+            // return the location of the uniform with this name so that it can
+            // that it's value can be obtained or modified from/to the shaders
             return glGetUniformLocation(this->program, name.c_str());
         }
 
         void set(const std::string &uniform, GLfloat value) {
             //TODO: call opengl to set the value to the uniform defined by name
+            
+            // change the content of this uniform to be value
+            // Use getUniformLocation first to obtain the location then
+            // Modify it
+
+            // The general parametars
+
+            //@param1 : the uniform location 
+            //@param2 : value (this could extend if the value is more than 1d as we see below)
+            
             glUniform1f(getUniformLocation(uniform), value);
         }
 
         void set(const std::string &uniform, glm::vec2 value) {
             //TODO: call opengl to set the value to the uniform defined by name
+            
+            // Same as above but with a 2d vector instead of a float
             glUniform2f(getUniformLocation(uniform), value.x, value.y);
         }
 
         void set(const std::string &uniform, glm::vec3 value) {
             //TODO: call opengl to set the value to the uniform defined by name
+            
+            // Same as above but with a 3d vector instead of a float
             glUniform3f(getUniformLocation(uniform), value.x, value.y, value.z);
         }
 
         void set(const std::string &uniform, glm::vec4 value) {
             //TODO: call opengl to set the value to the uniform defined by name
+            
+                        // Same as above but with a 4d vector instead of a float
             glUniform4f(getUniformLocation(uniform), value.x, value.y, value.z, value.w);
         }
 
 
         //TODO: Delete the copy constructor and assignment operator
         //Question: Why do we do this? Hint: Look at the deconstructor
+        
+        // Answer:
         // So no two shaders can point to the same program
         // If they both have the same shader ID value and one gets destroyed, the other won't know
+        
         ShaderProgram(const ShaderProgram& other) = delete;
     };
 

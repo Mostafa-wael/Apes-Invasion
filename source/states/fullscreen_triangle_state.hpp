@@ -34,16 +34,26 @@ struct Square {
   float side_length = 0.0;
 };
 
+struct Circle {
+  glm::vec2 center = glm::vec2(0, 0);
+  float radius = 0.0;
+};
+
 class FullscreenTriangleState : public our::State {
 
   our::ShaderProgram program;
   // TODO: Add a variable in which we will store the name (ID) for a vertex
-  // array
+  
+  // Create an empty Vertex Array Object which will later have an actual vertex array generated
+  // in it and is used to contain the data which will be drawn after all the vertex buffer object
+  // info is binded to it
+
   GLuint vertArrID;
 
   Line line;
   Diamond diamond;
   Square square;
+  Circle circle;
 
   // onInitialize() function is called once before the state starts
   void onInitialize() override {
@@ -110,6 +120,9 @@ class FullscreenTriangleState : public our::State {
     }
 
     // TODO: Create a vertex Array
+
+    // Generate the Vertex Array and assign it to the VAO variable
+
     glGenVertexArrays(1, &vertArrID);
 
     // We set the clear color to be black
@@ -125,7 +138,16 @@ class FullscreenTriangleState : public our::State {
     glClear(GL_COLOR_BUFFER_BIT);
 
     // TODO: Draw a triangle using the vertex array and the program
+    
+    // First, we bing the VAO to make sure that what we're drawing is what we actually
+        // want to draw. Then we draw. and since we're drawing trianges, simple glDrawArrays is enough
+    
     glBindVertexArray(vertArrID);
+
+    //@param 1: Simple primitive type related to what we're drawing to give open gl some sort of clue about
+    // What we're drawing
+    //@param 2: Starting index (here its zero)
+    //@param 3: number of vertices (3 for triangle)
 
     glDrawArrays(GL_TRIANGLES, 0, 3);
   }
@@ -133,6 +155,9 @@ class FullscreenTriangleState : public our::State {
   // onInitialize() function is called once after the state ends
   void onDestroy() override {
     // TODO: Delete the vertex Array
+
+    // Delete the VAO as its no longer needed and set the variable that was  holding it to -1
+
     glDeleteVertexArrays(1, &vertArrID);
     vertArrID = -1;
   }
@@ -189,6 +214,9 @@ class FullscreenTriangleState : public our::State {
     } else if (scenetitle == "Sqaure") {
       program.set("center", square.center);
       program.set("side_length", square.side_length);
+    } else if (scenetitle == "Circle") {
+      program.set("center", circle.center);
+      program.set("side_length", circle.radius);
     }
   }
 
@@ -212,13 +240,22 @@ class FullscreenTriangleState : public our::State {
       ImGui::SliderFloat("Side Length", &diamond.side_length, 0, 512);
     } else if (scenetitle == "Sqaure") {
       ImGui::SetWindowSize(ImVec2(200, 100));
-      ImGui::SliderFloat("Center X", &sqaure.center.x,
+      ImGui::SliderFloat("Center X", &square.center.x,
                          -getApp()->getWindowSize().x,
                          getApp()->getWindowSize().x);
-      ImGui::SliderFloat("Center Y", &sqaure.center.y,
+      ImGui::SliderFloat("Center Y", &square.center.y,
                          -getApp()->getWindowSize().y,
                          getApp()->getWindowSize().y);
-      ImGui::SliderFloat("Side Length", &sqaure.side_length, 0, 512);
+      ImGui::SliderFloat("Side Length", &square.side_length, 0, 512);
+    } else if (scenetitle == "Circle") {
+      ImGui::SetWindowSize(ImVec2(200, 100));
+      ImGui::SliderFloat("Center X", &circle.center.x,
+                         -getApp()->getWindowSize().x,
+                         getApp()->getWindowSize().x);
+      ImGui::SliderFloat("Center Y", &circle.center.y,
+                         -getApp()->getWindowSize().y,
+                         getApp()->getWindowSize().y);
+      ImGui::SliderFloat("Radius", &circle.radius, 0, 512);
     }
   }
 };
