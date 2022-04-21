@@ -49,11 +49,10 @@ CMakeSettings.json
 # Clion specific files
 .idea/
 
-# Visual Studio Code specific files
-.vscode/
 
 # cache specific files
 .cache/
 
 #################################################
 screenshots
+errors
