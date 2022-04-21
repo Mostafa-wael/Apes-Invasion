@@ -10,12 +10,19 @@ uniform vec4 outside_color = vec4(0.0, 0.0, 0.0, 1.0);
 uniform float slope = 1.0;
 uniform float intercept = 0.0;
 
+
+// Substitues in the line eqn with the point's x coordinate, getting the line's y coordinate .
+// Then checks if the point's y coordinate is above or below the line.
 void main(){
     float y = slope * gl_FragCoord.x + intercept;
 
     // Aspect ratio correction, needs resolution to be passed.
     // y = y*(iResolution.y/iResolution.x);  
     
+    //  we do direct substitute with the given slope and intercept in the function
+    //  y = slope * x + intercept
+    //  then we copare the output y if it's greater than the pixel's y
+    //  then this pixel is above the line 
     float above = float(gl_FragCoord.y <= y);
     frag_color=mix(outside_color,inside_color,above);
 }
