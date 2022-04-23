@@ -45,8 +45,30 @@ namespace our {
             if (this->faceCulling.enabled) {
                 glEnable(GL_CULL_FACE);
                 glCullFace(this->faceCulling.culledFace);
-                glFrontFace(this->faceCulling.frontFace); 
+                glFrontFace(this->faceCulling.frontFace);
+            } else {
+                glDisable(GL_CULL_FACE);
             }
+
+            if (this->depthTesting.enabled) {
+                glEnable(GL_DEPTH_TEST);
+                glDepthFunc(this->depthTesting.function);
+            } else {
+                glDisable(GL_DEPTH_TEST);
+            }
+
+            if (this->blending.enabled) {
+                glEnable(GL_BLEND);
+                glBlendEquation(this->blending.equation);
+                glBlendFunc(this->blending.sourceFactor, this->blending.destinationFactor);
+                glBlendColor(this->blending.constantColor.r, this->blending.constantColor.g, this->blending.constantColor.b, this->blending.constantColor.a);
+            } else {
+                glDisable(GL_BLEND);
+            }
+
+            glColorMask(colorMask.r, colorMask.g, colorMask.b, colorMask.a);
+            glDepthMask(depthMask);
+
         }
 
         // Given a json object, this function deserializes a PipelineState structure
