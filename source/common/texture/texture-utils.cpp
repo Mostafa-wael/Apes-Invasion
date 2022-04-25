@@ -1,4 +1,5 @@
 #include "texture-utils.hpp"
+#include "glad/gl.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
@@ -35,6 +36,22 @@ our::Texture2D* our::texture_utils::loadImage(const std::string& filename, bool 
     our::Texture2D* texture = new our::Texture2D();
     //Bind the texture such that we upload the image data to its storage
     //TODO: (Req 4) Finish this function to fill the texture with the data found in "pixels" and generate the mipmaps if requested
+    texture->bind();
+    glTexImage2D(GL_TEXTURE_2D,     //  target: Specifies the target texture. We only use the 2d Textures so it's hardcoded.
+                 0,                 //  level: Specifies the level-of-detail number. 
+                                    //         Level 0 is the base image level. Level n is the nth mipmap reduction image.
+                 GL_RGBA8,          //  internalformat: Specifies the number of color components in the texture.
+                 (GLsizei)size.x,   //  width: Specifies the width of the texture image.
+                 (GLsizei) size.y,  //  height: Specifies the height of the texture image.
+                 0,                 //  border: This value must be 0.
+                 GL_RGBA,           //  format: Specifies the format of the pixel data.
+                 GL_UNSIGNED_BYTE,  //  type: Specifies the data type of the pixel data.
+                 pixels             //  data: Specifies a pointer to the image data in memory.
+    );
+    if (generate_mipmap) {
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+
 
     stbi_image_free(pixels); //Free image data after uploading to GPU
     return texture;
