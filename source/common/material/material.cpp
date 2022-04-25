@@ -2,12 +2,15 @@
 
 #include "../asset-loader.hpp"
 #include "deserialize-utils.hpp"
+#include "material/material.hpp"
 
 namespace our {
 
     // This function should setup the pipeline state and set the shader to be used
     void Material::setup() const {
         //TODO: (Req 6) Write this function
+        this->pipelineState.setup();
+        this->shader->use();
     }
 
     // This function read the material data from a json object
@@ -25,6 +28,8 @@ namespace our {
     // set the "tint" uniform to the value in the member variable tint 
     void TintedMaterial::setup() const {
         //TODO: (Req 6) Write this function
+        Material::setup();
+        shader->set("tint", this->tint);
     }
 
     // This function read the material data from a json object
@@ -39,6 +44,10 @@ namespace our {
     // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex" 
     void TexturedMaterial::setup() const {
         //TODO: (Req 6) Write this function
+        Material::setup();
+        this->shader->set("alphaThreshold", this->alphaThreshold);
+        this->texture->bind();
+        this->sampler->bind(GL_TEXTURE0);
     }
 
     // This function read the material data from a json object
