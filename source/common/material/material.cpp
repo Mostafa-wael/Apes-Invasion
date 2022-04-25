@@ -46,8 +46,9 @@ namespace our {
         //TODO: (Req 6) Write this function
         Material::setup();
         this->shader->set("alphaThreshold", this->alphaThreshold);
+        this->shader->set("tint", this->tint);
         this->texture->bind();
-        this->sampler->bind(GL_TEXTURE0);
+        this->sampler->bind(0);
     }
 
     // This function read the material data from a json object
