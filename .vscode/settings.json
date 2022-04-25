@@ -1,0 +1,19 @@
+{
+  "editor.tokenColorCustomizations": {
+    "[Community Material Theme Darker KAK]": {
+      "textMateRules": [
+        {
+          "scope": [
+            "punctuation.definition.comment",
+            "comment.block",
+            "comment.line",
+            "comment.block.documentation"
+          ],
+          "settings": {
+            "foreground": "#FF0000"
+          }
+        }
+      ]
+    },
+  },
+}
