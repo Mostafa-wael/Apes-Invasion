@@ -1,6 +1,9 @@
 #pragma once
 
 #include <glad/gl.h>
+#include <string>
+#include "ecs/IImGuiDrawable.h"
+#include "imgui.h"
 #include "vertex.hpp"
 
 namespace our {
@@ -10,7 +13,7 @@ namespace our {
     #define ATTRIB_LOC_TEXCOORD 2
     #define ATTRIB_LOC_NORMAL   3
 
-    class Mesh {
+    class Mesh : public IImGuiDrawable {
         // Here, we store the object names of the 3 main components of a mesh:
         // A vertex array object, A vertex buffer and an element buffer
         unsigned int VBO, EBO;
@@ -18,6 +21,7 @@ namespace our {
         // We need to remember the number of elements that will be draw by glDrawElements 
         GLsizei elementCount;
     public:
+        std::string path;
 
         // The constructor takes two vectors:
         // - vertices which contain the vertex data.
@@ -26,7 +30,7 @@ namespace our {
         // a vertex buffer to store the vertex data on the VRAM,
         // an element buffer to store the element data on the VRAM,
         // a vertex array object to define how to read the vertex & element buffer during rendering 
-        Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& elements)
+        Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& elements, std::string pth = "/path/unspecified") : path(pth)
         {
             //TODO: (Req 1) Write this function
             // 1. Create a vertex array object
@@ -82,6 +86,10 @@ namespace our {
             glDeleteVertexArrays(1, &VAO); // Delete the VAO
             glDeleteBuffers(1 ,&VBO); // Delete the VBO
             glDeleteBuffers(1 ,&EBO); // Delete the EBO
+        }
+
+        void onImmediateGui(){
+            ImGui::LabelText("", "Mesh path: %s", path.c_str());
         }
 
         Mesh(Mesh const &) = delete;

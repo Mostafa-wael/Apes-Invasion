@@ -1,12 +1,16 @@
 #pragma once
 
 #include "../ecs/component.hpp"
+#include "ecs/IImGuiDrawable.h"
+#include "glm/gtc/constants.hpp"
+#include "imgui.h"
 
 #include <glm/mat4x4.hpp>
+#include <string>
 
 namespace our {
 
-    // An enum that defines the type of the camera (ORTHOGRAPHIC or PERSPECTIVE) 
+    // An enum that defines the type of the camera (ORTHOGRAPHIC or PERSPECTIVE)
     enum class CameraType {
         ORTHOGRAPHIC,
         PERSPECTIVE
@@ -17,9 +21,9 @@ namespace our {
     class CameraComponent : public Component {
     public:
         CameraType cameraType; // The type of the camera
-        float near, far; // The distance from the camera center to the near and far plane
-        float fovY; // The field of view angle of the camera if it is a perspective camera
-        float orthoHeight; // The orthographic height of the camera if it is an orthographic camera
+        float near, far;       // The distance from the camera center to the near and far plane
+        float fovY;            // The field of view angle of the camera if it is a perspective camera
+        float orthoHeight;     // The orthographic height of the camera if it is an orthographic camera
 
         // The ID of this component type is "Camera"
         static std::string getID() { return "Camera"; }
@@ -29,10 +33,27 @@ namespace our {
 
         // Creates and returns the camera view matrix
         glm::mat4 getViewMatrix() const;
-        
+
         // Creates and returns the camera projection matrix
         // "viewportSize" is used to compute the aspect ratio
         glm::mat4 getProjectionMatrix(glm::ivec2 viewportSize) const;
+
+        virtual void onImmediateGui() override {
+            std::string headerID  = std::to_string((long)this);
+            std::string compLabel = ("Camera ##" + headerID);
+            if(ImGui::CollapsingHeader(compLabel.c_str())) {
+                ImGui::Indent(10);
+                ImGui::LabelText("", "Camera type: %s", cameraType == CameraType::PERSPECTIVE ? "Perspective" : "Orthographic");
+
+                // Note that near, far are consecutive in memory, this should read/write them both properly.
+                ImGui::DragFloat("Near", &near, 0.5, 0, 10);
+                ImGui::DragFloat("Far", &far, 0.5, 10, 100);
+                ImGui::DragFloat("FOV", &fovY, 0.05, 0, glm::pi<float>());
+
+                if(cameraType == CameraType::ORTHOGRAPHIC) ImGui::LabelText("", "Orthographic height: %f", orthoHeight);
+                ImGui::Indent(-10);
+            }
+        }
     };
 
-}
+} // namespace our

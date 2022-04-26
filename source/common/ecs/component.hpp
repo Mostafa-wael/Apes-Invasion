@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ecs/IImGuiDrawable.h"
+#include "imgui.h"
 #include <json/json.hpp>
 #include <string>
 
@@ -11,7 +13,7 @@ namespace our {
     // The role of the entity in the world is defined by the components it holds.
     // For example, an entity with a camera component specifies that this entity should be used as a camera
     // Thus any renderer system should look for an entity holding a camera component in order to compute the camera related uniforms (e.g. VP matrix)
-    class Component {
+    class Component : public IImGuiDrawable {
         Entity* owner; // A pointer to the entity that owns this component
         friend Entity; // The entity is a friend since it is the only one allowed to set itself as an owner of a certain component.
     public:

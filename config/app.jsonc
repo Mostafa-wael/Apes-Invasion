@@ -129,6 +129,7 @@
         },
         "world":[
             {
+                "name": "camera",
                 "position": [0, 0, 10],
                 "components": [
                     {
@@ -140,6 +141,7 @@
                 ],
                 "children": [
                     {
+                        "name":"stick",
                         "position": [1, -1, -1],
                         "rotation": [45, 45, 0],
                         "scale": [0.1, 0.1, 1.0],
@@ -154,6 +156,7 @@
                 ]
             },
             {
+                "name": "monkey",
                 "rotation": [-45, 0, 0],
                 "components": [
                     {
@@ -169,6 +172,7 @@
                 ]
             },
             {
+                "name" : "ground",
                 "position": [0, -1, 0],
                 "rotation": [-90, 0, 0],
                 "scale": [10, 10, 1],
@@ -181,6 +185,7 @@
                 ]
             },
             {
+                "name":"glass front",
                 "position": [0, 1, 2],
                 "rotation": [0, 0, 0],
                 "scale": [2, 2, 2],
@@ -193,6 +198,7 @@
                 ]
             },
             {
+                "name":"glass back",
                 "position": [0, 1, -2],
                 "rotation": [0, 0, 0],
                 "scale": [2, 2, 2],
@@ -205,6 +211,7 @@
                 ]
             },
             {
+                "name": "glass left",
                 "position": [2, 1, 0],
                 "rotation": [0, 90, 0],
                 "scale": [2, 2, 2],
@@ -217,6 +224,7 @@
                 ]
             },
             {
+                "name": "glass right",
                 "position": [-2, 1, 0],
                 "rotation": [0, 90, 0],
                 "scale": [2, 2, 2],
@@ -229,6 +237,7 @@
                 ]
             },
             {
+                "name":"glass top",
                 "position": [0, 3, 0],
                 "rotation": [90, 0, 0],
                 "scale": [2, 2, 2],
@@ -241,6 +250,7 @@
                 ]
             },
             {
+                "name" : "moon",
                 "position": [0, 10, 0],
                 "rotation": [45, 45, 0],
                 "scale": [5, 5, 5],

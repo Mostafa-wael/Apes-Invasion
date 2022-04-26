@@ -171,6 +171,7 @@ namespace our {
         
         //TODO: (Req 8) Set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
         glColorMask(true, true, true, true);
+        glDepthMask(true);
 
         // If there is a postprocess material, bind the framebuffer
         if(postprocessMaterial){

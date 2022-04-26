@@ -1,30 +1,36 @@
 #pragma once
 
+#include "glm/ext/scalar_constants.hpp"
+#include "glm/gtc/constants.hpp"
+#include "imgui.h"
+#include "systems/entity-debugger.hpp"
 #include <application.hpp>
 
+#include <asset-loader.hpp>
 #include <ecs/world.hpp>
+#include <string>
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
-#include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
-class Playstate: public our::State {
+class Playstate : public our::State {
 
     our::World world;
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    float dt;
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
         // If we have assets in the scene config, we deserialize them
-        if(config.contains("assets")){
+        if(config.contains("assets")) {
             our::deserializeAllAssets(config["assets"]);
         }
         // If we have a world in the scene config, we use it to populate our world
-        if(config.contains("world")){
+        if(config.contains("world")) {
             world.deserialize(config["world"]);
         }
         // We initialize the camera controller system since it needs a pointer to the app
@@ -40,6 +46,7 @@ class Playstate: public our::State {
         cameraController.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
+        dt = deltaTime;
     }
 
     void onDestroy() override {
@@ -49,5 +56,12 @@ class Playstate: public our::State {
         cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
+    }
+
+    void onImmediateGui() override {
+        ImGui::Begin("KAK Engine");
+        ImGui::Text("Current frametime: %f", dt);
+        our::EntityDebugger::update(&world, 0);
+        ImGui::End();
     }
 };
