@@ -10,7 +10,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/bin/GAME_APPLICATION",
       "args": [
-        "-c='config/entity-test/test-0.jsonc'"
+        "-c='config/material-test/test-0.jsonc'"
       ],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
