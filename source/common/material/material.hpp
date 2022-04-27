@@ -45,7 +45,7 @@ namespace our {
         void setup() const override;
         void deserialize(const nlohmann::json& data) override;
         virtual void onImmediateGui() override {
-            std::string materialId = std::to_string((long)this);
+            std::string materialId = std::to_string((long long)this);
             std::string tintName = "Tint ##" + materialId;
 
             if(colorPicker)

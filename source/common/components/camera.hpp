@@ -39,7 +39,7 @@ namespace our {
         glm::mat4 getProjectionMatrix(glm::ivec2 viewportSize) const;
 
         virtual void onImmediateGui() override {
-            std::string headerID  = std::to_string((long)this);
+            std::string headerID  = std::to_string((long long)(this));
             std::string compLabel = ("Camera ##" + headerID);
             if(ImGui::CollapsingHeader(compLabel.c_str())) {
                 ImGui::Indent(10);

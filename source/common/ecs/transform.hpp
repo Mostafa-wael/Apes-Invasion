@@ -23,7 +23,7 @@ namespace our {
         void deserialize(const nlohmann::json&);
 
         void onImmediateGui() override {
-            std::string transformId = std::to_string((long)this);
+            std::string transformId = std::to_string((long long)(this));
             std::string pos         = "Position ##" + transformId;
             std::string rot         = "Rotation ##" + transformId;
             std::string scl         = "Scale    ##" + transformId;
