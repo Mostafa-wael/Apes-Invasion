@@ -8,11 +8,12 @@
       "name": "Build and Run",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/bin/GAME_APPLICATION",
+      "program": "${workspaceRoot}\\bin\\GAME_APPLICATION.exe",
       "args": [
+          "-c='config/renderer-test/test-1.jsonc'"
       ],
       "stopAtEntry": false,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceRoot}",
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
