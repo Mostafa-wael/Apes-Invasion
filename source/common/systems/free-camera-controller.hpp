@@ -55,7 +55,7 @@ namespace our
 
             // We get a reference to the entity's position and rotation
             glm::vec3& position = entity->localTransform.position;
-            glm::vec3& rotation = entity->localTransform.rotation;
+            glm::vec3 rotation = entity->localTransform.getEulerRotation();
 
             // If the left mouse button is pressed, we get the change in the mouse location
             // and use it to update the camera rotation
@@ -71,6 +71,8 @@ namespace our
             // This is not necessary, but whenever the rotation goes outside the 0 to 2*PI range, we wrap it back inside.
             // This could prevent floating point error if the player rotates in single direction for an extremely long time. 
             rotation.y = glm::wrapAngle(rotation.y);
+
+            entity->localTransform.setEulerRotation(rotation);
 
             // We update the camera fov based on the mouse wheel scrolling amount
             float fov = camera->fovY + app->getMouse().getScrollOffset().y * controller->fovSensitivity;

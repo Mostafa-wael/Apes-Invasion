@@ -52,6 +52,8 @@ CMakeSettings.json
 
 # cache specific files
 .cache/
+CMakeFiles/
+vendor/bullet/
 
 #################################################
 screenshots

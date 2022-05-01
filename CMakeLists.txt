@@ -24,7 +24,11 @@ set(IMGUI_SOURCES
         vendor/imgui/imgui_widgets.cpp
         vendor/imgui/imgui_impl/imgui_impl_glfw.cpp
         vendor/imgui/imgui_impl/imgui_impl_opengl3.cpp
-        )
+)
+
+set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ./ )
+
+find_package(Bullet)
 
 # Combine all vendor source files together into a single variable
 set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES})
@@ -93,6 +97,7 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
+        vendor/bullet/src
 )
 
 
@@ -116,4 +121,7 @@ set(STATES_SOURCES
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
-target_link_libraries(GAME_APPLICATION glfw)
+target_include_directories(GAME_APPLICATION PUBLIC ${BULLET_INCLUDE_DIR})
+target_compile_definitions(GAME_APPLICATION PUBLIC ${BULLET_DEFINITIONS})
+target_link_directories(GAME_APPLICATION PUBLIC ${Bullet_DIR}/${BULLET_ROOT_DIR}/${BULLET_LIBRARY_DIRS})
+target_link_libraries(GAME_APPLICATION glfw BulletDynamics.a BulletCollision.a LinearMath.a)

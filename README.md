@@ -12,3 +12,14 @@ Repo for CMP2023's computer graphics project. The aim is to use OpenGL (plus som
 - [stb](https://github.com/nothings/stb)
 - [tinyobjloader v1.0.6](https://github.com/tinyobjloader/tinyobjloader)
 - [tinygltf v2.4.0](https://github.com/syoyo/tinygltf)
+- [bullet physics](https://github.com/bulletphysics/bullet3)
+
+
+## Steps to build bullet statically (Tested on Ubuntu 20.04)
+- When you clone or pull from this repo, you should have bullet in `vendor/`
+- Go into `vendor/bullet/`
+- Execute `cmake .` to generate build files
+- Execute `sudo make -j12` for a 12 thread machine for example.
+
+After everything finishes, you should find a bunch of bullet related `.a` files under `/usr/local/lib/`
+

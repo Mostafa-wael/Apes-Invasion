@@ -15,12 +15,13 @@
 #include <systems/movement.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
-class Playstate : public our::State {
+class PhysicsTest : public our::State {
 
     our::World world;
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::Physics p;
     float dt;
 
     void onInitialize() override {
@@ -40,14 +41,18 @@ class Playstate : public our::State {
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
         renderer.app = getApp();
+
+        p.initialize();
+        p.addRbs(&world);
     }
-    
+
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
+        p.update(&world, deltaTime);
         dt = deltaTime;
 
     }
@@ -59,12 +64,17 @@ class Playstate : public our::State {
         cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
+
+        p.destroy();
     }
 
     void onImmediateGui() override {
         ImGui::Begin("KAK Engine");
         ImGui::Text("Current frametime: %f", dt);
         our::EntityDebugger::update(&world, 0);
+
+        p.onImmediateGui();
+
         ImGui::End();
     }
 };

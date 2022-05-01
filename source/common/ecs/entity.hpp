@@ -1,7 +1,11 @@
 #pragma once
 
+#include "LinearMath/btQuaternion.h"
+#include "LinearMath/btTransform.h"
 #include "component.hpp"
 #include "ecs/IImGuiDrawable.h"
+#include "ecs/rigidbody.hpp"
+#include "glm/gtc/type_ptr.hpp"
 #include "transform.hpp"
 #include <glm/glm.hpp>
 #include <string>
@@ -86,6 +90,13 @@ namespace our {
             ImGui::LabelText("", "%s", name.c_str());
 
             localTransform.onImmediateGui();
+            if(auto rb = getComponent<RigidBody>() ; localTransform.changedInUI && rb) {
+                btTransform t;
+                t.setFromOpenGLMatrix(glm::value_ptr(getLocalToWorldMatrix()));
+
+                rb->body->setWorldTransform(t);
+                localTransform.changedInUI = false;
+            }
 
             ImGui::Indent(10);
             auto [compsBegin, compsEnd] = getComponentsIter();

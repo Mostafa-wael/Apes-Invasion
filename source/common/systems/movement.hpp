@@ -27,7 +27,7 @@ namespace our
                 if(movement){
                     // Change the position and rotation based on the linear & angular velocity and delta time.
                     entity->localTransform.position += deltaTime * movement->linearVelocity;
-                    entity->localTransform.rotation += deltaTime * movement->angularVelocity;
+                    entity->localTransform.setEulerRotation(deltaTime * movement->angularVelocity + entity->localTransform.getEulerRotation());
                 }
             }
         }
