@@ -3,13 +3,16 @@
 #include "LinearMath/btQuaternion.h"
 #include "LinearMath/btTransform.h"
 #include "component.hpp"
+#include "components/mesh-renderer.hpp"
 #include "ecs/IImGuiDrawable.h"
 #include "ecs/rigidbody.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
+#include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include "imgui.h"
 #include "transform.hpp"
+#include <cstring>
 #include <glm/glm.hpp>
 #include <string>
 #include <type_traits>
@@ -34,6 +37,15 @@ namespace our {
         Entity* parent;           // The parent of the entity. The transform of the entity is relative to its parent.
                                   // If parent is null, the entity is a root entity (has no parent).
         Transform localTransform; // The transform of this entity relative to its parent.
+
+        bool enabled = true;
+
+        const char* componentsToAdd[3] = {
+            "Mesh Renderer",
+            "Rigid Body",
+            "Shooter"};
+
+        int currComponent = 0;
 
         World* getWorld() const { return world; } // Returns the world to which this entity belongs
 
@@ -83,7 +95,7 @@ namespace our {
         Entity(const Entity&)            = delete;
         Entity& operator=(Entity const&) = delete;
 
-        glm::mat4 getWorldRotation() {
+        glm::mat4 getWorldRotation() const {
             Entity* currentParent  = parent;
             glm::mat4 localToWorld = glm::toMat4(localTransform.qRot);
             while(currentParent) {
@@ -119,32 +131,69 @@ namespace our {
             return {components.begin(), components.end()};
         }
 
+        glm::vec3 getForward() const {
+            return glm::vec3(getWorldRotation() * glm::vec4(0, 0, -1, 1));
+        }
+
+        glm::vec3 getRight() const {
+            return glm::vec3(getWorldRotation() * glm::vec4(1, 0, 0, 1));
+        }
+
+        glm::vec3 getUp() const {
+            return glm::vec3(getWorldRotation() * glm::vec4(0, 1, 0, 1));
+        }
+
         virtual void onImmediateGui() override {
             if(ImGui::CollapsingHeader((name + "##" + std::to_string((long long)this)).c_str())) {
 
                 std::string id = std::to_string((long long)this);
 
-                if(ImGui::TreeNode(("Transform##" + id).c_str())) {
+                drawComponentAdder(id);
 
-                    localTransform.onImmediateGui();
+                drawTransform(id);
+
+                ourToBullet();
+
+                drawComponents(id);
+            }
+        }
+
+        void drawComponentAdder(std::string id) {
+            ImGui::Combo(("##" + id).c_str(), &currComponent, componentsToAdd, 3);
+            ImGui::SameLine();
+            if(ImGui::Button(("Add component##" + id).c_str())) {
+                if(std::strcmp(componentsToAdd[currComponent], "Mesh Renderer") == 0)
+                    addComponent<MeshRendererComponent>();
+                // TODO: Implement logic for adding other components
+            }
+        }
+
+        void drawTransform(std::string id) {
+            if(ImGui::TreeNode(("Transform##" + id).c_str())) {
+
+                localTransform.onImmediateGui();
+
+                ImGui::TreePop();
+            }
+        }
+
+        // Synnchronizes bullet rigidbodies to our data when we update something in the entity list
+        void ourToBullet() {
+            if(auto rb = getComponent<RigidBody>(); localTransform.changedInUI && rb) {
+                rb->syncWithTransform(getWorldRotation(), getWorldTranslation());
+                localTransform.changedInUI = false;
+            }
+        }
+
+        void drawComponents(std::string id) {
+            auto [compsBegin, compsEnd] = getComponentsIter();
+
+            for(auto iter = compsBegin; iter != compsEnd; iter++) {
+                if(ImGui::TreeNode((iter->second->getIDPolymorphic() + "##" + id).c_str())) {
+
+                    iter->second->onImmediateGui();
 
                     ImGui::TreePop();
-                }
-
-                if(auto rb = getComponent<RigidBody>(); localTransform.changedInUI && rb) {
-                    rb->syncWithTransform(getWorldRotation(), getWorldTranslation());
-                    localTransform.changedInUI = false;
-                }
-
-                auto [compsBegin, compsEnd] = getComponentsIter();
-
-                for(auto iter = compsBegin; iter != compsEnd; iter++) {
-                    if(ImGui::TreeNode((iter->second->getIDPolymorphic() + "##" + id).c_str())) {
-
-                        iter->second->onImmediateGui();
-
-                        ImGui::TreePop();
-                    }
                 }
             }
         }

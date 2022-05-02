@@ -1,6 +1,8 @@
 #pragma once
 
 #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
+#include "BulletCollision/CollisionShapes/btCollisionShape.h"
+#include "BulletCollision/CollisionShapes/btSphereShape.h"
 #include "BulletDynamics/Dynamics/btRigidBody.h"
 #include "LinearMath/btMatrix3x3.h"
 #include "LinearMath/btQuaternion.h"
@@ -32,7 +34,15 @@ namespace our {
 
         void fromExtentsTranslationRotation(glm::vec3 boxHalfExtents, glm::vec3 translation, glm::vec3 rotation, std::string type, float m) {
             btCollisionShape* boundingBox = new btBoxShape({boxHalfExtents.x, boxHalfExtents.y, boxHalfExtents.z});
+            fromCollisionShapeTranslationRotation(boundingBox, translation, rotation, type, m);
+        }
 
+        void fromSphereTranslationRotation(float radius, glm::vec3 translation, glm::vec3 rotation, std::string type, float m) {
+            btCollisionShape* boundingSphere = new btSphereShape(radius);
+            fromCollisionShapeTranslationRotation(boundingSphere, translation, rotation, type, m);
+        }
+
+        void fromCollisionShapeTranslationRotation(btCollisionShape* btColl, glm::vec3 translation, glm::vec3 rotation, std::string type, float m) {
             btTransform transform;
 
             transform.setIdentity();
@@ -49,11 +59,11 @@ namespace our {
 
             btVector3 localInertia(0, 0, 0);
             if(isDynamic)
-                boundingBox->calculateLocalInertia(mass, localInertia);
+                btColl->calculateLocalInertia(mass, localInertia);
 
             //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
             btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
-            btRigidBody::btRigidBodyConstructionInfo rbInfo(m, myMotionState, boundingBox, localInertia);
+            btRigidBody::btRigidBodyConstructionInfo rbInfo(m, myMotionState, btColl, localInertia);
 
             body = new btRigidBody(rbInfo);
 

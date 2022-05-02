@@ -21,6 +21,7 @@ class Playstate : public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::EntityDebugger edb;
     float dt;
 
     void onInitialize() override {
@@ -64,7 +65,7 @@ class Playstate : public our::State {
     void onImmediateGui() override {
         ImGui::Begin("KAK Engine");
         ImGui::Text("Current frametime: %f", dt);
-        our::EntityDebugger::update(&world, 0);
+        edb.update(&world, 0);
         ImGui::End();
     }
 };

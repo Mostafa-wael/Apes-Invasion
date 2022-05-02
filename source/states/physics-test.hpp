@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ecs/entity.hpp"
+#include "ecs/rigidbody.hpp"
 #include "ecs/shooter.hpp"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
@@ -23,6 +25,8 @@ class PhysicsTest : public our::State {
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
     our::Physics p;
+    our::EntityDebugger edb;
+
     float dt;
 
     void onInitialize() override {
@@ -46,8 +50,9 @@ class PhysicsTest : public our::State {
         p.initialize(&world);
 
         for(auto&& e : world.getEntities()) {
-            if(auto s = e->getComponent<our::Shooter>())
-                s->physicsSystem = &p;
+            if(auto s = e->getComponent<our::Shooter>()) {
+                s->init(&p);
+            }
         }
     }
 
@@ -84,7 +89,7 @@ class PhysicsTest : public our::State {
 
     void onImmediateGui() override {
 
-        our::EntityDebugger::update(&world, 0);
+        edb.EntityDebugger::update(&world, dt);
 
         p.onImmediateGui();
     }

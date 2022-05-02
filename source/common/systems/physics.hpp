@@ -35,7 +35,7 @@ namespace our {
         btSequentialImpulseConstraintSolver* solver;
         btDiscreteDynamicsWorld* dynamicsWorld;
         // MeshRendererComponent box;
-        bool simulate        = false;
+        bool simulate        = true;
         int framesToSimulate = 10000;
 
         PhysDebugDraw* debugDrawer;
@@ -113,6 +113,7 @@ namespace our {
         // Reads data from bullet physics and updates object transform for graphics drawing
         void bulletToOur() {
             for(auto&& e : world->getEntitiesMut()) {
+                if(!e->enabled) continue;
                 if(auto rb = e->getComponent<RigidBody>()) {
                     btTransform rbT;
                     rb->body->getMotionState()->getWorldTransform(rbT);
@@ -148,6 +149,8 @@ namespace our {
         // Reads our data and sets bullet rigidbodies with it
         void ourToBullet() {
             for(auto e : world->getEntities()) {
+                if(!e->enabled) continue;
+
                 if(auto rb = e->getComponent<RigidBody>()) {
                     // Can move both getWorldRotation/Translation to inside the method
                     // but it segfaults for some reason.

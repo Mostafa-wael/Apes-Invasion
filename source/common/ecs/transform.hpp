@@ -1,9 +1,11 @@
 #pragma once
 
 #include "ecs/IImGuiDrawable.h"
+#include "glm/ext/quaternion_transform.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/constants.hpp"
 #include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "imgui.h"
 #include <cstdio>
 #include <glm/glm.hpp>
@@ -33,7 +35,6 @@ namespace our {
             std::string scl         = "Scale    ##" + transformId;
             std::string uni         = "Uniform scaling ##" + transformId;
 
-
             changedInUI |= ImGui::DragFloat3(pos.c_str(), &position.x, 0.1f);
 
             glm::vec3 rotation = getEulerRotation();
@@ -43,7 +44,6 @@ namespace our {
 
             ImGui::Spacing();
 
-
             ImGui::Checkbox(uni.c_str(), &uniform);
             if(uniform) {
                 changedInUI |= ImGui::DragFloat(scl.c_str(), &scale.x, 0.05, 0.1, 10);
@@ -51,7 +51,6 @@ namespace our {
             } else {
                 changedInUI |= ImGui::DragFloat3(scl.c_str(), &scale.x, 0.05, 0.1, 10);
             }
-
         }
 
         void setEulerRotation(float x, float y, float z) {
