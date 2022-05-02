@@ -33,6 +33,7 @@ namespace our {
             std::string scl         = "Scale    ##" + transformId;
             std::string uni         = "Uniform scaling ##" + transformId;
 
+
             changedInUI |= ImGui::DragFloat3(pos.c_str(), &position.x, 0.1f);
 
             glm::vec3 rotation = getEulerRotation();
@@ -40,15 +41,17 @@ namespace our {
 
             setEulerRotation(rotation.x, rotation.y, rotation.z);
 
+            ImGui::Spacing();
+
+
+            ImGui::Checkbox(uni.c_str(), &uniform);
             if(uniform) {
-                changedInUI |= ImGui::DragFloat(scl.c_str(), &scale.x, 0.05, 0.1, 5);
+                changedInUI |= ImGui::DragFloat(scl.c_str(), &scale.x, 0.05, 0.1, 10);
                 scale.y = scale.z = scale.x;
             } else {
-                changedInUI |= ImGui::DragFloat3(scl.c_str(), &scale.x, 0.05, 0.1, 5);
+                changedInUI |= ImGui::DragFloat3(scl.c_str(), &scale.x, 0.05, 0.1, 10);
             }
-            
-            ImGui::SameLine();
-            ImGui::Checkbox(uni.c_str(), &uniform);
+
         }
 
         void setEulerRotation(float x, float y, float z) {

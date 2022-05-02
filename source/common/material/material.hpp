@@ -47,14 +47,15 @@ namespace our {
         virtual void onImmediateGui() override {
             std::string materialId = std::to_string((long long)this);
             std::string tintName = "Tint ##" + materialId;
+            
+            ImGui::Spacing();
 
+            ImGui::Checkbox(("Color picker ##"+materialId).c_str(), &colorPicker);
             if(colorPicker)
                 ImGui::ColorPicker4(tintName.c_str(), &tint.x);
             else
                 ImGui::DragFloat4(tintName.c_str(),&tint.x, 0.01, 0, 2);
 
-            ImGui::SameLine();
-            ImGui::Checkbox(("Color picker ##"+materialId).c_str(), &colorPicker);
         }
     };
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ecs/shooter.hpp"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
@@ -42,19 +43,32 @@ class PhysicsTest : public our::State {
         renderer.initialize(size, config["renderer"]);
         renderer.app = getApp();
 
-        p.initialize();
-        p.addRbs(&world);
+        p.initialize(&world);
+
+        for(auto&& e : world.getEntities()) {
+            if(auto s = e->getComponent<our::Shooter>())
+                s->physicsSystem = &p;
+        }
     }
 
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
+
+        for(auto&& e : world.getEntities()) {
+            if(auto s = e->getComponent<our::Shooter>())
+                s->update(deltaTime);
+        }
+
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
-        p.update(&world, deltaTime);
-        dt = deltaTime;
 
+        p.update(deltaTime);
+
+        world.deleteMarkedEntities();
+
+        dt = deltaTime;
     }
 
     void onDestroy() override {
@@ -69,12 +83,9 @@ class PhysicsTest : public our::State {
     }
 
     void onImmediateGui() override {
-        ImGui::Begin("KAK Engine");
-        ImGui::Text("Current frametime: %f", dt);
+
         our::EntityDebugger::update(&world, 0);
 
         p.onImmediateGui();
-
-        ImGui::End();
     }
 };

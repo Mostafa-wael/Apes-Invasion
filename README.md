@@ -23,3 +23,5 @@ Repo for CMP2023's computer graphics project. The aim is to use OpenGL (plus som
 
 After everything finishes, you should find a bunch of bullet related `.a` files under `/usr/local/lib/`
 
+_**HEED MY WARNING: NEVER USE SCALING WITH BULLET PHYSICS OR IT WILL BREAK**_
+

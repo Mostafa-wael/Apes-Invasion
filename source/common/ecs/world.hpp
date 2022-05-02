@@ -27,7 +27,6 @@ namespace our {
         Entity* add() {
             Entity* entity = new Entity();
             entity->world = this;
-            entity->localTransform ;
             entities.insert(entity);
             return entity;
         }

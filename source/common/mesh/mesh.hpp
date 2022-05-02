@@ -105,13 +105,13 @@ namespace our {
             ImGui::Checkbox(("render##" + std::to_string((uint64_t)(this))).c_str(), &enabled);
         }
 
-        std::pair<glm::vec3, glm::vec3> getAABB(glm::mat4 rotation, glm::vec3 scale) {
+        std::pair<glm::vec3, glm::vec3> getAABB( glm::vec3 scale) {
             glm::vec3 min = glm::vec3(INFINITY);
             glm::vec3 max = glm::vec3(-INFINITY);
 
             std::vector<glm::vec3> vertsTransformed = verts;
 
-            glm::mat4 transform = rotation * glm::scale(glm::mat4(1), scale);
+            glm::mat4 transform = glm::scale(glm::mat4(1), scale);
             for (auto&& vert : vertsTransformed) vert = transform * glm::vec4(vert,1);
 
             for(auto&& v : vertsTransformed) {

@@ -8,6 +8,7 @@
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/quaternion.hpp"
+#include "imgui.h"
 #include "transform.hpp"
 #include <glm/glm.hpp>
 #include <string>
@@ -119,21 +120,33 @@ namespace our {
         }
 
         virtual void onImmediateGui() override {
-            ImGui::LabelText("", "%s", name.c_str());
+            if(ImGui::CollapsingHeader((name + "##" + std::to_string((long long)this)).c_str())) {
 
-            localTransform.onImmediateGui();
-            if(auto rb = getComponent<RigidBody>(); localTransform.changedInUI && rb) {
-                rb->syncWithTransform(getWorldRotation(), getWorldTranslation());
-                localTransform.changedInUI = false;
-            }
+                std::string id = std::to_string((long long)this);
 
-            ImGui::Indent(10);
-            auto [compsBegin, compsEnd] = getComponentsIter();
-            for(auto iter = compsBegin; iter != compsEnd; iter++) {
-                iter->second->onImmediateGui();
+                if(ImGui::TreeNode(("Transform##" + id).c_str())) {
+
+                    localTransform.onImmediateGui();
+
+                    ImGui::TreePop();
+                }
+
+                if(auto rb = getComponent<RigidBody>(); localTransform.changedInUI && rb) {
+                    rb->syncWithTransform(getWorldRotation(), getWorldTranslation());
+                    localTransform.changedInUI = false;
+                }
+
+                auto [compsBegin, compsEnd] = getComponentsIter();
+
+                for(auto iter = compsBegin; iter != compsEnd; iter++) {
+                    if(ImGui::TreeNode((iter->second->getIDPolymorphic() + "##" + id).c_str())) {
+
+                        iter->second->onImmediateGui();
+
+                        ImGui::TreePop();
+                    }
+                }
             }
-            ImGui::Indent(-10);
         }
     };
-
 } // namespace our

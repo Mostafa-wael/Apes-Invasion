@@ -35,12 +35,14 @@ namespace our {
         btSequentialImpulseConstraintSolver* solver;
         btDiscreteDynamicsWorld* dynamicsWorld;
         // MeshRendererComponent box;
-        bool simulate[2] = {false, false};
-        int framesToSimulate        = 10000;
+        bool simulate        = false;
+        int framesToSimulate = 10000;
 
-        PhysDebugDraw* debugDraw;
+        PhysDebugDraw* debugDrawer;
 
-        void initialize() {
+        World* world;
+
+        void initialize(World* w) {
             ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
             collisionConfiguration = new btDefaultCollisionConfiguration();
 
@@ -57,85 +59,30 @@ namespace our {
 
             dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 
-            debugDraw = new PhysDebugDraw();
-            dynamicsWorld->setDebugDrawer(debugDraw);
+            debugDrawer = new PhysDebugDraw();
+            dynamicsWorld->setDebugDrawer(debugDrawer);
+
+            world = w;
+
+            for(auto&& e : world->getEntities())
+                if(auto rb = e->getComponent<RigidBody>()) dynamicsWorld->addRigidBody(rb->body);
         }
 
-        void addRbs(our::World* world) {
-            for(auto&& e : world->getEntitiesMut()) {
-                if(e->name == "camera") continue;
+        void update(float dt) {
+            debugDraw();
 
-                RigidBody* rb = e->addComponent<RigidBody>();
-
-                glm::vec3 wPos   = e->getWorldTranslation();
-                glm::vec3 wRot   = glm::eulerAngles(glm::quat(e->getWorldRotation()));
-                glm::vec3 wScale = e->getWorldScale();
-
-                auto [wAABBPos, aabbHalfExtents] = e->getComponent<MeshRendererComponent>()->mesh->getAABB(glm::eulerAngleXYZ(0, 0, 0), wScale);
-                wAABBPos                         = glm::translate(glm::mat4(1), wPos) * glm::vec4(wAABBPos, 1);
-
-                if(e->name == "ground") {
-                    *rb = RigidBody(aabbHalfExtents, wAABBPos, wRot, 0);
-                    rb->body->setCollisionFlags(rb->body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
-                } else {
-                    *rb = RigidBody(aabbHalfExtents, wAABBPos, wRot, 1);
-                    rb->body->applyImpulse({1, -5, 1}, rb->body->getCenterOfMassPosition());
-                }
-                rb->body->setActivationState(DISABLE_DEACTIVATION);
-                dynamicsWorld->addRigidBody(rb->body);
-            }
-        }
-
-        void update(World* world, float dt) {
-
-            if(simulate[0] && !simulate[1]) {
-                for(auto i = world->getEntities().begin(); i != world->getEntities().end() ; i++) {
-                    auto e = *i;
-                    if(auto rb = e->getComponent<RigidBody>()) {
-                      // Can move both getWorldRotation/Translation to inside the method
-                      // but it segfaults for some reason.
-                      rb->syncWithTransform(e->getWorldRotation(), e->getWorldTranslation());
-                    }
-                }
-            }
-            
-            glm::mat4 view, projection;
-            for(auto&& e : world->getEntities()) {
-                if(auto cam = e->getComponent<CameraComponent>()) {
-                    view       = cam->getViewMatrix();
-                    projection = cam->getProjectionMatrix({1280, 720});
-                    break;
-                }
-            }
-
-            debugDraw->SetMatrices(view, projection);
-            dynamicsWorld->debugDrawWorld();
-
-            if(!simulate[0] || framesToSimulate == 0) {
+            if(!simulate || framesToSimulate == 0) {
                 return;
             }
-
-            simulate[1] = simulate[0];
 
             framesToSimulate--;
             int i;
 
             dynamicsWorld->stepSimulation(dt);
 
-            for(auto&& e : world->getEntitiesMut()) {
-                if(auto rb = e->getComponent<RigidBody>()) {
-                    btTransform rbT;
-                    rb->body->getMotionState()->getWorldTransform(rbT);
-
-                    e->localTransform.position = {rbT.getOrigin().x(),
-                                                  rbT.getOrigin().y(),
-                                                  rbT.getOrigin().z()};
-
-                    btQuaternion qRot      = rbT.getRotation();
-                    e->localTransform.qRot = {qRot.w(), qRot.x(), qRot.y(), qRot.z()};
-                }
-            }
+            bulletToOur();
         }
+
         void destroy() {
 
             for(int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
@@ -163,14 +110,82 @@ namespace our {
             delete collisionConfiguration;
         }
 
-        virtual void onImmediateGui() override {
-            if(ImGui::CollapsingHeader("Physics")) {
-                ImGui::Indent(10);
-                ImGui::Checkbox("simulate", &simulate[0]);
-                ImGui::InputInt("frames to simulate", &framesToSimulate);
+        // Reads data from bullet physics and updates object transform for graphics drawing
+        void bulletToOur() {
+            for(auto&& e : world->getEntitiesMut()) {
+                if(auto rb = e->getComponent<RigidBody>()) {
+                    btTransform rbT;
+                    rb->body->getMotionState()->getWorldTransform(rbT);
 
-                ImGui::Indent(-10);
+                    e->localTransform.position = {rbT.getOrigin().x(),
+                                                  rbT.getOrigin().y(),
+                                                  rbT.getOrigin().z()};
+
+                    btQuaternion qRot      = rbT.getRotation();
+                    e->localTransform.qRot = {qRot.w(), qRot.x(), qRot.y(), qRot.z()};
+                }
             }
+        }
+
+        void debugDraw() const {
+
+            // Get view and projection matrices for proper drawing
+            glm::mat4 view, projection;
+            for(auto&& e : world->getEntities()) {
+                if(auto cam = e->getComponent<CameraComponent>()) {
+                    view       = cam->getViewMatrix();
+                    projection = cam->getProjectionMatrix({1280, 720});
+                    break;
+                }
+            }
+
+            debugDrawer->SetMatrices(view, projection);
+
+            // Draw what bullet physics sees
+            dynamicsWorld->debugDrawWorld();
+        }
+
+        // Reads our data and sets bullet rigidbodies with it
+        void ourToBullet() {
+            for(auto e : world->getEntities()) {
+                if(auto rb = e->getComponent<RigidBody>()) {
+                    // Can move both getWorldRotation/Translation to inside the method
+                    // but it segfaults for some reason.
+                    rb->syncWithTransform(e->getWorldRotation(), e->getWorldTranslation());
+                }
+            }
+        }
+
+        virtual void onImmediateGui() override {
+            ImGui::Begin("Physics");
+            ImGui::Indent(10);
+
+            if(ImGui::Checkbox("simulate", &simulate) && simulate) {
+                ourToBullet();
+            }
+
+            ImGui::InputInt("frames to simulate", &framesToSimulate);
+
+            for(int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--) {
+
+                if(ImGui::TreeNode(("Rigidbody ##" + std::to_string(j)).c_str())) {
+
+                    btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
+                    btRigidBody* body      = btRigidBody::upcast(obj);
+                    btTransform trans;
+                    if(body && body->getMotionState()) {
+                        body->getMotionState()->getWorldTransform(trans);
+                    } else {
+                        trans = obj->getWorldTransform();
+                    }
+                    float x[] = {trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z()};
+                    ImGui::DragFloat3(("kak##" + std::to_string(j)).c_str(), x);
+                    ImGui::TreePop();
+                }
+            }
+
+            ImGui::Indent(-10);
+            ImGui::End();
         };
     };
 } // namespace our
