@@ -1,4 +1,5 @@
 #pragma once
+#include "BulletCollision/CollisionDispatch/btCollisionObject.h"
 #include "LinearMath/btQuaternion.h"
 #include "LinearMath/btScalar.h"
 #include "LinearMath/btTransform.h"
@@ -10,8 +11,14 @@
 #include "ecs/rigidbody.hpp"
 #include "ecs/transform.hpp"
 #include "ecs/world.hpp"
+#include "glm/common.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/ext/quaternion_float.hpp"
 #include "glm/ext/vector_float3.hpp"
+#include "glm/ext/vector_float4.hpp"
 #include "glm/fwd.hpp"
+#include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/euler_angles.hpp"
 #include "glm/matrix.hpp"
 #include "imgui.h"
 #include "mesh/mesh.hpp"
@@ -29,14 +36,9 @@ namespace our {
         btDiscreteDynamicsWorld* dynamicsWorld;
         // MeshRendererComponent box;
         bool simulate[2] = {false, false};
-        int steps        = 10000;
+        int framesToSimulate        = 10000;
 
         PhysDebugDraw* debugDraw;
-
-        static void myTickCallback(btDynamicsWorld* world, btScalar timeStep) {
-            int numManifolds = world->getDispatcher()->getNumManifolds();
-            printf("numManifolds = %d\n", numManifolds);
-        }
 
         void initialize() {
             ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
@@ -53,8 +55,7 @@ namespace our {
 
             dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 
-            dynamicsWorld->setGravity(btVector3(0, -1, 0));
-            dynamicsWorld->setInternalTickCallback(myTickCallback);
+            dynamicsWorld->setGravity(btVector3(0, -9.81, 0));
 
             debugDraw = new PhysDebugDraw();
             dynamicsWorld->setDebugDrawer(debugDraw);
@@ -65,20 +66,22 @@ namespace our {
                 if(e->name == "camera") continue;
 
                 RigidBody* rb = e->addComponent<RigidBody>();
-                btTransform t;
 
-                auto worldMat             = e->getLocalToWorldMatrix();
-                glm::vec3 aabbCenter      = e->getComponent<MeshRendererComponent>()->mesh->aabbCenter;
-                glm::vec3 aabbHalfExtents = e->getComponent<MeshRendererComponent>()->mesh->aabbHalfExtents;
-                glm::vec3 wAABBPos        = glm::vec4(aabbCenter, 1);
-                glm::vec3 wRot            = e->localTransform.getEulerRotation();
+                glm::vec3 wPos   = e->getWorldTranslation();
+                glm::vec3 wRot   = glm::eulerAngles(glm::quat(e->getWorldRotation()));
+                glm::vec3 wScale = e->getWorldScale();
+
+                auto [wAABBPos, aabbHalfExtents] = e->getComponent<MeshRendererComponent>()->mesh->getAABB(glm::eulerAngleXYZ(0, 0, 0), wScale);
+                wAABBPos                         = glm::translate(glm::mat4(1), wPos) * glm::vec4(wAABBPos, 1);
 
                 if(e->name == "ground") {
                     *rb = RigidBody(aabbHalfExtents, wAABBPos, wRot, 0);
-
+                    rb->body->setCollisionFlags(rb->body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
                 } else {
                     *rb = RigidBody(aabbHalfExtents, wAABBPos, wRot, 1);
+                    rb->body->applyImpulse({1, -5, 1}, rb->body->getCenterOfMassPosition());
                 }
+                rb->body->setActivationState(DISABLE_DEACTIVATION);
                 dynamicsWorld->addRigidBody(rb->body);
             }
         }
@@ -86,27 +89,39 @@ namespace our {
         void update(World* world, float dt) {
 
             if(simulate[0] && !simulate[1]) {
-                for(auto e : world->getEntities()) {
+                for(auto i = world->getEntities().begin(); i != world->getEntities().end() ; i++) {
+                    auto e = *i;
                     if(auto rb = e->getComponent<RigidBody>()) {
-                        btTransform t;
-                        t.setFromOpenGLMatrix(glm::value_ptr(e->getLocalToWorldMatrix()));
-
-                        rb->body->setWorldTransform(t);
+                      // Can move both getWorldRotation/Translation to inside the method
+                      // but it segfaults for some reason.
+                      rb->syncWithTransform(e->getWorldRotation(), e->getWorldTranslation());
                     }
                 }
+            }
+            
+            glm::mat4 view, projection;
+            for(auto&& e : world->getEntities()) {
+                if(auto cam = e->getComponent<CameraComponent>()) {
+                    view       = cam->getViewMatrix();
+                    projection = cam->getProjectionMatrix({1280, 720});
+                    break;
+                }
+            }
+
+            debugDraw->SetMatrices(view, projection);
+            dynamicsWorld->debugDrawWorld();
+
+            if(!simulate[0] || framesToSimulate == 0) {
+                return;
             }
 
             simulate[1] = simulate[0];
 
-            if(!simulate[0] || steps == 0) {
-                simulate[0] = false;
-                return;
-            }
-
-            steps--;
+            framesToSimulate--;
             int i;
 
-            glm::mat4 view, projection;
+            dynamicsWorld->stepSimulation(dt);
+
             for(auto&& e : world->getEntitiesMut()) {
                 if(auto rb = e->getComponent<RigidBody>()) {
                     btTransform rbT;
@@ -117,21 +132,9 @@ namespace our {
                                                   rbT.getOrigin().z()};
 
                     btQuaternion qRot      = rbT.getRotation();
-                    e->localTransform.qRot = {qRot.x(), qRot.y(), qRot.z(), qRot.w()};
-
-                    rb->body->applyTorque({0, 10 * dt, 0});
-                    rb->body->activate(true);
-                }
-                if(auto cam = e->getComponent<CameraComponent>()) {
-                    view       = cam->getViewMatrix();
-                    projection = cam->getProjectionMatrix({1280, 720});
+                    e->localTransform.qRot = {qRot.w(), qRot.x(), qRot.y(), qRot.z()};
                 }
             }
-
-            dynamicsWorld->stepSimulation(dt);
-
-            debugDraw->SetMatrices(view, projection);
-            dynamicsWorld->debugDrawWorld();
         }
         void destroy() {
 
@@ -164,21 +167,8 @@ namespace our {
             if(ImGui::CollapsingHeader("Physics")) {
                 ImGui::Indent(10);
                 ImGui::Checkbox("simulate", &simulate[0]);
-                ImGui::InputInt("steps", &steps);
+                ImGui::InputInt("frames to simulate", &framesToSimulate);
 
-                for(int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--) {
-                    btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[j];
-                    btRigidBody* body      = btRigidBody::upcast(obj);
-                    btTransform trans;
-                    if(body && body->getMotionState()) {
-                        body->getMotionState()->getWorldTransform(trans);
-                    } else {
-                        trans = obj->getWorldTransform();
-                    }
-                    float x[] = {trans.getOrigin().x(), trans.getOrigin().y(), trans.getOrigin().z()};
-
-                    ImGui::DragFloat3(("kak##" + std::to_string(j)).c_str(), x);
-                }
                 ImGui::Indent(-10);
             }
         };

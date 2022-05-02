@@ -1,12 +1,18 @@
 #pragma once
 
 #include "ecs/IImGuiDrawable.h"
+#include "glm/ext/matrix_float4x4.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/ext/vector_float3.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
 #include "vertex.hpp"
+#include <algorithm>
 #include <cmath>
 #include <glad/gl.h>
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace our {
 
@@ -25,9 +31,9 @@ namespace our {
 
     public:
         std::string path;
-        glm::vec3 aabbCenter;
-        glm::vec3 aabbHalfExtents;
         bool enabled = true;
+
+        std::vector<glm::vec3> verts;
 
         // The constructor takes two vectors:
         // - vertices which contain the vertex data.
@@ -37,7 +43,8 @@ namespace our {
         // an element buffer to store the element data on the VRAM,
         // a vertex array object to define how to read the vertex & element buffer during rendering
         Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& elements, std::string pth = "/path/unspecified") : path(pth) {
-            getAABB(vertices);
+
+            for (auto&& vert : vertices) verts.push_back(vert.position);
 
             //TODO: (Req 1) Write this function
             // 1. Create a vertex array object
@@ -98,20 +105,26 @@ namespace our {
             ImGui::Checkbox(("render##" + std::to_string((uint64_t)(this))).c_str(), &enabled);
         }
 
-        void getAABB(const std::vector<Vertex>& vertices) {
+        std::pair<glm::vec3, glm::vec3> getAABB(glm::mat4 rotation, glm::vec3 scale) {
             glm::vec3 min = glm::vec3(INFINITY);
             glm::vec3 max = glm::vec3(-INFINITY);
-            for(auto&& v : vertices) {
-                min.x = std::fmin(min.x, v.position.x);
-                min.y = std::fmin(min.y, v.position.y);
-                min.z = std::fmin(min.z, v.position.z);
 
-                max.x = std::fmax(max.x, v.position.x);
-                max.y = std::fmax(max.y, v.position.y);
-                max.z = std::fmax(max.z, v.position.z);
+            std::vector<glm::vec3> vertsTransformed = verts;
+
+            glm::mat4 transform = rotation * glm::scale(glm::mat4(1), scale);
+            for (auto&& vert : vertsTransformed) vert = transform * glm::vec4(vert,1);
+
+            for(auto&& v : vertsTransformed) {
+                min.x = std::fmin(min.x, v.x);
+                min.y = std::fmin(min.y, v.y);
+                min.z = std::fmin(min.z, v.z);
+
+                max.x = std::fmax(max.x, v.x);
+                max.y = std::fmax(max.y, v.y);
+                max.z = std::fmax(max.z, v.z);
             }
-            aabbCenter      = (min + max) / 2.0f;
-            float minDist = 0.1;
+            glm::vec3 aabbCenter      = (min + max) / 2.0f;
+            float minDist = 1;
 
             if(fabs(min.x - max.x) < minDist) {
                 min.x = aabbCenter.x - minDist/2;
@@ -128,7 +141,9 @@ namespace our {
                 max.z = aabbCenter.z + minDist/2;
             }
 
-            aabbHalfExtents = (max - min) / 2.0f;
+            glm::vec3 aabbHalfExtents = (max - min) / 2.0f;
+
+            return {aabbCenter, aabbHalfExtents};
         }
 
         Mesh(Mesh const&)            = delete;

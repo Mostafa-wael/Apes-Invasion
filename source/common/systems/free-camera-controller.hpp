@@ -66,11 +66,12 @@ namespace our
             }
 
             // We prevent the pitch from exceeding a certain angle from the XZ plane to prevent gimbal locks
-            if(rotation.x < -glm::half_pi<float>() * 0.99f) rotation.x = -glm::half_pi<float>() * 0.99f;
-            if(rotation.x >  glm::half_pi<float>() * 0.99f) rotation.x  = glm::half_pi<float>() * 0.99f;
+            // if(rotation.x < -glm::half_pi<float>() * 0.99f) rotation.x = -glm::half_pi<float>() * 0.99f;
+            // if(rotation.x >  glm::half_pi<float>() * 0.99f) rotation.x  = glm::half_pi<float>() * 0.99f;
+
             // This is not necessary, but whenever the rotation goes outside the 0 to 2*PI range, we wrap it back inside.
             // This could prevent floating point error if the player rotates in single direction for an extremely long time. 
-            rotation.y = glm::wrapAngle(rotation.y);
+            // rotation.y = glm::wrapAngle(rotation.y);
 
             entity->localTransform.setEulerRotation(rotation);
 

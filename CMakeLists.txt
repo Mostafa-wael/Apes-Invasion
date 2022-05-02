@@ -66,12 +66,12 @@ set(COMMON_SOURCES
         source/common/material/material.cpp
 
         source/common/ecs/component.hpp
-        source/common/ecs/transform.hpp
         source/common/ecs/transform.cpp
         source/common/ecs/entity.hpp
         source/common/ecs/entity.cpp
         source/common/ecs/world.hpp
         source/common/ecs/world.cpp
+        source/common/ecs/rigidbody.cpp
 
         source/common/components/camera.hpp
         source/common/components/camera.cpp

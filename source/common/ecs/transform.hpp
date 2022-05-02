@@ -46,7 +46,7 @@ namespace our {
             } else {
                 changedInUI |= ImGui::DragFloat3(scl.c_str(), &scale.x, 0.05, 0.1, 5);
             }
-            printf("%s\n", changedInUI? "change" : "no change");
+            
             ImGui::SameLine();
             ImGui::Checkbox(uni.c_str(), &uniform);
         }

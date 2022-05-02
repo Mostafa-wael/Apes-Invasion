@@ -9,12 +9,14 @@
 #include "btBulletDynamicsCommon.h"
 
 #include "ecs/component.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/vec3.hpp"
 #include <cstdio>
 #include <string>
 
 namespace our {
+
     class RigidBody : public Component {
     public:
         btRigidBody* body;
@@ -29,9 +31,6 @@ namespace our {
             transform.setOrigin(btVector3(translation.x, translation.y, translation.z));
             btQuaternion quat = btQuaternion();
             quat.setEuler(rotation.y, rotation.x, rotation.z);
-
-            if(quat == btQuaternion(rotation.y, rotation.x, rotation.z))
-                printf("%s", "KAK\n");
             transform.setRotation(quat);
 
             btScalar mass(m);
@@ -69,5 +68,7 @@ namespace our {
         virtual void deserialize(const nlohmann::json& data) {}
 
         static std::string getID() { return "rigidbody"; }
+
+        void syncWithTransform(glm::mat4 worldRotation, glm::vec3 worldTranslation);
     };
 } // namespace our

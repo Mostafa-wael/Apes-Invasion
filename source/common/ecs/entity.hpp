@@ -5,7 +5,9 @@
 #include "component.hpp"
 #include "ecs/IImGuiDrawable.h"
 #include "ecs/rigidbody.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "transform.hpp"
 #include <glm/glm.hpp>
 #include <string>
@@ -80,6 +82,36 @@ namespace our {
         Entity(const Entity&)            = delete;
         Entity& operator=(Entity const&) = delete;
 
+        glm::mat4 getWorldRotation() {
+            Entity* currentParent  = parent;
+            glm::mat4 localToWorld = glm::toMat4(localTransform.qRot);
+            while(currentParent) {
+                localToWorld  = glm::toMat4(currentParent->localTransform.qRot) * localToWorld;
+                currentParent = currentParent->parent;
+            }
+            return localToWorld;
+        }
+
+        glm::vec3 getWorldScale() const {
+            Entity* currentParent  = parent;
+            glm::vec3 localToWorld = localTransform.scale;
+            while(currentParent) {
+                localToWorld  = currentParent->localTransform.scale * localToWorld;
+                currentParent = currentParent->parent;
+            }
+            return localToWorld;
+        }
+
+        glm::vec3 getWorldTranslation() const {
+            Entity* currentParent  = parent;
+            glm::vec3 localToWorld = localTransform.position;
+            while(currentParent) {
+                localToWorld  = currentParent->localTransform.position + localToWorld;
+                currentParent = currentParent->parent;
+            }
+            return localToWorld;
+        }
+
         typedef std::unordered_map<std::string, Component*>::const_iterator CompMapConstIter;
         std::pair<CompMapConstIter, CompMapConstIter>
         getComponentsIter() const {
@@ -90,11 +122,8 @@ namespace our {
             ImGui::LabelText("", "%s", name.c_str());
 
             localTransform.onImmediateGui();
-            if(auto rb = getComponent<RigidBody>() ; localTransform.changedInUI && rb) {
-                btTransform t;
-                t.setFromOpenGLMatrix(glm::value_ptr(getLocalToWorldMatrix()));
-
-                rb->body->setWorldTransform(t);
+            if(auto rb = getComponent<RigidBody>(); localTransform.changedInUI && rb) {
+                rb->syncWithTransform(getWorldRotation(), getWorldTranslation());
                 localTransform.changedInUI = false;
             }
 
