@@ -52,7 +52,12 @@ CMakeSettings.json
 
 # cache specific files
 .cache/
-CMakeFiles/
+**/CMakeFiles/
+**/MakeFile
+**/cmake_install.cmake
+vendor/bullet_bkp
+
+
 
 #################################################
 screenshots

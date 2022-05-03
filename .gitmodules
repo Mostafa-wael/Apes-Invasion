@@ -1,3 +1,0 @@
-[submodule "vendor/bullet"]
-	path = vendor/bullet
-	url = https://github.com/bulletphysics/bullet3.git
