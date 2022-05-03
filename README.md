@@ -18,7 +18,8 @@ Repo for CMP2023's computer graphics project. The aim is to use OpenGL (plus som
 ## Steps to build bullet statically (Tested on Ubuntu 20.04)
 - When you clone or pull from this repo, you should have bullet in `vendor/`
 - Go into `vendor/bullet/`
-- Execute `cmake .` to generate build files
+- Execute `cmake . -DBUILD_EXTRAS=OFF -DBUILD_UNIT_TESTS=OFF` to generate build files
+- You can safely delete everythin except the following files/folders `src/` , `CMakeLists.txt`, `VERSION`, `UseBullet.cmake`, `bullet.pc.cmake`, `BulletConfig.cmake.in` 
 - Execute `sudo make install -j12` for a 12 thread machine for example.
 
 After everything finishes, you should find a bunch of bullet related `.a` files under `/usr/local/lib/`
