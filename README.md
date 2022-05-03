@@ -19,7 +19,7 @@ Repo for CMP2023's computer graphics project. The aim is to use OpenGL (plus som
 - When you clone or pull from this repo, you should have bullet in `vendor/`
 - Go into `vendor/bullet/`
 - Execute `cmake .` to generate build files
-- Execute `sudo make -j12` for a 12 thread machine for example.
+- Execute `sudo make install -j12` for a 12 thread machine for example.
 
 After everything finishes, you should find a bunch of bullet related `.a` files under `/usr/local/lib/`
 
