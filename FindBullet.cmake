@@ -33,6 +33,7 @@ macro(_FIND_BULLET_LIBRARY _var)
         ${BULLET_ROOT}
         ${BULLET_ROOT}/out/release8/libs
         ${BULLET_ROOT}/out/debug8/libs
+        ${BULLET_ROOT}/lib
      PATH_SUFFIXES lib
   )
   mark_as_advanced(${_var})
