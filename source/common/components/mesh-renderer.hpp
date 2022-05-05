@@ -23,7 +23,7 @@ namespace our {
         void deserialize(const nlohmann::json& data) override;
 
         virtual void onImmediateGui() override {
-            std::string meshRendHeaderID = std::to_string((long)&mesh) + std::to_string((long)&material);
+            std::string meshRendHeaderID = std::to_string((long long)&mesh) + std::to_string((long long)&material);
             std::string meshRendLabel    = "Mesh Renderer ##" + meshRendHeaderID;
             if(ImGui::CollapsingHeader(meshRendLabel.c_str())) {
                 ImGui::Indent(10);
