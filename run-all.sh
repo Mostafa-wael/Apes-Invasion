@@ -30,20 +30,23 @@
 # ./bin/GAME_APPLICATION -f=2 -c='config/transform-test/test-0.jsonc'
 
 # Pipeline
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-0.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-1.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-2.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-3.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-4.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-0.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-1.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-2.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-3.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/b-4.jsonc'
 
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/cm-0.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dm-0.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/cm-0.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dm-0.jsonc'
 
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dt-0.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dt-1.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dt-2.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dt-0.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dt-1.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/dt-2.jsonc'
 
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-0.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-1.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-2.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-3.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-0.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-1.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-2.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/pipeline-test/fc-3.jsonc'
+
+# Physics
+./bin/GAME_APPLICATION -c='config/physics.jsonc'
