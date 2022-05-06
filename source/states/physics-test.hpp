@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/camera.hpp"
 #include "ecs/entity.hpp"
 #include "ecs/rigidbody.hpp"
 #include "ecs/shooter.hpp"
@@ -47,7 +48,13 @@ class PhysicsTest : public our::State {
         renderer.initialize(size, config["renderer"]);
         renderer.app = getApp();
 
-        p.initialize(&world);
+        our::CameraComponent* cam;
+        for (auto e : world.getEntities()) {
+            if(auto camComp = e->getComponent<our::CameraComponent>())  
+                cam = camComp;
+        }
+
+        p.initialize(&world,getApp(), cam);
 
         for(auto&& e : world.getEntities()) {
             if(auto s = e->getComponent<our::Shooter>()) {

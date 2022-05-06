@@ -16,7 +16,7 @@ namespace our { // namespace our
         this->fromExtentsTranslationRotation(aabbHalfExtents, getOwner()->getWorldTranslation(), wRot, type, mass);
     }
 
-    void RigidBody::syncWithTransform(glm::mat4 worldRotation, glm::vec3 worldTranslation) {
+    void RigidBody::syncWithTransform(glm::mat4 worldRotation, glm::vec3 worldTranslation, bool resetMovement) {
         btTransform t;
         glm::mat4 wRot = worldRotation;
         glm::mat4 wPos = glm::translate(glm::mat4(1), worldTranslation);
@@ -24,11 +24,15 @@ namespace our { // namespace our
 
         int colFlags  = body->getCollisionFlags();
         int kinematic = btCollisionObject::CF_KINEMATIC_OBJECT;
-        if(colFlags & kinematic) {
-            body->getMotionState()->setWorldTransform(t);
+
+        if(resetMovement) {
             body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
             body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
             body->clearForces();
+        }
+
+        if(colFlags & kinematic) {
+            body->getMotionState()->setWorldTransform(t);
         } else
             body->setWorldTransform(t);
     }
@@ -57,6 +61,50 @@ namespace our { // namespace our
                     throw std::runtime_error("Rigidbody with no given AABB is not attached to an entity with a mesh renderer\n");
             }
         }
+    }
+
+    void RigidBody::fromCollisionShapeTranslationRotation(btCollisionShape* btColl, glm::vec3 translation, glm::vec3 rotation, std::string type, float m) {
+        btTransform transform;
+
+        transform.setIdentity();
+        transform.setOrigin({translation.x, translation.y, translation.z});
+
+        btQuaternion quat = btQuaternion();
+        quat.setEuler(rotation.y, rotation.x, rotation.z);
+        transform.setRotation(quat);
+
+        btScalar mass(m);
+
+        //rigidbody is dynamic if and only if mass is non zero, otherwise static
+        bool isDynamic = (m != 0.f);
+
+        btVector3 localInertia(0, 0, 0);
+        if(isDynamic)
+            btColl->calculateLocalInertia(mass, localInertia);
+
+        //using motionstate is optional, it provides interpolation capabilities, and only synchronizes 'active' objects
+        btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
+        btRigidBody::btRigidBodyConstructionInfo rbInfo(m, myMotionState, btColl, localInertia);
+
+        body = new btRigidBody(rbInfo);
+
+        // Simulates physics, gets affected by other dynamic objects
+        if(type == "dynamic")
+            body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_DYNAMIC_OBJECT);
+
+        // Simulates physics, NOT affected by other dynamic objects but affects them.
+        else if(type == "kinematic")
+            body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+
+        // No physics simulation, only collision?
+        else if(type == "static")
+            body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+
+        // Always simulate
+        // Bullet disables simulation after an object stays still or moves very slowly for some time.
+        // Just for debugging
+        body->setUserPointer(getOwner());
+        body->setActivationState(DISABLE_DEACTIVATION);
     }
 
     std::pair<glm::vec3, glm::vec3> RigidBody::getAABBWorldScale(Mesh* meshComp) {

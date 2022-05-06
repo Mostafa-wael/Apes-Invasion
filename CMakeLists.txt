@@ -26,12 +26,16 @@ set(IMGUI_SOURCES
         vendor/imgui/imgui_impl/imgui_impl_opengl3.cpp
 )
 
+set(OTHER_VENDOR_SOURCES
+        vendor/imguizmo/ImGuizmo.cpp
+)
+
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ./ )
 
 find_package(Bullet)
 
 # Combine all vendor source files together into a single variable
-set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES})
+set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES} ${OTHER_VENDOR_SOURCES})
 
 # A variable with all our source files that are common between executable targets (examples)
 set(COMMON_SOURCES
@@ -87,6 +91,7 @@ set(COMMON_SOURCES
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
+        source/common/systems/physics.cpp
 
         source/common/util.cpp
 )
@@ -100,6 +105,7 @@ include_directories(
         vendor/imgui
         vendor/utils
         vendor/bullet/src
+        vendor/imguizmo
 )
 
 

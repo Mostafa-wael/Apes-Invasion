@@ -226,10 +226,10 @@
                         "useMeshBoundingBox": true,
                         "rigidBodyType": "dynamic"
                     }
-                    ,
-                    {
-                        "type": "Shooter"
-                    }
+                    // ,
+                    // {
+                    //     "type": "Shooter"
+                    // }
                 ]
             }
             //,

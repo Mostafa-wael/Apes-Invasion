@@ -26,7 +26,9 @@ namespace our {
             lineShader.attach("assets/shaders/physics-debug.vert", GL_VERTEX_SHADER);
             lineShader.attach("assets/shaders/physics-debug.frag", GL_FRAGMENT_SHADER);
             lineShader.link();
-
+            
+            glGenBuffers(1, &VBO);
+            glGenVertexArrays(1, &VAO);
         }
 
 
@@ -53,12 +55,6 @@ namespace our {
             points[9]  = color.x()/255.0f;
             points[10] = color.y()/255.0f;
             points[11] = color.z()/255.0f;
-
-            glDeleteBuffers(1, &VBO);
-            glDeleteVertexArrays(1, &VAO);
-
-            glGenBuffers(1, &VBO);
-            glGenVertexArrays(1, &VAO);
 
             glBindVertexArray(VAO);
 
