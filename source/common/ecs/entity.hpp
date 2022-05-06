@@ -12,6 +12,7 @@
 #include "glm/gtx/quaternion.hpp"
 #include "imgui.h"
 #include "transform.hpp"
+#include <cstdio>
 #include <cstring>
 #include <glm/glm.hpp>
 #include <string>
@@ -144,6 +145,7 @@ namespace our {
         }
 
         virtual void onImmediateGui() override {
+
             if(ImGui::CollapsingHeader((name + "##" + std::to_string((long long)this)).c_str())) {
 
                 std::string id = std::to_string((long long)this);

@@ -2,6 +2,7 @@
 
 #include "ecs/world.hpp"
 #include "imgui.h"
+#include <cstring>
 namespace our {
     class EntityDebugger {
         char entityName[128];
@@ -12,15 +13,19 @@ namespace our {
             ImGui::Text("Current frametime: %f", deltaTime);
 
             ImGui::InputText("Entity name", entityName, 128);
-            ImGui::SameLine();
-            if(ImGui::Button("Add entity"))
+
+            float item_spacing = ImGui::GetStyle().ItemSpacing.x, window_width = ImGui::GetWindowWidth();
+            float full_button_width = window_width - 2 * item_spacing;
+
+            if(ImGui::Button("Add entity", {full_button_width, 0}) && std::strlen(entityName) > 0)
                 addEntity(entityName, world);
+
+            ImGui::Spacing();
 
             // TODO: Scene saving when serialization is done
             // char filePath[256];
             // ImGui::InputText("Filepath", filePath, 256);
             // if (ImGui::Button("Save")) {
-
             // }
 
             for(auto entity : world->getEntities()) {

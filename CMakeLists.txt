@@ -6,6 +6,11 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# Profiling stuff
+# SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
+# SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+# SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -pg")
+
 # These are the options we select for building GLFW as a library
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)        # Don't build Documentation
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)       # Don't build Tests
@@ -22,6 +27,7 @@ set(IMGUI_SOURCES
         vendor/imgui/imgui_demo.cpp
         vendor/imgui/imgui_draw.cpp
         vendor/imgui/imgui_widgets.cpp
+        vendor/imgui/imgui_tables.cpp
         vendor/imgui/imgui_impl/imgui_impl_glfw.cpp
         vendor/imgui/imgui_impl/imgui_impl_opengl3.cpp
 )
