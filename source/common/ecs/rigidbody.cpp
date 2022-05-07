@@ -107,9 +107,9 @@ namespace our { // namespace our
         body->setUserPointer(getOwner());
         body->setActivationState(DISABLE_DEACTIVATION);
 
-        if(getOwner()->parent) {
+        if(getOwner()->getParent()) {
             printf("Entity %s has a rigidbody component, setting parent to null due to technical limitations\n", getOwner()->name.c_str());
-            getOwner()->parent = nullptr;
+            getOwner()->setParent(nullptr);
         }
     }
 

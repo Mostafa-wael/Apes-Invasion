@@ -37,7 +37,7 @@ namespace our {
             // }
 
             for(auto entity : world->getEntities()) {
-                if(!entity->enabled || entity->parent != nullptr) continue;
+                if(!entity->enabled || entity->getParent() != nullptr) continue;
                 // Imgui treats elements with the same label/ID as one element
                 // To differentiate each entity, added an ID to the end of each element's name
                 // Imgui ignores the ##

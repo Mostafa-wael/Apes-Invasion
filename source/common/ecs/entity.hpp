@@ -31,13 +31,14 @@ namespace our {
         std::unordered_map<std::string, Component*> components; // A map of components that are owned by this entity
                                                                 // The key is the ID of the component so an entity can only have one component of each type
 
+        Entity* parent;     // The parent of the entity. The transform of the entity is relative to its parent.
+                            // If parent is null, the entity is a root entity (has no parent).
         friend World;       // The world is a friend since it is the only class that is allowed to instantiate an entity
         Entity() = default; // The entity constructor is private since only the world is allowed to instantiate an entity
     public:
         std::string name;         // The name of the entity. It could be useful to refer to an entity by its name
-        Entity* parent;           // The parent of the entity. The transform of the entity is relative to its parent.
-                                  // If parent is null, the entity is a root entity (has no parent).
         Transform localTransform; // The transform of this entity relative to its parent.
+        std::unordered_set<Entity*> children;
 
         bool enabled = true;
 
@@ -57,16 +58,34 @@ namespace our {
         // This template method create a component of type T,
         // adds it to the components map and returns a pointer to it
         template <typename T>
-        T* addComponent() ;
+        T* addComponent() {
+            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+            T* component           = new T();
+            component->owner       = this;
+            components[T::getID()] = component;
+            return component;
+        }
 
         // This template method searhes for a component of type T and returns a pointer to it
         // If no component of type T was found, it returns a nullptr
         template <typename T>
-        T* getComponent() ;
+        T* getComponent() {
+            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+            if(auto it = components.find(static_cast<std::string>(T::getID())); it != components.end()) {
+                return dynamic_cast<T*>(it->second);
+            }
+            return nullptr;
+        }
 
         // This template method searhes for a component of type T and deletes it
         template <typename T>
-        void deleteComponent() ;
+        void deleteComponent() {
+            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
+            if(auto it = components.find(static_cast<std::string>(T::getID())); it != components.end()) {
+                delete it->second;
+                components.erase(it);
+            }
+        }
 
         // Since the entity owns its components, they should be deleted alongside the entity
         ~Entity() {
@@ -79,31 +98,34 @@ namespace our {
         Entity(const Entity&)            = delete;
         Entity& operator=(Entity const&) = delete;
 
-        glm::mat4 getWorldRotation() const ;
+        glm::mat4 getWorldRotation() const;
 
-        glm::vec3 getWorldScale() const ;
+        glm::vec3 getWorldScale() const;
 
-        glm::vec3 getWorldTranslation() const ;
+        glm::vec3 getWorldTranslation() const;
 
         typedef std::unordered_map<std::string, Component*>::const_iterator CompMapConstIter;
         std::pair<CompMapConstIter, CompMapConstIter>
-        getComponentsIter() const ;
+        getComponentsIter() const;
 
-        glm::vec3 getForward() const ;
+        glm::vec3 getForward() const;
 
-        glm::vec3 getRight() const ;
+        glm::vec3 getRight() const;
 
-        glm::vec3 getUp() const ;
+        glm::vec3 getUp() const;
 
         virtual void onImmediateGui() override;
 
-        void drawComponentAdder(std::string id) ;
+        void drawComponentAdder(std::string id);
 
-        void drawTransform(std::string id) ;
+        void drawTransform(std::string id);
 
         // Synnchronizes bullet rigidbodies to our data when we update something in the entity list
         void ourToBullet();
 
-        void drawComponents(std::string id) ;
+        void drawComponents(std::string id);
+
+        void setParent(Entity* p);
+        Entity* getParent();
     };
 } // namespace our

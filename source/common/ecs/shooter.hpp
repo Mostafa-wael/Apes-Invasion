@@ -21,7 +21,7 @@ namespace our {
 
         float lifeTime     = 2;
         float deleteTimer  = lifeTime;
-        int numProjectiles = 1;
+        int numProjectiles = 4;
 
         float rotationSpeed = 50;
         float velocity      = 15.0f;
@@ -83,10 +83,10 @@ namespace our {
         Entity* spawnProjectile() {
 
             auto e                     = zaWardo->add();
-            e->parent                  = getOwner();
             e->enabled                 = false;
             e->name                    = "sphere##" + std::to_string((long long)e);
             e->localTransform.position = {0, 0, 0};
+            e->setParent(getOwner());
 
             auto mR      = e->addComponent<MeshRendererComponent>();
             mR->mesh     = AssetLoader<Mesh>::get("sphere");

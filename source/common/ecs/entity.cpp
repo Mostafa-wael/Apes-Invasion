@@ -40,11 +40,9 @@ namespace our {
     void Entity::onImmediateGui() {
         if(ImGui::TreeNode((name + "##" + std::to_string((long long)this)).c_str())) {
             ImGui::Indent(10);
-
-            // Brute force solution
-            // TODO: figre out a better way to display child hierarchies.
-            for(auto e : world->getEntities()) {
-                if(e->parent == this) e->onImmediateGui();
+            
+            for(auto c : children) {
+                c->onImmediateGui();
             }
             ImGui::Indent(-10);
             ImGui::TreePop();
@@ -54,39 +52,6 @@ namespace our {
             selectedEntity = this;
         }
     }
-
-    // This template method create a component of type T,
-        // adds it to the components map and returns a pointer to it
-        template <typename T>
-        T* Entity::addComponent() {
-            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-            T* component           = new T();
-            component->owner       = this;
-            components[T::getID()] = component;
-            return component;
-        }
-
-        // This template method searhes for a component of type T and returns a pointer to it
-        // If no component of type T was found, it returns a nullptr
-        template <typename T>
-        T* Entity::getComponent() {
-            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-            if(auto it = components.find(static_cast<std::string>(T::getID())); it != components.end()) {
-                return dynamic_cast<T*>(it->second);
-            }
-            return nullptr;
-        }
-
-        // This template method searhes for a component of type T and deletes it
-        template <typename T>
-        void Entity::deleteComponent() {
-            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-            if(auto it = components.find(static_cast<std::string>(T::getID())); it != components.end()) {
-                delete it->second;
-                components.erase(it);
-            }
-        }
-
 
     glm::mat4 Entity::getWorldRotation() const {
         Entity* currentParent  = parent;
@@ -174,6 +139,24 @@ namespace our {
                 ImGui::TreePop();
             }
         }
+    }
+
+    void Entity::setParent(Entity* p ){
+        // Remove this as a child of the old parent
+        if(parent) {
+            parent->children.erase(this);
+        }
+
+        parent = p;
+
+        // Set this as the child of the new parent
+        if(p){
+            p->children.insert(this);
+        }
+    }
+
+    Entity* Entity::getParent(){
+        return parent;
     }
 
 } // namespace our
