@@ -5,6 +5,7 @@
 #include "glm/ext/vector_float3.hpp"
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtx/euler_angles.hpp"
+#include <cstdio>
 #include <stdexcept>
 #include <string>
 
@@ -105,6 +106,11 @@ namespace our { // namespace our
         // Just for debugging
         body->setUserPointer(getOwner());
         body->setActivationState(DISABLE_DEACTIVATION);
+
+        if(getOwner()->parent) {
+            printf("Entity %s has a rigidbody component, setting parent to null due to technical limitations\n", getOwner()->name.c_str());
+            getOwner()->parent = nullptr;
+        }
     }
 
     std::pair<glm::vec3, glm::vec3> RigidBody::getAABBWorldScale(Mesh* meshComp) {

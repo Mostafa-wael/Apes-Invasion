@@ -47,6 +47,7 @@ namespace our {
             "Shooter"};
 
         int currComponent = 0;
+        static inline Entity* selectedEntity;
 
         World* getWorld() const { return world; } // Returns the world to which this entity belongs
 
@@ -144,21 +145,7 @@ namespace our {
             return glm::vec3(getWorldRotation() * glm::vec4(0, 1, 0, 1));
         }
 
-        virtual void onImmediateGui() override {
-
-            if(ImGui::CollapsingHeader((name + "##" + std::to_string((long long)this)).c_str())) {
-
-                std::string id = std::to_string((long long)this);
-
-                drawComponentAdder(id);
-
-                drawTransform(id);
-
-                ourToBullet();
-
-                drawComponents(id);
-            }
-        }
+        virtual void onImmediateGui() override;
 
         void drawComponentAdder(std::string id) {
             ImGui::Combo(("##" + id).c_str(), &currComponent, componentsToAdd, 3);

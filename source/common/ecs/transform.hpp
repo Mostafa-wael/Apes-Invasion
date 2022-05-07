@@ -2,6 +2,7 @@
 
 #include "ecs/IImGuiDrawable.h"
 #include "glm/ext/quaternion_transform.hpp"
+#include "glm/ext/scalar_constants.hpp"
 #include "glm/fwd.hpp"
 #include "glm/gtc/constants.hpp"
 #include "glm/gtc/quaternion.hpp"
@@ -38,7 +39,7 @@ namespace our {
             changedInUI |= ImGui::DragFloat3(pos.c_str(), &position.x, 0.1f);
 
             glm::vec3 rotation = getEulerRotation();
-            changedInUI |= ImGui::DragFloat3(rot.c_str(), &rotation.x, 0.05, 0, glm::half_pi<float>());
+            changedInUI |= ImGui::DragFloat3(rot.c_str(), &rotation.x, 0.05, 0, glm::pi<float>());
 
             setEulerRotation(rotation.x, rotation.y, rotation.z);
 

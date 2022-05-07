@@ -16,28 +16,32 @@
 namespace our {
     class Shooter : public Component {
     public:
-        float firingDelay   = 0.2;
-        float timer         = firingDelay;
-        float lifeTime      = 1;
-        float deleteTimer   = lifeTime;
-        int numProjectiles  = 8;
-        float rotationSpeed = 50;
-        float velocity      = 20.0f;
-        float spawnDist     = 5.0f;
+        float firingDelay = 0.5;
+        float timer       = firingDelay;
 
-        std::queue<Entity*> pool;
+        float lifeTime     = 2;
+        float deleteTimer  = lifeTime;
+        int numProjectiles = 1;
+
+        float rotationSpeed = 50;
+        float velocity      = 15.0f;
+        float spawnDist     = 3.0f;
 
         World* zaWardo;
         Physics* physicsSystem;
 
-        std::queue<Entity*> projectiles;
+        int projToSpawn   = 0;
+        int projToDespawn = 0;
+        std::vector<Entity*> projectiles;
+        int maxProjectiles;
+
         bool t = false;
 
         void init(Physics* p) {
-            int maxProjectiles = (numProjectiles / firingDelay) * lifeTime;
+            maxProjectiles = (numProjectiles / firingDelay) * lifeTime;
 
             for(int i = 0; i < maxProjectiles; i++)
-                pool.push(spawnProjectile());
+                projectiles.push_back(spawnProjectile());
 
             if(auto rb = getOwner()->getComponent<our::RigidBody>()) {
                 rb->body->setSpinningFriction(0);
@@ -79,6 +83,7 @@ namespace our {
         Entity* spawnProjectile() {
 
             auto e                     = zaWardo->add();
+            e->parent                  = getOwner();
             e->enabled                 = false;
             e->name                    = "sphere##" + std::to_string((long long)e);
             e->localTransform.position = {0, 0, 0};
@@ -94,32 +99,27 @@ namespace our {
         }
 
         void getFromPool(glm::vec3 position, glm::vec3 velocity) {
-            if(pool.size() > 0) {
-                Entity* e = pool.front();
-                pool.pop();
+            Entity* e = projectiles[projToSpawn];
 
-                e->enabled = true;
+            projToSpawn = (projToSpawn + 1) % maxProjectiles;
 
-                auto rb = e->getComponent<RigidBody>();
+            e->enabled = true;
 
-                e->localTransform.position = position;
-                rb->syncWithTransform(e->getWorldRotation(), e->getWorldTranslation());
+            auto rb = e->getComponent<RigidBody>();
 
-                rb->body->setLinearVelocity({velocity.x, velocity.y, velocity.z});
-                physicsSystem->dynamicsWorld->addRigidBody(rb->body);
-                rb->body->setGravity({0, 0, 0});
+            e->localTransform.position = position;
+            rb->syncWithTransform(e->getWorldRotation(), e->getWorldTranslation());
 
-                projectiles.push(e);
-            }
+            rb->body->setLinearVelocity({velocity.x, velocity.y, velocity.z});
+            physicsSystem->dynamicsWorld->addRigidBody(rb->body);
+            rb->body->setGravity({0, 0, 0});
         }
 
         void addToPool() {
-            Entity* rm;
-            rm = projectiles.front();
-            projectiles.pop();
-
-            pool.push(rm);
+            Entity* rm    = projectiles[projToDespawn];
+            projToDespawn = (projToDespawn + 1) % maxProjectiles;
             physicsSystem->dynamicsWorld->removeRigidBody(rm->getComponent<RigidBody>()->body);
+            rm->enabled = false;
         }
 
         static std::string getID() { return "Shooter"; }

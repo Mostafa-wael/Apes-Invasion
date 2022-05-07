@@ -2,6 +2,7 @@
 #include "../components/component-deserializer.hpp"
 #include "../deserialize-utils.hpp"
 #include "glm/fwd.hpp"
+#include "imgui.h"
 
 #include <glm/gtx/euler_angles.hpp>
 
@@ -33,6 +34,24 @@ namespace our {
                     deserializeComponent(component, this);
                 }
             }
+        }
+    }
+
+    void Entity::onImmediateGui() {
+        if(ImGui::TreeNode((name + "##" + std::to_string((long long)this)).c_str())) {
+            ImGui::Indent(10);
+
+            // Brute force solution
+            // TODO: figre out a better way to display child hierarchies.
+            for(auto e : world->getEntities()) {
+                if(e->parent == this) e->onImmediateGui();
+            }
+            ImGui::Indent(-10);
+            ImGui::TreePop();
+        }
+
+        if(ImGui::IsItemClicked()) {
+            selectedEntity = this;
         }
     }
 

@@ -16,7 +16,9 @@
 #include "ecs/transform.hpp"
 #include "ecs/world.hpp"
 #include "glm/common.hpp"
+#include "glm/detail/type_quat.hpp"
 #include "glm/ext/matrix_transform.hpp"
+#include "glm/ext/quaternion_common.hpp"
 #include "glm/ext/quaternion_float.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/ext/vector_float4.hpp"
@@ -25,10 +27,12 @@
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/euler_angles.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "glm/matrix.hpp"
 #include "imgui.h"
 #include "mesh/mesh.hpp"
 #include "systems/physics-debug.hpp"
+#include <cmath>
 #include <stdio.h>
 #include <string>
 
@@ -59,7 +63,7 @@ namespace our {
         CameraComponent* camera;
 
         bool hit = false;
-        glm::mat4 hitObjTransform;
+        glm::mat4 hitEntityTransform;
         Entity* hitEntity;
 
         void initialize(World* w, Application* a, CameraComponent* cam) {
@@ -161,7 +165,7 @@ namespace our {
                 ray_eye            = {ray_eye.x, ray_eye.y, -1.0, 0.0};
 
                 glm::vec3 ray_wor = inverse(camera->getViewMatrix()) * ray_eye;
-                float dist        = 20;
+                float dist        = 1000;
 
                 glm::vec3 rayStart = camera->getOwner()->getWorldTranslation();
                 glm::vec3 rayEnd   = rayStart + ray_wor * dist;
@@ -183,13 +187,23 @@ namespace our {
 
                 if(allResults.hasHit()) {
                     printf("%s", "HIT!\n");
-                    hit = true;
+                    hit             = true;
+                    Entity* closest = nullptr;
+                    glm::mat4 closestTransform;
+                    float minDist = INFINITY;
+
                     for(int i = 0; i < allResults.m_hitPointWorld.size(); i++) {
                         dynamicsWorld->getDebugDrawer()->drawSphere(allResults.m_hitPointWorld.at(i), 1, btVector3(1, 0, 0));
-                        hitEntity       = static_cast<Entity*>(allResults.m_collisionObjects[0]->getUserPointer());
-                        hitObjTransform = hitEntity->localTransform.toMat4();
-                        break;
+                        float currDist = allResults.m_hitPointWorld.at(i).distance2(from);
+                        if(currDist < minDist) {
+                            closest          = static_cast<Entity*>(allResults.m_collisionObjects[0]->getUserPointer());
+                            closestTransform = closest->localTransform.toMat4();
+                            minDist          = currDist;
+                        }
                     }
+
+                    hitEntity = closest;
+                    hitEntityTransform = closestTransform;
                 } else {
                     hit = false;
                 }
@@ -201,15 +215,16 @@ namespace our {
             for(auto&& e : world->getEntitiesMut()) {
                 if(!e->enabled) continue;
                 if(auto rb = e->getComponent<RigidBody>()) {
+
                     btTransform rbT;
                     rb->body->getMotionState()->getWorldTransform(rbT);
 
-                    e->localTransform.position = {rbT.getOrigin().x(),
-                                                  rbT.getOrigin().y(),
-                                                  rbT.getOrigin().z()};
+                    glm::vec3 newWorldTranslation = {rbT.getOrigin().x(), rbT.getOrigin().y(), rbT.getOrigin().z()};
+                    glm::quat newWorldRotation =
+                        glm::quat(rbT.getRotation().w(), rbT.getRotation().x(), rbT.getRotation().y(), rbT.getRotation().z());
 
-                    btQuaternion qRot      = rbT.getRotation();
-                    e->localTransform.qRot = {qRot.w(), qRot.x(), qRot.y(), qRot.z()};
+                    e->localTransform.position = newWorldTranslation;
+                    e->localTransform.qRot     = newWorldRotation;
                 }
             }
         }
@@ -248,16 +263,19 @@ namespace our {
         virtual void onImmediateGui() override {
             if(hit) {
                 ImGuizmo::BeginFrame();
-                EditTransform(camera, &hitObjTransform, app->getWindowSize(), &app->getKeyboard());
+                EditTransform(camera, &hitEntityTransform, app->getWindowSize(), &app->getKeyboard());
                 glm::vec3 scale, translation, skew;
                 glm::quat orein;
                 glm::vec4 perspective;
-                glm::decompose(hitObjTransform, scale, orein, translation, skew, perspective);
+                glm::decompose(hitEntityTransform, scale, orein, translation, skew, perspective);
 
                 hitEntity->localTransform.position    = translation;
                 hitEntity->localTransform.qRot        = orein;
                 hitEntity->localTransform.scale       = scale;
                 hitEntity->localTransform.changedInUI = true;
+
+                Entity::selectedEntity = hitEntity;
+
                 if(auto rb = hitEntity->getComponent<RigidBody>()) {
                     rb->syncWithTransform(hitEntity->getWorldRotation(), hitEntity->getWorldTranslation(), true);
                 }

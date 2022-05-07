@@ -225,8 +225,7 @@
                         "type": "Rigid Body",
                         "useMeshBoundingBox": true,
                         "rigidBodyType": "dynamic"
-                    }
-                    ,
+                    },
                     {
                         "type": "Shooter"
                     }
@@ -249,32 +248,34 @@
                         "type": "Mesh Renderer",
                         "mesh": "cube",
                         "material": "moon"
-                    },
+                    }
+                    // ,
+                    // {
+                    //     "type": "Rigid Body",
+                    //     "useMeshBoundingBox": true,
+                    //     "rigidBodyType": "dynamic"
+                    // }
+                ],
+                "children": [
+                    //,
                     {
-                        "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
-                        "rigidBodyType": "dynamic"
+                        "name": "monkey",
+                        "position" : [-1,-1, -1],
+                        "rotation": [
+                            -45,
+                            0,
+                            0
+                        ],
+                        "components": [
+                            {
+                                "type": "Mesh Renderer",
+                                "mesh": "monkey",
+                                "material": "monkey"
+                            }
+                        ]
                     }
                 ]
-            }
-            //,
-            // {
-            //     "name": "monkey",
-            //     "rotation": [-45, 0, 0],
-            //     "components": [
-            //         {
-            //             "type": "Mesh Renderer",
-            //             "mesh": "monkey",
-            //             "material": "monkey"
-            //         },
-            //         {
-            //             "type": "Movement",
-            //             "linearVelocity": [0, 0.1, 0],
-            //             "angularVelocity": [0, 45, 0]
-            //         }
-            //     ]
-            // }
-            ,
+            },
             {
                 "name": "ground",
                 "position": [
