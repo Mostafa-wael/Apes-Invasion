@@ -2,9 +2,10 @@
 #include "../components/component-deserializer.hpp"
 #include "../deserialize-utils.hpp"
 #include "glm/fwd.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include "imgui.h"
-
 #include <glm/gtx/euler_angles.hpp>
+#include "systems/entity-debugger.hpp"
 
 namespace our {
 
@@ -40,27 +41,28 @@ namespace our {
     void Entity::onImmediateGui() {
         if(ImGui::TreeNode((name + "##" + std::to_string((long long)this)).c_str())) {
             ImGui::Indent(10);
-            
+
             for(auto c : children) {
                 c->onImmediateGui();
             }
+
             ImGui::Indent(-10);
             ImGui::TreePop();
         }
 
         if(ImGui::IsItemClicked()) {
-            selectedEntity = this;
+            EntityDebugger::selectedEntity = this;
         }
     }
 
     glm::mat4 Entity::getWorldRotation() const {
         Entity* currentParent  = parent;
-        glm::mat4 localToWorld = glm::toMat4(localTransform.qRot);
+        glm::quat localToWorld = localTransform.qRot;
         while(currentParent) {
-            localToWorld  = glm::toMat4(currentParent->localTransform.qRot) * localToWorld;
+            localToWorld  = currentParent->localTransform.qRot * localToWorld;
             currentParent = currentParent->parent;
         }
-        return localToWorld;
+        return glm::toMat4(localToWorld);
     }
 
     glm::vec3 Entity::getWorldScale() const {
@@ -141,7 +143,7 @@ namespace our {
         }
     }
 
-    void Entity::setParent(Entity* p ){
+    void Entity::setParent(Entity* p) {
         // Remove this as a child of the old parent
         if(parent) {
             parent->children.erase(this);
@@ -150,12 +152,12 @@ namespace our {
         parent = p;
 
         // Set this as the child of the new parent
-        if(p){
+        if(p) {
             p->children.insert(this);
         }
     }
 
-    Entity* Entity::getParent(){
+    Entity* Entity::getParent() {
         return parent;
     }
 

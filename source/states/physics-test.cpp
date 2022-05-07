@@ -1,4 +1,5 @@
 #include "physics-test.hpp"
+#include "systems/entity-debugger.hpp"
 
 void PhysicsTest::onInitialize() {
     // First of all, we get the scene configuration from the app config
@@ -20,11 +21,15 @@ void PhysicsTest::onInitialize() {
 
     our::CameraComponent* cam;
     for(auto e : world.getEntities()) {
-        if(auto camComp = e->getComponent<our::CameraComponent>())
+        if(auto camComp = e->getComponent<our::CameraComponent>()) {
             cam = camComp;
+            break;
+        }
     }
 
-    p.initialize(&world, getApp(), cam);
+    our::EntityDebugger::init(cam, getApp());
+
+    p.initialize(&world);
 
     for(auto&& e : world.getEntities()) {
         if(auto s = e->getComponent<our::Shooter>()) {
@@ -66,7 +71,7 @@ void PhysicsTest::onDestroy() {
 
 void PhysicsTest::onImmediateGui() {
 
-    edb.EntityDebugger::update(&world, dt);
+    our::EntityDebugger::update(&world, dt);
 
     p.onImmediateGui();
 }

@@ -44,7 +44,6 @@ namespace our {
 
     public:
         Application* app;
-        bool wireframe = false;
         // Initialize the renderer including the sky and the Postprocessing objects.
         // windowSize is the width & height of the window (in pixels).
         void initialize(glm::ivec2 windowSize, const nlohmann::json& config);

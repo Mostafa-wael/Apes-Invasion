@@ -225,7 +225,8 @@
                         "type": "Rigid Body",
                         "useMeshBoundingBox": true,
                         "rigidBodyType": "dynamic"
-                    },
+                    }
+                    ,
                     {
                         "type": "Shooter"
                     }

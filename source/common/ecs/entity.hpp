@@ -48,7 +48,6 @@ namespace our {
             "Shooter"};
 
         int currComponent = 0;
-        static inline Entity* selectedEntity;
 
         World* getWorld() const { return world; } // Returns the world to which this entity belongs
 

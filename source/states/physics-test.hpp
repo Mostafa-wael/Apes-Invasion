@@ -26,11 +26,10 @@ class PhysicsTest : public our::State {
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
     our::Physics p;
-    our::EntityDebugger edb;
-
     float dt;
 
     void onInitialize() override ;
+    
     void onDraw(double deltaTime) override ;
 
     void onDestroy() override ;

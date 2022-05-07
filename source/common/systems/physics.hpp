@@ -1,6 +1,5 @@
 #pragma once
 #include "BulletCollision/CollisionDispatch/btCollisionObject.h"
-#include "BulletCollision/NarrowPhaseCollision/btRaycastCallback.h"
 #include "ImGuizmo.h"
 #include "LinearMath/btQuaternion.h"
 #include "LinearMath/btScalar.h"
@@ -26,7 +25,6 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtc/type_ptr.hpp"
 #include "glm/gtx/euler_angles.hpp"
-#include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include "glm/matrix.hpp"
 #include "imgui.h"
@@ -58,14 +56,10 @@ namespace our {
         PhysDebugDraw* debugDrawer;
 
         World* world;
-        Application* app;
-        CameraComponent* camera;
 
         bool hit = false;
-        glm::mat4 hitEntityTransform;
-        Entity* hitEntity;
 
-        void initialize(World* w, Application* a, CameraComponent* cam);
+        void initialize(World* w);
 
         void update(float dt);
 
@@ -76,12 +70,11 @@ namespace our {
         // Perhaps it'd be wise to split the real physics simulation from the picking system
         // By having 2 dynamic worlds. One for picking and the other for simulating physics.
         // We'd also have 2 components: RigidBody and Pickable.
-
         // The picking world would not need to simulate physics, it would only keep track of objects and their
         // AABBs, it would get updated after each frame with new object positions.
 
         // Might be good to look into btGhostObject
-        void rayCast();
+        void editorPickObject();
 
         // Reads data from bullet physics and updates object transform for graphics drawing
         void bulletToOur();

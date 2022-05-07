@@ -181,15 +181,6 @@ namespace our {
         glColorMask(true, true, true, true);
         glDepthMask(true);
 
-        if(app->getKeyboard().justPressed(GLFW_KEY_F)) {
-            wireframe = !wireframe;
-            if(wireframe) {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-            } else {
-                glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            }
-        }
-
         // If there is a postprocess material, bind the framebuffer
         if(postprocessMaterial) {
             //TODO: (Req 10) bind the framebuffer

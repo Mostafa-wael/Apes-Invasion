@@ -6,6 +6,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtc/constants.hpp"
 #include "glm/gtc/quaternion.hpp"
+#include "glm/gtx/fast_trigonometry.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include "imgui.h"
 #include <cstdio>
@@ -17,6 +18,8 @@ namespace our {
 
     // A transform defines the translation, rotation & scale of an object relative to its parent
     struct Transform : public IImGuiDrawable {
+        glm::vec3 rotation = glm::vec3(0); // Should only be used through setEulerRotation and getEulerRotation
+
     public:
         glm::vec3 position = glm::vec3(0, 0, 0); // The position is defined as a vec3. (0,0,0) means no translation
         glm::vec3 scale    = glm::vec3(1, 1, 1); // The scale is defined as a vec3. (1,1,1) means no scaling.
@@ -39,7 +42,7 @@ namespace our {
             changedInUI |= ImGui::DragFloat3(pos.c_str(), &position.x, 0.1f);
 
             glm::vec3 rotation = getEulerRotation();
-            changedInUI |= ImGui::DragFloat3(rot.c_str(), &rotation.x, 0.05, 0, glm::pi<float>());
+            changedInUI |= ImGui::DragFloat3(rot.c_str(), &rotation.x, 0.05);
 
             setEulerRotation(rotation.x, rotation.y, rotation.z);
 
@@ -54,16 +57,17 @@ namespace our {
             }
         }
 
-        void setEulerRotation(float x, float y, float z) {
-            qRot = glm::quat({x, y, z});
+        void setEulerRotation(glm::vec3 eRot) {
+            rotation = eRot;
+            qRot     = glm::quat(rotation);
         }
 
-        void setEulerRotation(glm::vec3 eRot) {
-            qRot = glm::quat(eRot);
+        void setEulerRotation(float x, float y, float z) {
+            setEulerRotation({x, y, z});
         }
 
         glm::vec3 getEulerRotation() {
-            return glm::eulerAngles(qRot);
+            return rotation;
         }
     };
 
