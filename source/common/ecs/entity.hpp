@@ -57,34 +57,16 @@ namespace our {
         // This template method create a component of type T,
         // adds it to the components map and returns a pointer to it
         template <typename T>
-        T* addComponent() {
-            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-            T* component           = new T();
-            component->owner       = this;
-            components[T::getID()] = component;
-            return component;
-        }
+        T* addComponent() ;
 
         // This template method searhes for a component of type T and returns a pointer to it
         // If no component of type T was found, it returns a nullptr
         template <typename T>
-        T* getComponent() {
-            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-            if(auto it = components.find(static_cast<std::string>(T::getID())); it != components.end()) {
-                return dynamic_cast<T*>(it->second);
-            }
-            return nullptr;
-        }
+        T* getComponent() ;
 
         // This template method searhes for a component of type T and deletes it
         template <typename T>
-        void deleteComponent() {
-            static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
-            if(auto it = components.find(static_cast<std::string>(T::getID())); it != components.end()) {
-                delete it->second;
-                components.erase(it);
-            }
-        }
+        void deleteComponent() ;
 
         // Since the entity owns its components, they should be deleted alongside the entity
         ~Entity() {
@@ -97,94 +79,31 @@ namespace our {
         Entity(const Entity&)            = delete;
         Entity& operator=(Entity const&) = delete;
 
-        glm::mat4 getWorldRotation() const {
-            Entity* currentParent  = parent;
-            glm::mat4 localToWorld = glm::toMat4(localTransform.qRot);
-            while(currentParent) {
-                localToWorld  = glm::toMat4(currentParent->localTransform.qRot) * localToWorld;
-                currentParent = currentParent->parent;
-            }
-            return localToWorld;
-        }
+        glm::mat4 getWorldRotation() const ;
 
-        glm::vec3 getWorldScale() const {
-            Entity* currentParent  = parent;
-            glm::vec3 localToWorld = localTransform.scale;
-            while(currentParent) {
-                localToWorld  = currentParent->localTransform.scale * localToWorld;
-                currentParent = currentParent->parent;
-            }
-            return localToWorld;
-        }
+        glm::vec3 getWorldScale() const ;
 
-        glm::vec3 getWorldTranslation() const {
-            Entity* currentParent  = parent;
-            glm::vec3 localToWorld = localTransform.position;
-            while(currentParent) {
-                localToWorld  = currentParent->localTransform.position + localToWorld;
-                currentParent = currentParent->parent;
-            }
-            return localToWorld;
-        }
+        glm::vec3 getWorldTranslation() const ;
 
         typedef std::unordered_map<std::string, Component*>::const_iterator CompMapConstIter;
         std::pair<CompMapConstIter, CompMapConstIter>
-        getComponentsIter() const {
-            return {components.begin(), components.end()};
-        }
+        getComponentsIter() const ;
 
-        glm::vec3 getForward() const {
-            return glm::vec3(getWorldRotation() * glm::vec4(0, 0, -1, 1));
-        }
+        glm::vec3 getForward() const ;
 
-        glm::vec3 getRight() const {
-            return glm::vec3(getWorldRotation() * glm::vec4(1, 0, 0, 1));
-        }
+        glm::vec3 getRight() const ;
 
-        glm::vec3 getUp() const {
-            return glm::vec3(getWorldRotation() * glm::vec4(0, 1, 0, 1));
-        }
+        glm::vec3 getUp() const ;
 
         virtual void onImmediateGui() override;
 
-        void drawComponentAdder(std::string id) {
-            ImGui::Combo(("##" + id).c_str(), &currComponent, componentsToAdd, 3);
-            ImGui::SameLine();
-            if(ImGui::Button(("Add component##" + id).c_str())) {
-                if(std::strcmp(componentsToAdd[currComponent], "Mesh Renderer") == 0)
-                    addComponent<MeshRendererComponent>();
-                // TODO: Implement logic for adding other components
-            }
-        }
+        void drawComponentAdder(std::string id) ;
 
-        void drawTransform(std::string id) {
-            if(ImGui::TreeNode(("Transform##" + id).c_str())) {
-
-                localTransform.onImmediateGui();
-
-                ImGui::TreePop();
-            }
-        }
+        void drawTransform(std::string id) ;
 
         // Synnchronizes bullet rigidbodies to our data when we update something in the entity list
-        void ourToBullet() {
-            if(auto rb = getComponent<RigidBody>(); localTransform.changedInUI && rb) {
-                rb->syncWithTransform(getWorldRotation(), getWorldTranslation());
-                localTransform.changedInUI = false;
-            }
-        }
+        void ourToBullet();
 
-        void drawComponents(std::string id) {
-            auto [compsBegin, compsEnd] = getComponentsIter();
-
-            for(auto iter = compsBegin; iter != compsEnd; iter++) {
-                if(ImGui::TreeNode((iter->second->getIDPolymorphic() + "##" + id).c_str())) {
-
-                    iter->second->onImmediateGui();
-
-                    ImGui::TreePop();
-                }
-            }
-        }
+        void drawComponents(std::string id) ;
     };
 } // namespace our
