@@ -34,13 +34,18 @@ namespace our {
 
         static void update(World* world, float deltaTime) {
 
-            ImGui::Begin("Help");
+            ImGui::Begin("Help", NULL, ImGuiWindowFlags_HorizontalScrollbar);
 
-            ImGui::Text("Press WASD to move the camera, QE to move down/up");
-            ImGui::Text("Press and hold the right mouse button to look around");
-            ImGui::Text("Click on a physics object to select it (you should see axes on the object's pivot)");
-            ImGui::Text("With a selected object, press T to translate it, R to rotate it, and Y to scale it");
-            ImGui::Text("Note that objects with rigidbodies do not support scaling, you'll only scale the mesh, not the collision");
+            ImGui::BulletText("Press WASD to move the camera, QE to move down/up");
+            ImGui::BulletText("Press and hold the right mouse button to look around");
+            ImGui::BulletText("Click on a physics object to select it (you should see axes on the object's pivot)");
+            ImGui::BulletText("With a selected object:");
+            ImGui::Indent(10);
+            ImGui::BulletText("press T to translate it, R to rotate it, and Y to scale it");
+            ImGui::BulletText("Press F to teleport near that object");
+            ImGui::Indent(-10);
+            ImGui::BulletText("Note that objects with rigidbodies do not support scaling, you'll only scale the mesh, not the collision");
+
 
             ImGui::End();
 

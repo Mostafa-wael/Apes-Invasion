@@ -134,7 +134,8 @@ namespace our {
         auto [compsBegin, compsEnd] = getComponentsIter();
 
         for(auto iter = compsBegin; iter != compsEnd; iter++) {
-            if(ImGui::TreeNode((iter->second->getIDPolymorphic() + "##" + id).c_str())) {
+            // ImGui::SetNextItemOpen(true);
+            if(ImGui::TreeNodeEx((iter->second->getIDPolymorphic() + "##" + id).c_str(),ImGuiTreeNodeFlags_DefaultOpen)) {
 
                 iter->second->onImmediateGui();
 
