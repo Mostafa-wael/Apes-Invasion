@@ -30,10 +30,10 @@ namespace our {
             // We will draw the sphere from the inside, so what options should we pick for the face culling.
             PipelineState skyPipelineState{};
             skyPipelineState.depthTesting.enabled = true;
-            skyPipelineState.depthTesting.function = GL_ALWAYS;
+            skyPipelineState.depthTesting.function = GL_LEQUAL;
 
-            //skyPipelineState.faceCulling.enabled = true;
-            //skyPipelineState.faceCulling.culledFace = GL_FRONT;
+            skyPipelineState.faceCulling.enabled = true;
+            skyPipelineState.faceCulling.culledFace = GL_FRONT;
 
             // Load the sky texture (note that we don't need mipmaps since we want to avoid any unnecessary blurring while rendering the sky)
             std::string skyTextureFile = config.value<std::string>("sky", "");
@@ -209,6 +209,7 @@ namespace our {
             //TODO: (Req 9) Create a model matrix for the sky such that it always follows the camera (sky sphere center = camera position)
             glm::mat4 model = glm::mat4(1.0f);
             model = glm::translate(model, cameraPos);
+            model = glm::scale(model, glm::vec3(camera->far));
 
             
 
