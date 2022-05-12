@@ -81,7 +81,7 @@ our::Mesh* our::mesh_utils::loadOBJ(const std::string& filename) {
         }
     }
 
-    return new our::Mesh(vertices, elements, filename);
+    return new our::Mesh(vertices, elements);
 }
 
 // Create a sphere (the vertex order in the triangles are CCW from the outside)

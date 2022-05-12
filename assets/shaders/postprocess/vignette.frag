@@ -21,5 +21,5 @@ void main(){
     // from tex ->  0 to 1
     // to NDC -> -1 to 1
     // this maps to a function y (NDC coord) = 2 * x (tex coord) - 1
-    frag_color = texture(tex, tex_coord) / (1 + length (2 * tex_coord - 1));
+    frag_color = texture(tex, tex_coord) / (1 + length (2 * tex_coord - 1) * length (2 * tex_coord - 1));
 }
