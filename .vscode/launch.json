@@ -4,11 +4,12 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+  
     {
       "name": "Build and Run",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceRoot}\\bin\\GAME_APPLICATION.exe",
+      "program": "${workspaceRoot}/bin/GAME_APPLICATION",
       "args": [
           "-c='config/renderer-test/test-1.jsonc'"
       ],
