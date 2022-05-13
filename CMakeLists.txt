@@ -41,6 +41,7 @@ set(OTHER_VENDOR_SOURCES
         vendor/imguizmo/ImGuizmo.cpp
 )
 
+
 # find_package(Bullet)
 
 # Combine all vendor source files together into a single variable
@@ -118,11 +119,19 @@ include_directories(
         vendor/utils
         vendor/bullet/src
         vendor/imguizmo
+        vendor/bullet/src/Bullet3Collision
+        vendor/bullet/src/Bullet3Common
+        vendor/bullet/src/Bullet3Dynamics
+        vendor/bullet/src/Bullet3Geometry
+        vendor/bullet/src/Bullet3OpenCL
+        vendor/bullet/src/Bullet3Serialize
+        vendor/bullet/src/BulletCollision
+        vendor/bullet/src/BulletDynamics
+        vendor/bullet/src/BulletInverseDynamics
+        vendor/bullet/src/BulletSoftBody
+        vendor/bullet/src/clew
+        vendor/bullet/src/LinearMath
 )
-link_directories(
-        ${BULLET_ROOT}/lib
-)
-
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/bin)
@@ -153,10 +162,7 @@ add_executable(GAME_APPLICATION source/main.cpp ${EXECUTABLE_SOURCES} ${STATES_S
 
 target_link_libraries(GAME_APPLICATION 
         glfw 
-        LinearMath
-        Bullet3Common
-        BulletInverseDynamics
-        BulletCollision
         BulletDynamics
-        BulletSoftBody
+        BulletCollision
+        LinearMath
 )
