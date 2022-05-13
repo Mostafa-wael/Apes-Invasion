@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.4.3)
+cmake_minimum_required(VERSION 3.0.0)
 set(CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true)
 cmake_policy(SET CMP0017 NEW)
 #this line has to appear before 'PROJECT' in order to be able to disable incremental linking
@@ -437,10 +437,10 @@ ENDIF(BUILD_BULLET2_DEMOS)
 
 
 
-OPTION(BUILD_EXTRAS "Set when you want to build the extras" ON)
-IF(BUILD_EXTRAS)
-  SUBDIRS(Extras)
-ENDIF(BUILD_EXTRAS)
+# OPTION(BUILD_EXTRAS "Set when you want to build the extras" OFF)
+# IF(BUILD_EXTRAS)
+#   SUBDIRS(Extras)
+# ENDIF(BUILD_EXTRAS)
 
 
 
@@ -482,12 +482,12 @@ IF(INSTALL_LIBS)
 ENDIF()
 
 
-OPTION(BUILD_UNIT_TESTS "Build Unit Tests"	ON)
+OPTION(BUILD_UNIT_TESTS "Build Unit Tests"	OFF)
 
-IF (BUILD_UNIT_TESTS)
-	ENABLE_TESTING()
-	SUBDIRS(test)
-ENDIF()
+# IF (BUILD_UNIT_TESTS)
+# 	ENABLE_TESTING()
+# 	SUBDIRS(test)
+# ENDIF()
 
 set (BULLET_CONFIG_CMAKE_PATH lib${LIB_SUFFIX}/cmake/bullet )
 list (APPEND BULLET_DEFINITIONS ${BULLET_DOUBLE_DEF})

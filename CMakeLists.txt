@@ -8,6 +8,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_BUILD_TYPE Debug)
 
+CMAKE_POLICY(SET CMP0074 NEW)
+
 # Profiling stuff
 # SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pg")
 # SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
@@ -20,6 +22,7 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)    # Don't build Examples
 set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)           # Don't build Installation Information
 set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)     # Add variables to use High Performance Graphics Card if available
 add_subdirectory(vendor/glfw)                       # Build the GLFW project to use later as a library
+add_subdirectory(vendor/bullet)
 
 # A variable with all the source files of GLAD
 set(GLAD_SOURCE vendor/glad/src/gl.c)
@@ -38,9 +41,7 @@ set(OTHER_VENDOR_SOURCES
         vendor/imguizmo/ImGuizmo.cpp
 )
 
-set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ./ )
-
-find_package(Bullet)
+# find_package(Bullet)
 
 # Combine all vendor source files together into a single variable
 set(VENDOR_SOURCES ${GLAD_SOURCE} ${IMGUI_SOURCES} ${OTHER_VENDOR_SOURCES})
@@ -118,6 +119,9 @@ include_directories(
         vendor/bullet/src
         vendor/imguizmo
 )
+link_directories(
+        ${BULLET_ROOT}/lib
+)
 
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
@@ -140,7 +144,19 @@ set(STATES_SOURCES
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${EXECUTABLE_SOURCES} ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
-target_include_directories(GAME_APPLICATION PUBLIC ${BULLET_INCLUDE_DIR})
-target_compile_definitions(GAME_APPLICATION PUBLIC ${BULLET_DEFINITIONS})
-target_link_directories(GAME_APPLICATION PUBLIC ${Bullet_DIR}/${BULLET_ROOT_DIR}/${BULLET_LIBRARY_DIRS})
-target_link_libraries(GAME_APPLICATION glfw BulletDynamics.a BulletCollision.a LinearMath.a)
+
+# get_cmake_property(_variableNames VARIABLES)
+# list (SORT _variableNames)
+# foreach (_variableName ${_variableNames})
+#     message(STATUS "${_variableName}=${${_variableName}}")
+# endforeach()
+
+target_link_libraries(GAME_APPLICATION 
+        glfw 
+        LinearMath
+        Bullet3Common
+        BulletInverseDynamics
+        BulletCollision
+        BulletDynamics
+        BulletSoftBody
+)
