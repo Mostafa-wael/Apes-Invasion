@@ -54,6 +54,8 @@ CMakeSettings.json
 .cache/
 **/CMakeFiles/
 **/Makefile
+**/CMakeCache.txt
+*.cmake
 **/cmake_install.cmake
 vendor/bullet_bkp
 
