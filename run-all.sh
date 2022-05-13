@@ -53,5 +53,11 @@
 # ./bin/GAME_APPLICATION -f=2 -c='config/renderer-test/test-1.jsonc'
 
 # Sky Rendering
-./bin/GAME_APPLICATION -f=2 -c='config/sky-test/test-0.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/sky-test/test-1.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/sky-test/test-0.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/sky-test/test-1.jsonc'
+
+# Post processing
+./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-0.jsonc'
+./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-1.jsonc'
+./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-2.jsonc'
+./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-3.jsonc'
