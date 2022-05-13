@@ -52,6 +52,7 @@ CMakeSettings.json
 
 # cache specific files
 .cache/
+**/CMakeFiles/
 
 #################################################
 screenshots
