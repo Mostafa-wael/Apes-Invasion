@@ -105,10 +105,7 @@ set(COMMON_SOURCES
         
         source/common/util.cpp
 )
-set(EXECUTABLE_SOURCES
-        
-        source/states/physics-test.cpp
-)
+
 # Define the directories in which to search for the included headers
 include_directories(
         source/common
@@ -147,6 +144,22 @@ set(STATES_SOURCES
         source/states/material-test-state.hpp
         source/states/entity-test-state.hpp
         source/states/renderer-test-state.hpp
+        source/states/physics-test.cpp
+)
+
+link_directories(
+        vendor/bullet/src/Bullet3Collision
+        vendor/bullet/src/Bullet3Common
+        vendor/bullet/src/Bullet3Dynamics
+        vendor/bullet/src/Bullet3Geometry
+        vendor/bullet/src/Bullet3OpenCL
+        vendor/bullet/src/Bullet3Serialize
+        vendor/bullet/src/BulletCollision
+        vendor/bullet/src/BulletDynamics
+        vendor/bullet/src/BulletInverseDynamics
+        vendor/bullet/src/BulletSoftBody
+        vendor/bullet/src/clew
+        vendor/bullet/src/LinearMath
 )
 
 # For each example, we add an executable target
