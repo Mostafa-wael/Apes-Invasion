@@ -167,7 +167,12 @@ namespace our {
 
         //TODO: (Req 8) Modify the following line such that "cameraForward" contains a vector pointing the camera forward direction
         // HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
+
+        // Get the camera's forward vector transformed to world space
         glm::vec3 cameraForward = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, 0.0, -1, 0);
+
+        // Project the positions of both objects on the camera's forward vector 
+        // The one with the higher distance should be drawn first.
         std::sort(transparentCommands.begin(), transparentCommands.end(),
                   [cameraForward](const RenderCommand& first, const RenderCommand& second) {
                       //TODO: (Req 8) Finish this function
