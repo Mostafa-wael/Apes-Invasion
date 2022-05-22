@@ -48,6 +48,7 @@ namespace our {
         this->shader->set("alphaThreshold", this->alphaThreshold);
         this->texture->bind();
         this->sampler->bind(0);
+        shader->set("tex", 0);
     }
 
     // This function read the material data from a json object
