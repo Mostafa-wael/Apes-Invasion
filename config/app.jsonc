@@ -12,7 +12,7 @@
     "scene": {
         "renderer":{
             "sky": "assets/textures/sky.jpg",
-            "postprocess": "assets/shaders/postprocess/vignette.frag"
+            "postprocess": "assets/shaders/postprocess/chromatic-aberration.frag"
         },
         "assets":{
             "shaders":{
@@ -167,7 +167,7 @@
                     {
                         "type": "Movement",
                         "linearVelocity": [0, 0.1, 0],
-                        "angularVelocity": [0, 45, 0]
+                        "angularVelocity": [0, 90, 0]
                     }
                 ]
             },

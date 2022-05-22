@@ -1,0 +1,6 @@
+make --dry-run --keep-going --print-directory
+make: Entering directory '/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/SecondTerm/CG/project/GameX'
+make: Leaving directory '/mnt/FC8006E78006A7EA/Users/tarek/Desktop/College/Year3/SecondTerm/CG/project/GameX'
+ 
+make: *** No targets specified and no makefile found.  Stop.
+

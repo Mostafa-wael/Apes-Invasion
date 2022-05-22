@@ -47,7 +47,7 @@ namespace our {
         TintedMaterial::setup();
         this->shader->set("alphaThreshold", this->alphaThreshold);
         this->texture->bind();
-        this->sampler->bind(0);
+        this->sampler->bind(0); // Need to send unit number
     }
 
     // This function read the material data from a json object

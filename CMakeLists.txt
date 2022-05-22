@@ -16,6 +16,9 @@ add_subdirectory(vendor/glfw)                       # Build the GLFW project to 
 
 # A variable with all the source files of GLAD
 set(GLAD_SOURCE vendor/glad/src/gl.c)
+
+set(CXX_COMPILER_FLAGS CXX_COMPILER_FLAGS -gcodeview)
+
 # A variables with all the source files of Dear ImGui
 set(IMGUI_SOURCES
         vendor/imgui/imgui.cpp

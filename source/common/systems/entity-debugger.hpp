@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ecs/world.hpp"
+#include "imgui.h"
+#include <cstdlib>
 namespace our {
     class EntityDebugger {
     public:
@@ -13,6 +15,10 @@ namespace our {
                 // if (ImGui::Button("Save")) {
 
                 // }
+
+                if(ImGui::Button("Exit")){
+                    exit(0);
+                }
 
                 for(auto entity : world->getEntities()) {
                     // Imgui treats elements with the same label/ID as one element
