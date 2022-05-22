@@ -18,7 +18,7 @@ namespace our {
         Entity* currentParent  = parent;
         glm::mat4 localToWorld = localTransform.toMat4();
         while(currentParent) {
-            localToWorld  = parent->localTransform.toMat4() * localToWorld;
+            localToWorld  = currentParent->localTransform.toMat4() * localToWorld;
             currentParent = currentParent->parent;
         }
         return localToWorld;
