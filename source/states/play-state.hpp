@@ -4,6 +4,7 @@
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
 #include "systems/entity-debugger.hpp"
+#include "systems/physics.hpp"
 #include <application.hpp>
 
 #include <asset-loader.hpp>
@@ -20,6 +21,7 @@ class Playstate : public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::EntityDebugger edb;
     float dt;
 
     void onInitialize() override {
@@ -38,8 +40,9 @@ class Playstate : public our::State {
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
+        renderer.app = getApp();
     }
-
+    
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
@@ -47,6 +50,7 @@ class Playstate : public our::State {
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
         dt = deltaTime;
+
     }
 
     void onDestroy() override {
@@ -61,7 +65,7 @@ class Playstate : public our::State {
     void onImmediateGui() override {
         ImGui::Begin("KAK Engine");
         ImGui::Text("Current frametime: %f", dt);
-        our::EntityDebugger::update(&world, 0);
+        edb.update(&world, 0);
         ImGui::End();
     }
 };

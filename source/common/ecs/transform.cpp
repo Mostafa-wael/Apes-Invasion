@@ -1,7 +1,9 @@
 #include "entity.hpp"
 #include "../deserialize-utils.hpp"
+#include "glm/ext/matrix_transform.hpp"
 
 #include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 namespace our {
 
@@ -13,7 +15,7 @@ namespace our {
         // 1. Compute the translation matrix
         glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
         // 2. Compute the rotation matrix
-        glm::mat4 rotationMatrix = glm::yawPitchRoll(rotation.y, rotation.x, rotation.z);
+        glm::mat4 rotationMatrix = glm::toMat4(qRot);
         // 3. Compute the scaling matrix
         glm::mat4 scalingMatrix = glm::scale(glm::mat4(1.0f), scale);
         // 4. Compute the final matrix
@@ -23,7 +25,7 @@ namespace our {
      // Deserializes the entity data and components from a json object
     void Transform::deserialize(const nlohmann::json& data){
         position = data.value("position", position);
-        rotation = glm::radians(data.value("rotation", glm::degrees(rotation)));
+        setEulerRotation(glm::radians(data.value("rotation", glm::degrees(glm::vec3(0,0,0)))));
         scale    = data.value("scale", scale);
     }
 

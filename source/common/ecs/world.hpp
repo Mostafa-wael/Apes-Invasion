@@ -2,6 +2,7 @@
 
 #include <unordered_set>
 #include "entity.hpp"
+#include "glm/fwd.hpp"
 
 namespace our {
 
@@ -34,6 +35,11 @@ namespace our {
         const std::unordered_set<Entity*>& getEntities() {
             return entities;
         }
+
+        std::unordered_set<Entity*>& getEntitiesMut() {
+            return entities;
+        }
+
 
         // This marks an entity for removal by adding it to the "markedForRemoval" set.
         // The elements in the "markedForRemoval" set will be removed and deleted when "deleteMarkedEntities" is called.

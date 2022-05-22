@@ -27,6 +27,7 @@ namespace our {
 
         // The ID of this component type is "Camera"
         static std::string getID() { return "Camera"; }
+        virtual std::string getIDPolymorphic() override { return getID(); }
 
         // Reads camera parameters from the given json object
         void deserialize(const nlohmann::json& data) override;
@@ -39,20 +40,14 @@ namespace our {
         glm::mat4 getProjectionMatrix(glm::ivec2 viewportSize) const;
 
         virtual void onImmediateGui() override {
-            std::string headerID  = std::to_string((long long)(this));
-            std::string compLabel = ("Camera ##" + headerID);
-            if(ImGui::CollapsingHeader(compLabel.c_str())) {
-                ImGui::Indent(10);
-                ImGui::LabelText("", "Camera type: %s", cameraType == CameraType::PERSPECTIVE ? "Perspective" : "Orthographic");
+            ImGui::LabelText("", "Camera type: %s", cameraType == CameraType::PERSPECTIVE ? "Perspective" : "Orthographic");
 
-                // Note that near, far are consecutive in memory, this should read/write them both properly.
-                ImGui::DragFloat("Near", &near, 0.5, 0, 10);
-                ImGui::DragFloat("Far", &far, 0.5, 10, 100);
-                ImGui::DragFloat("FOV", &fovY, 0.05, 0, glm::pi<float>());
+            // Note that near, far are consecutive in memory, this should read/write them both properly.
+            ImGui::DragFloat("Near", &near, 0.5, 0, 10);
+            ImGui::DragFloat("Far", &far, 0.5, 10, 100);
+            ImGui::DragFloat("FOV", &fovY, 0.05, 0, glm::pi<float>());
 
-                if(cameraType == CameraType::ORTHOGRAPHIC) ImGui::LabelText("", "Orthographic height: %f", orthoHeight);
-                ImGui::Indent(-10);
-            }
+            if(cameraType == CameraType::ORTHOGRAPHIC) ImGui::LabelText("", "Orthographic height: %f", orthoHeight);
         }
     };
 

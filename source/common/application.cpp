@@ -1,4 +1,5 @@
 #include "application.hpp"
+#include "imgui.h"
 
 #include <iostream>
 #include <fstream>
@@ -201,6 +202,7 @@ int our::Application::run(int run_for_frames) {
     // Start the ImGui context and set dark style (just my preference :D)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGuiIO& io = ImGui::GetIO();
     ImGui::StyleColorsDark();
 

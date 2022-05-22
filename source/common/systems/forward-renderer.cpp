@@ -1,6 +1,8 @@
 #include "forward-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
+#include "GLFW/glfw3.h"
+#include "ecs/rigidbody.hpp"
 #include "glad/gl.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/fwd.hpp"
@@ -134,6 +136,7 @@ namespace our {
         for(auto entity : world->getEntities()) {
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) camera = entity->getComponent<CameraComponent>();
+
             // If this entity has a mesh renderer component
             if(auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer) {
                 // We construct a command from it
@@ -142,6 +145,8 @@ namespace our {
                 command.center       = glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1));
                 command.mesh         = meshRenderer->mesh;
                 command.material     = meshRenderer->material;
+
+                if(!command.mesh || !command.material) continue;
 
                 // I think this is a bit more concise?
                 // Perhaps use it once the everything is working

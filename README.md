@@ -12,3 +12,18 @@ Repo for CMP2023's computer graphics project. The aim is to use OpenGL (plus som
 - [stb](https://github.com/nothings/stb)
 - [tinyobjloader v1.0.6](https://github.com/tinyobjloader/tinyobjloader)
 - [tinygltf v2.4.0](https://github.com/syoyo/tinygltf)
+- [bullet physics](https://github.com/bulletphysics/bullet3)
+- [imguizmo](https://github.com/CedricGuillemet/ImGuizmo)
+
+
+## Steps to fix GLFW platform specific errors (dlfcn.h / windows.h)
+When cloning or pulling you might get some errors when building if someone on another OS has uploaded cache files. These errors usually have something with:
+- `dlfcn.h` when building on windows with cache files from linux.
+- `windows.h` when building on linux with cache files from windows.
+  
+You can fix this easily by running `killCaches` with powershell on windows/linux and it will recursively delete `CMakeCache.txt, Makefile, and CMakeFiles`.
+Then go to `vendor/glfw` and run `cmake . -G "Unix Makefiles"`
+Then go to the project root and and configure and build, it should go smoothely go this time.
+
+_**HEED MY WARNING: NEVER USE SCALING WITH BULLET PHYSICS OR IT WILL BREAK**_
+

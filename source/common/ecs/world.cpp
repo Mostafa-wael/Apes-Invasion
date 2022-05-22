@@ -9,7 +9,7 @@ namespace our {
         if(!data.is_array()) return;
         for(const auto& entityData : data){
             Entity* entity = add();
-            entity->parent = parent;
+            entity->setParent(parent);
             entity->deserialize(entityData);
             if(entityData.contains("children"))
                 this->deserialize(entityData["children"], entity);

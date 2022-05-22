@@ -1,12 +1,15 @@
 #pragma once
 
+#include "../shader/shader.hpp"
+#include "../texture/sampler.hpp"
+#include "../texture/texture2d.hpp"
+#include "asset-loader.hpp"
 #include "ecs/IImGuiDrawable.h"
 #include "imgui.h"
 #include "pipeline-state.hpp"
-#include "../texture/texture2d.hpp"
-#include "../texture/sampler.hpp"
-#include "../shader/shader.hpp"
+#include "util.h"
 
+#include <cstddef>
 #include <glm/vec4.hpp>
 #include <json/json.hpp>
 #include <string>
@@ -24,7 +27,7 @@ namespace our {
         PipelineState pipelineState;
         ShaderProgram* shader;
         bool transparent;
-        
+
         // This function does 2 things: setup the pipeline state and set the shader program to be used
         virtual void setup() const;
         // This function read a material from a json object
@@ -46,15 +49,15 @@ namespace our {
         void deserialize(const nlohmann::json& data) override;
         virtual void onImmediateGui() override {
             std::string materialId = std::to_string((long long)this);
-            std::string tintName = "Tint ##" + materialId;
+            std::string tintName   = "Tint ##" + materialId;
 
+            ImGui::Spacing();
+
+            ImGui::Checkbox(("Color picker ##" + materialId).c_str(), &colorPicker);
             if(colorPicker)
                 ImGui::ColorPicker4(tintName.c_str(), &tint.x);
             else
-                ImGui::DragFloat4(tintName.c_str(),&tint.x, 0.01, 0, 2);
-
-            ImGui::SameLine();
-            ImGui::Checkbox(("Color picker ##"+materialId).c_str(), &colorPicker);
+                ImGui::DragFloat4(tintName.c_str(), &tint.x, 0.01, 0, 2);
         }
     };
 
@@ -74,14 +77,14 @@ namespace our {
     };
 
     // This function returns a new material instance based on the given type
-    inline Material* createMaterialFromType(const std::string& type){
-        if(type == "tinted"){
+    inline Material* createMaterialFromType(const std::string& type) {
+        if(type == "tinted") {
             return new TintedMaterial();
-        } else if(type == "textured"){
+        } else if(type == "textured") {
             return new TexturedMaterial();
         } else {
             return new Material();
         }
     }
 
-}
+} // namespace our

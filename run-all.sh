@@ -57,7 +57,10 @@
 # ./bin/GAME_APPLICATION -f=2 -c='config/sky-test/test-1.jsonc'
 
 # Post processing
-./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-0.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-1.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-2.jsonc'
-./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-3.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-0.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-1.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-2.jsonc'
+# ./bin/GAME_APPLICATION -f=2 -c='config/postprocess-test/test-3.jsonc'
+
+# Physics
+./bin/GAME_APPLICATION -c='config/physics.jsonc'

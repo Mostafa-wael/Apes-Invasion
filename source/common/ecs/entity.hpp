@@ -1,8 +1,19 @@
 #pragma once
 
+#include "LinearMath/btQuaternion.h"
+#include "LinearMath/btTransform.h"
 #include "component.hpp"
+#include "components/mesh-renderer.hpp"
 #include "ecs/IImGuiDrawable.h"
+#include "ecs/rigidbody.hpp"
+#include "glm/ext/matrix_float4x4.hpp"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
+#include "glm/gtx/quaternion.hpp"
+#include "imgui.h"
 #include "transform.hpp"
+#include <cstdio>
+#include <cstring>
 #include <glm/glm.hpp>
 #include <string>
 #include <type_traits>
@@ -20,13 +31,23 @@ namespace our {
         std::unordered_map<std::string, Component*> components; // A map of components that are owned by this entity
                                                                 // The key is the ID of the component so an entity can only have one component of each type
 
+        Entity* parent;     // The parent of the entity. The transform of the entity is relative to its parent.
+                            // If parent is null, the entity is a root entity (has no parent).
         friend World;       // The world is a friend since it is the only class that is allowed to instantiate an entity
         Entity() = default; // The entity constructor is private since only the world is allowed to instantiate an entity
     public:
         std::string name;         // The name of the entity. It could be useful to refer to an entity by its name
-        Entity* parent;           // The parent of the entity. The transform of the entity is relative to its parent.
-                                  // If parent is null, the entity is a root entity (has no parent).
         Transform localTransform; // The transform of this entity relative to its parent.
+        std::unordered_set<Entity*> children;
+
+        bool enabled = true;
+
+        const char* componentsToAdd[3] = {
+            "Mesh Renderer",
+            "Rigid Body",
+            "Shooter"};
+
+        int currComponent = 0;
 
         World* getWorld() const { return world; } // Returns the world to which this entity belongs
 
@@ -76,24 +97,34 @@ namespace our {
         Entity(const Entity&)            = delete;
         Entity& operator=(Entity const&) = delete;
 
+        glm::mat4 getWorldRotation() const;
+
+        glm::vec3 getWorldScale() const;
+
+        glm::vec3 getWorldTranslation() const;
+
         typedef std::unordered_map<std::string, Component*>::const_iterator CompMapConstIter;
         std::pair<CompMapConstIter, CompMapConstIter>
-        getComponentsIter() const {
-            return {components.begin(), components.end()};
-        }
+        getComponentsIter() const;
 
-        virtual void onImmediateGui() override {
-            ImGui::LabelText("", "%s", name.c_str());
+        glm::vec3 getForward() const;
 
-            localTransform.onImmediateGui();
+        glm::vec3 getRight() const;
 
-            ImGui::Indent(10);
-            auto [compsBegin, compsEnd] = getComponentsIter();
-            for(auto iter = compsBegin; iter != compsEnd; iter++) {
-                iter->second->onImmediateGui();
-            }
-            ImGui::Indent(-10);
-        }
+        glm::vec3 getUp() const;
+
+        virtual void onImmediateGui() override;
+
+        void drawComponentAdder(std::string id);
+
+        void drawTransform(std::string id);
+
+        // Synnchronizes bullet rigidbodies to our data when we update something in the entity list
+        void ourToBullet();
+
+        void drawComponents(std::string id);
+
+        void setParent(Entity* p);
+        Entity* getParent();
     };
-
 } // namespace our
