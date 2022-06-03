@@ -102,6 +102,8 @@ set(COMMON_SOURCES
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
         source/common/systems/physics.cpp
+
+        source/common/light/light.hpp
         
         source/common/util.cpp
 )

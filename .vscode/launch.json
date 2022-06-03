@@ -4,15 +4,10 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-  
     {
       "name": "Build and Run",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceRoot}/bin/GAME_APPLICATION",
-      "args": [
-          "-c='config/renderer-test/test-1.jsonc'"
-      ],
       "stopAtEntry": false,
       "cwd": "${workspaceRoot}",
       "environment": [],
@@ -21,10 +16,11 @@
       "preLaunchTask": "CMake: Build Debug",
       "windows": {
         "args": [
-          "-c='config\\app.jsonc'"
+          "-c=config\\physics.jsonc"
         ],
+        "miDebuggerPath": "C:\\Users\\Abdelrahman\\Downloads\\winlibs-x86_64-posix-seh-gcc-11.3.0-llvm-14.0.3-mingw-w64ucrt-10.0.0-r3\\mingw64\\bin\\gdb.exe",
         "program": "${workspaceRoot}\\bin\\GAME_APPLICATION.exe",
-        "MIMode": "lldb"
+        "MIMode": "gdb"
       },
       "linux": {
         "args": [
@@ -33,7 +29,13 @@
         "program": "${workspaceRoot}/bin/GAME_APPLICATION",
         "MIMode": "gdb"
       },
-
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
     }
   ]
 }

@@ -18,10 +18,10 @@
 #include <imgui_impl/imgui_impl_glfw.h>
 #include <imgui_impl/imgui_impl_opengl3.h>
 
-#if !defined(NDEBUG)
+// #if !defined(NDEBUG)
 // If NDEBUG (no debug) is not defined, enable OpenGL debug messages
 #define ENABLE_OPENGL_DEBUG_MESSAGES
-#endif
+// #endif
 
 #include "texture/screenshot.hpp"
 

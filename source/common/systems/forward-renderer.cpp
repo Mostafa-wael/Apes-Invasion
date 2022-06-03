@@ -8,6 +8,7 @@
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include <iostream>
+#include <light/light.hpp>
 
 namespace our {
 
@@ -129,6 +130,8 @@ namespace our {
     }
 
     void ForwardRenderer::render(World* world) {
+        
+        Light* light_arr = AssetLoader<Light>::get("lights");
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent* camera = nullptr;
         opaqueCommands.clear();
