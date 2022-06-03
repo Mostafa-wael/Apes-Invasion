@@ -1,31 +1,30 @@
 {
     "start-scene": "main",
-    "window":
-    {
-        "title":"Default Game Window",
-        "size":{
-            "width":1280,
-            "height":720
+    "window": {
+        "title": "Default Game Window",
+        "size": {
+            "width": 1280,
+            "height": 720
         },
         "fullscreen": false
     },
     "scene": {
-        "renderer":{
+        "renderer": {
             "sky": "assets/textures/space-galaxy-background.jpg",
             "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
-        "assets":{
-            "shaders":{
-                "tinted":{
-                    "vs":"assets/shaders/tinted.vert",
-                    "fs":"assets/shaders/tinted.frag"
+        "assets": {
+            "shaders": {
+                "tinted": {
+                    "vs": "assets/shaders/tinted.vert",
+                    "fs": "assets/shaders/tinted.frag"
                 },
-                "textured":{
-                    "vs":"assets/shaders/textured.vert",
-                    "fs":"assets/shaders/textured.frag"
+                "textured": {
+                    "vs": "assets/shaders/textured.vert",
+                    "fs": "assets/shaders/textured.frag"
                 }
             },
-            "textures":{
+            "textures": {
                 "moon": "assets/textures/moon.jpg",
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
@@ -34,74 +33,89 @@
                 "spaceship02": "assets/textures/1001_Base_Color.png",
                 "spaceship01": "assets/textures/Intergalactic Spaceship_color_4.jpg"
             },
-            "meshes":{
+            "meshes": {
                 "cube": "assets/models/cube.obj",
                 "monkey": "assets/models/monkey.obj",
                 "sphere": "assets/models/sphere.obj",
                 "spaceship02": "assets/models/spaceship02.obj",
                 "spaceship01": "assets/models/spaceship01.obj"
             },
-            "samplers":{
-                "default":{},
-                "pixelated":{
+            "samplers": {
+                "default": {},
+                "pixelated": {
                     "MAG_FILTER": "GL_NEAREST"
                 }
             },
-            "materials":{
-                "spaceship01":{
+            "materials": {
+                "spaceship01": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "spaceship01",
                     "sampler": "default"
                 },
-                "spaceship02":{
+                "spaceship02": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "spaceship02",
                     "sampler": "default"
                 },
-                "metal":{
+                "metal": {
                     "type": "tinted",
                     "shader": "tinted",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [0.45, 0.4, 0.5, 1]
+                    "tint": [
+                        0.45,
+                        0.4,
+                        0.5,
+                        1
+                    ]
                 },
-                "glass":{
+                "glass": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         },
-                        "blending":{
+                        "blending": {
                             "enabled": true,
                             "sourceFactor": "GL_SRC_ALPHA",
                             "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
@@ -109,168 +123,238 @@
                         "depthMask": false
                     },
                     "transparent": true,
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "glass",
                     "sampler": "pixelated"
                 },
-                "grass":{
+                "grass": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "grass",
                     "sampler": "default"
                 },
-                "monkey":{
+                "monkey": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "monkey",
                     "sampler": "default"
                 },
-                "moon":{
+                "moon": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "moon",
                     "sampler": "default"
                 },
-                "Tennis-court-blueMaterial":{
+                "Tennis-court-blueMaterial": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "blue-court",
                     "sampler": "default"
                 },
-                "fenceMaterial":{
+                "fenceMaterial": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "fenceTexture",
                     "sampler": "default"
                 },
-                "grid":{
+                "grid": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "gridTexture",
                     "sampler": "default"
                 },
-                "ads":{
+                "ads": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "ads",
                     "sampler": "default"
                 },
-                "court":{
+                "court": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "court",
                     "sampler": "default"
                 },
-                "billboard":{
+                "billboard": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "billboard",
                     "sampler": "default"
                 }
-            }
-        },
-        "world":[
-            {
-                "name": "camera",
-                "position": [0, 0, 10],
-                "components": [
-                    {
-                        "type": "Camera"
-                    },
-                    {
-                        "type": "Free Camera Controller"
-                    }
-                ]
             },
+            "lights": [
+                {
+                    "type": "directional",
+                    "color": [
+                        0.5,
+                        0.2,
+                        0.9
+                    ],
+                    "direction": [
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    "enabled": true
+                }
+            ]
+        },
+        "world": [
             {
-                "name" : "spaceship02",
-                "position": [0, -1, 0],
+                "name": "Player ship",
+                "position": [
+                    0,
+                    -1,
+                    0
+                ],
                 "components": [
                     {
                         "type": "Mesh Renderer",
                         "mesh": "spaceship02",
                         "material": "spaceship02"
+                    }
+                ],
+                "children": [
+                    {
+                        "name": "Player camera",
+                        "position" : [0, 1, 0],
+                        "rotation": [0, -90, 0],
+                        "components": [
+                            {
+                                "type": "Camera"
+                            }
+                        ]
                     }
                 ]
             }

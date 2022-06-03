@@ -59,7 +59,7 @@ namespace our {
             if(lightData.is_object()) {
                 std::string type = lightData["type"];
                 Light light;
-                light.enabled = lightData["enabled"];
+                light.enabled = lightData.value("enabled", true);
                 if(type == "directional") {
                     light.type      = LightType::DIRECTIONAL;
                     light.direction = lightData["direction"];

@@ -6,6 +6,8 @@
 #include "ImGuizmo.h"
 #include "application.hpp"
 #include "components/camera.hpp"
+#include "components/rigidbody.hpp"
+
 #include "ecs/entity.hpp"
 #include "ecs/world.hpp"
 #include "glm/ext/matrix_transform.hpp"

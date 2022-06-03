@@ -21,7 +21,6 @@ class Playstate : public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
-    our::EntityDebugger edb;
     float dt;
 
     void onInitialize() override {
@@ -35,15 +34,25 @@ class Playstate : public our::State {
         if(config.contains("world")) {
             world.deserialize(config["world"]);
         }
-    
+
         // We initialize the camera controller system since it needs a pointer to the app
         cameraController.enter(getApp());
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
         renderer.app = getApp();
+
+        our::CameraComponent* cam;
+        for(auto e : world.getEntities()) {
+            if(auto camComp = e->getComponent<our::CameraComponent>()) {
+                cam = camComp;
+                break;
+            }
+        }
+
+        our::EntityDebugger::init(cam, getApp());
     }
-    
+
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
@@ -65,7 +74,7 @@ class Playstate : public our::State {
     void onImmediateGui() override {
         ImGui::Begin("KAK Engine");
         ImGui::Text("Current frametime: %f", dt);
-        edb.update(&world, 0);
+        our::EntityDebugger::update(&world, dt);
         ImGui::End();
     }
 };
