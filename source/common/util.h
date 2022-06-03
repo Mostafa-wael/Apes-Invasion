@@ -4,6 +4,8 @@
 #include "imgui.h"
 #include <string>
 #include <vector>
+#include "btBulletDynamicsCommon.h"
+#include "glm/glm.hpp"
 
 namespace our {
     std::vector<char> stringsToImGuiComboList(std::vector<std::string> strings);
@@ -35,4 +37,6 @@ namespace our {
 
         return ret;
     }
+
+    btVector3 glmToBtVector3(glm::vec3 glmVec);
 } // namespace our

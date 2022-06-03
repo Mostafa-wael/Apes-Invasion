@@ -258,6 +258,9 @@
                     },
                     {
                         "type": "Player Controller"
+                    },
+                    {
+                        "type": "Rigid Body"
                     }
                 ],
                 "children": [
@@ -266,7 +269,7 @@
                         "position": [
                             0,
                             1,
-                            0
+                            1
                         ],
                         "components": [
                             {
