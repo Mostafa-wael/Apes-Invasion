@@ -2,6 +2,7 @@
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 #include "GLFW/glfw3.h"
+#include "asset-loader.hpp"
 #include "ecs/rigidbody.hpp"
 #include "glad/gl.h"
 #include "glm/ext/vector_float3.hpp"
@@ -211,11 +212,9 @@ namespace our {
         //TODO: (Req 8) Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Light* light_arr = AssetLoader<Light>::get("lights");
+        Light* lights = AssetLoader<Light>::get("lights");
 
-        // int light_arr_size = AssetLoader::get_light_array_size();
-        
-        int light_arr_size = 2;
+        int numLights = AssetLoader<Light>::getNumAssets();
 
         //TODO: (Req 8) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
@@ -227,9 +226,9 @@ namespace our {
             int light_index = 0;
             const int MAX_LIGHT_COUNT = 16;
 
-            opaqueCommand.material->shader->set("light_count", light_arr_size);
-            for(int i = 0;i<light_arr_size;i++) {
-                Light light = light_arr[i];
+            opaqueCommand.material->shader->set("light_count", numLights);
+            for(int i = 0;i<numLights;i++) {
+                Light light = lights[i];
                 if(!light.enabled) continue;
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 

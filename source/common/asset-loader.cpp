@@ -50,9 +50,11 @@ namespace our {
     //    { type : "directional", ... }
     template <>
     void AssetLoader<Light>::deserialize(const nlohmann::json& data) {
+        
         if(!data.is_array()) return;
-        Light* light_array = new Light[data.size()];
+        Light* lights = new Light[data.size()];
         int index = 0;
+
         for(const auto& lightData : data) {
             if(lightData.is_object()) {
                 std::string type = lightData["type"];
@@ -84,12 +86,13 @@ namespace our {
                 } else {
                     throw std::runtime_error("Unknown light type: " + type);
                 }
-                light_array[index] = light;
+
+                lights[index] = light;
                 index++;
             }
         }
-        assets["lights"]     = light_array;
-        light_array_size     = index;
+
+        assets["lights"]     = lights;
     };
 
     // This will load all the samplers defined in "data"

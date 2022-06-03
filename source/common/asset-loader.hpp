@@ -16,8 +16,7 @@ namespace our {
         // This map stores a pointer to each asset identified by its name
         // All assets in this map are owned by the asset loader so it should not be deleted outside of this class
         static inline std::unordered_map<std::string, T*> assets;
-
-        static int light_array_size;
+        static inline int lightArraySize;
 
     public:
         // This function loads the assets defined by the given json object
@@ -37,8 +36,8 @@ namespace our {
             return nullptr;
         };
 
-        static int get_light_array_size() {
-            return light_array_size;
+        static int getNumAssets() {
+            return assets.size();
         }
 
         // This function deletes all the assets held by this class and clear the assets map
@@ -70,7 +69,7 @@ namespace our {
     // This function will call "AssetLoader<T>::deserialize" for all the different asset types T
     // For example, a json in the form {"shaders": ... , "textures": ... } will call "deserialize" for:
     // AssetLoader<ShaderProgram> and AssetLoader<Texture2D>
-    int get_light_array_size();
+    
     void deserializeAllAssets(const nlohmann::json& assetData);
     // This will call "AssetLoader<T>::clear" for all the different asset types T
     void clearAllAssets();
