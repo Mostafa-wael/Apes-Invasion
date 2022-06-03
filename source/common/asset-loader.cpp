@@ -89,6 +89,7 @@ namespace our {
             }
         }
         assets["lights"]     = light_array;
+        light_array_size     = index;
     };
 
     // This will load all the samplers defined in "data"

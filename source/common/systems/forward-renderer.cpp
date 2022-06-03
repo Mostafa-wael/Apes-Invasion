@@ -130,8 +130,6 @@ namespace our {
     }
 
     void ForwardRenderer::render(World* world) {
-        
-        Light* light_arr = AssetLoader<Light>::get("lights");
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent* camera = nullptr;
         opaqueCommands.clear();
@@ -213,11 +211,59 @@ namespace our {
         //TODO: (Req 8) Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        Light* light_arr = AssetLoader<Light>::get("lights");
+
+        // int light_arr_size = AssetLoader::get_light_array_size();
+        
+        int light_arr_size = 2;
+
         //TODO: (Req 8) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
         for(auto opaqueCommand : opaqueCommands) {
             opaqueCommand.material->setup();
             opaqueCommand.material->shader->set("transform", VP * opaqueCommand.localToWorld);
+            // opaqueCommand.material->shader->set("lights", light_arr);
+            // We will go through all the lights and send the enabled ones to the shader.
+            int light_index = 0;
+            const int MAX_LIGHT_COUNT = 16;
+
+            opaqueCommand.material->shader->set("light_count", light_arr_size);
+            for(int i = 0;i<light_arr_size;i++) {
+                Light light = light_arr[i];
+                if(!light.enabled) continue;
+                std::string prefix = "lights[" + std::to_string(light_index) + "].";
+
+                opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light.type));
+                opaqueCommand.material->shader->set(prefix + "color", light.color);
+                // std::cout<<light.color.x<<" "<<light.color.y<<" "<<light.color.z<<std::endl;
+                switch (light.type) {
+                    case LightType::DIRECTIONAL:
+                        opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light.direction));
+                        break;
+                    case LightType::POINT:
+                        opaqueCommand.material->shader->set(prefix + "position", light.position);
+                        opaqueCommand.material->shader->set(prefix + "attenuation_constant", light.attenuation.constant);
+                        opaqueCommand.material->shader->set(prefix + "attenuation_linear", light.attenuation.linear);
+                        opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light.attenuation.quadratic);
+                        break;
+                    case LightType::SPOT:
+                        opaqueCommand.material->shader->set(prefix + "position", light.position);
+                        opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light.direction));
+                        opaqueCommand.material->shader->set(prefix + "attenuation_constant", light.attenuation.constant);
+                        opaqueCommand.material->shader->set(prefix + "attenuation_linear", light.attenuation.linear);
+                        opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light.attenuation.quadratic);
+                        opaqueCommand.material->shader->set(prefix + "inner_angle", light.spot_angle.inner);
+                        opaqueCommand.material->shader->set(prefix + "outer_angle", light.spot_angle.outer);
+                        break;
+                    case LightType::SKY:
+                        opaqueCommand.material->shader->set(prefix + "top_color", light.sky_light.top_color);
+                        opaqueCommand.material->shader->set(prefix + "middle_color", light.sky_light.middle_color);
+                        opaqueCommand.material->shader->set(prefix + "bottom_color", light.sky_light.bottom_color);
+                        break;
+                }
+                light_index++;
+                if(light_index >= MAX_LIGHT_COUNT) break;
+            }
             opaqueCommand.mesh->draw();
         }
 

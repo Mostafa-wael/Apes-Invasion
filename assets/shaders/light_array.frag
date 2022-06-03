@@ -2,7 +2,7 @@
 
 // We include the common light functions and structures.
 // Note that GLSL doesn't support "#include" by default but we the library "stb_include" to recursively include the files as a string preprocessing phase.
-#include "light_common.glsl"
+#include "light_common.glsl" 
 
 in Varyings {
     vec4 color;
