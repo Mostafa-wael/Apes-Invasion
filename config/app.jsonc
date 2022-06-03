@@ -192,9 +192,9 @@
                     "texture": "moon",
                     "sampler": "default"
                 },
-                "Tennis-court-blueMaterial": {
-                    "type": "textured",
-                    "shader": "textured",
+                "danger": {
+                    "type": "tinted",
+                    "shader": "tinted",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": false
@@ -204,122 +204,34 @@
                         }
                     },
                     "tint": [
-                        1,
-                        1,
-                        1,
+                        0.9,
+                        0.2,
+                        0.2,
                         1
-                    ],
-                    "texture": "blue-court",
-                    "sampler": "default"
-                },
-                "fenceMaterial": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "fenceTexture",
-                    "sampler": "default"
-                },
-                "grid": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "gridTexture",
-                    "sampler": "default"
-                },
-                "ads": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "ads",
-                    "sampler": "default"
-                },
-                "court": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "court",
-                    "sampler": "default"
-                },
-                "billboard": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "billboard",
-                    "sampler": "default"
+                    ]
                 }
             },
             "lights": [
                 {
                     "type": "directional",
                     "color": [
-                        0.5,
-                        0.2,
-                        0.9
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "direction": [
+                        -1,
+                        -1,
+                        -1
+                    ],
+                    "enabled": true
+                },
+                {
+                    "type": "directional",
+                    "color": [
+                        0.0,
+                        1.0,
+                        0.0
                     ],
                     "direction": [
                         -1,
@@ -343,13 +255,24 @@
                         "type": "Mesh Renderer",
                         "mesh": "spaceship02",
                         "material": "spaceship02"
+                    },
+                    {
+                        "type": "Player Controller"
                     }
                 ],
                 "children": [
                     {
                         "name": "Player camera",
-                        "position" : [0, 1, 0],
-                        "rotation": [0, -90, 0],
+                        "position": [
+                            -1,
+                            1,
+                            0
+                        ],
+                        "rotation": [
+                            0,
+                            -90,
+                            0
+                        ],
                         "components": [
                             {
                                 "type": "Camera"
@@ -357,18 +280,73 @@
                         ]
                     }
                 ]
+            },
+            {
+                "name": "spaceship01",
+                "position": [
+                    10,
+                    3,
+                    0
+                ],
+                "scale": [
+                    0.25,
+                    0.25,
+                    0.25
+                ],
+                "rotation": [
+                    0,
+                    -90,
+                    0
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "spaceship01",
+                        "material": "spaceship01"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "kinematic"
+                    },
+                    {
+                        "type": "Shooter"
+                    }
+                ]
+            },
+            {
+                "name": "moon",
+                "position": [
+                    0,
+                    10,
+                    0
+                ],
+                "rotation": [
+                    45,
+                    45,
+                    0
+                ],
+                "scale": [
+                    5,
+                    5,
+                    5
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "moon"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [
+                            0,
+                            90,
+                            0
+                        ]
+                    }
+                ]
             }
-            // {
-            //     "name" : "spaceship01",
-            //     "position": [0, -1, 0],
-            //     "components": [
-            //         {
-            //             "type": "Mesh Renderer",
-            //             "mesh": "spaceship01",
-            //             "material": "spaceship01"
-            //         }
-            //     ]
-            // }
         ]
     }
 }
