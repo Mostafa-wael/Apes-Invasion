@@ -14,6 +14,11 @@
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 
+#include "components/camera.hpp"
+#include "ecs/entity.hpp"
+#include "ecs/rigidbody.hpp"
+#include "ecs/shooter.hpp"
+
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
 
@@ -22,6 +27,7 @@ class Playstate : public our::State {
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
     our::EntityDebugger edb;
+    our::Physics p;
     float dt;
 
     void onInitialize() override {
@@ -42,14 +48,43 @@ class Playstate : public our::State {
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
         renderer.app = getApp();
+
+        
+
+        our::CameraComponent* cam;
+        for(auto e : world.getEntities()) {
+            if(auto camComp = e->getComponent<our::CameraComponent>()) {
+                cam = camComp;
+                break;
+            }
+        }
+
+        our::EntityDebugger::init(cam, getApp());
+
+        p.initialize(&world);
+
+        for(auto&& e : world.getEntities()) {
+            if(auto s = e->getComponent<our::Shooter>()) {
+                s->init(&p);
+            }
+        }
     }
     
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
+        
+        for(auto&& e : world.getEntities()) {
+        if(auto s = e->getComponent<our::Shooter>())
+            s->update(deltaTime);
+        }
+        
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
+        p.update(deltaTime);
+
+        world.deleteMarkedEntities();
         dt = deltaTime;
     }
 
@@ -60,6 +95,7 @@ class Playstate : public our::State {
         cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
+        p.destroy();
     }
 
     void onImmediateGui() override {
@@ -67,5 +103,8 @@ class Playstate : public our::State {
         ImGui::Text("Current frametime: %f", dt);
         edb.update(&world, 0);
         ImGui::End();
+        our::EntityDebugger::update(&world, dt);
+
+        p.onImmediateGui();
     }
 };

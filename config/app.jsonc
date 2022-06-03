@@ -78,71 +78,6 @@
                     "texture": "spaceship02",
                     "sampler": "default"
                 },
-                "metal":{
-                    "type": "tinted",
-                    "shader": "tinted",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [0.45, 0.4, 0.5, 1]
-                },
-                "glass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        },
-                        "blending":{
-                            "enabled": true,
-                            "sourceFactor": "GL_SRC_ALPHA",
-                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-                        },
-                        "depthMask": false
-                    },
-                    "transparent": true,
-                    "tint": [1, 1, 1, 1],
-                    "texture": "glass",
-                    "sampler": "pixelated"
-                },
-                "grass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "grass",
-                    "sampler": "default"
-                },
-                "monkey":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
-                    "sampler": "default"
-                },
                 "moon":{
                     "type": "textured",
                     "shader": "textured",
@@ -158,97 +93,39 @@
                     "texture": "moon",
                     "sampler": "default"
                 },
-                "Tennis-court-blueMaterial":{
-                    "type": "textured",
-                    "shader": "textured",
+                "danger": {
+                    "type": "tinted",
+                    "shader": "tinted",
                     "pipelineState": {
-                        "faceCulling":{
+                        "faceCulling": {
                             "enabled": false
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "blue-court",
-                    "sampler": "default"
-                },
-                "fenceMaterial":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "fenceTexture",
-                    "sampler": "default"
-                },
-                "grid":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "gridTexture",
-                    "sampler": "default"
-                },
-                "ads":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "ads",
-                    "sampler": "default"
-                },
-                "court":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "court",
-                    "sampler": "default"
-                },
-                "billboard":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "billboard",
-                    "sampler": "default"
+                    "tint": [
+                        0.9,
+                        0.2,
+                        0.2,
+                        1
+                    ]
                 }
-            }
+            },
+            "lights": [
+                { 
+                    "type": "directional",
+                    "color": [1.0, 1.0, 1.0],
+                    "direction": [-1, -1, -1],
+                    "enabled": true
+                },
+                { 
+                    "type": "directional",
+                    "color": [0.0, 1.0, 0.0],
+                    "direction": [-1, -1, -1],
+                    "enabled": true
+                }
+             ]
         },
         "world":[
             {
@@ -273,18 +150,45 @@
                         "material": "spaceship02"
                     }
                 ]
+            },
+            {
+                "name" : "spaceship01",
+                "position": [10, 3, 0],
+                "scale": [0.25, 0.25, 0.25],
+                "rotation": [0, -90, 0],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "spaceship01",
+                        "material": "spaceship01"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "kinematic"
+                    },
+                    {
+                        "type": "Shooter"
+                    }
+                ]
+            },
+            {
+                "name" : "moon",
+                "position": [0, 10, 0],
+                "rotation": [45, 45, 0],
+                "scale": [5, 5, 5],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "sphere",
+                        "material": "moon"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [0, 90, 0]
+                    }
+                ]
             }
-            // {
-            //     "name" : "spaceship01",
-            //     "position": [0, -1, 0],
-            //     "components": [
-            //         {
-            //             "type": "Mesh Renderer",
-            //             "mesh": "spaceship01",
-            //             "material": "spaceship01"
-            //         }
-            //     ]
-            // }
         ]
     }
 }
