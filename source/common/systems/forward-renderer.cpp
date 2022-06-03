@@ -2,7 +2,7 @@
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 #include "GLFW/glfw3.h"
-#include "ecs/rigidbody.hpp"
+#include "../components/rigidbody.hpp"
 #include "glad/gl.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/fwd.hpp"

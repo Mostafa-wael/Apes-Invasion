@@ -11,7 +11,6 @@
 #include "components/mesh-renderer.hpp"
 #include "ecs/IImGuiDrawable.h"
 #include "ecs/entity.hpp"
-#include "ecs/rigidbody.hpp"
 #include "ecs/transform.hpp"
 #include "ecs/world.hpp"
 #include "glm/common.hpp"
@@ -29,6 +28,7 @@
 #include "glm/matrix.hpp"
 #include "imgui.h"
 #include "mesh/mesh.hpp"
+#include "../components/rigidbody.hpp"
 #include "systems/physics-debug.hpp"
 #include <cmath>
 #include <stdio.h>
@@ -83,6 +83,9 @@ namespace our {
 
         // Reads our data and sets bullet rigidbodies with it
         void ourToBullet();
+
+        // Checks collisions and calls proper callbacks for each collision
+        void collisionCallbacks();
 
         virtual void onImmediateGui() override;
     };

@@ -1,18 +1,17 @@
 #pragma once
 
-#include <unordered_set>
 #include "entity.hpp"
 #include "glm/fwd.hpp"
+#include <unordered_set>
 
 namespace our {
 
     // This class holds a set of entities
     class World {
-        std::unordered_set<Entity*> entities; // These are the entities held by this world
+        std::unordered_set<Entity*> entities;         // These are the entities held by this world
         std::unordered_set<Entity*> markedForRemoval; // These are the entities that are awaiting to be deleted
                                                       // when deleteMarkedEntities is called
     public:
-
         World() = default;
 
         // This will deserialize a json array of entities and add the new entities to the current world
@@ -26,7 +25,8 @@ namespace our {
         // deleted when "deleteMarkedEntities" is called.
         Entity* add() {
             Entity* entity = new Entity();
-            entity->world = this;
+            entity->world  = this;
+            entity->name   = "Unnamed";
             entities.insert(entity);
             return entity;
         }
@@ -40,18 +40,19 @@ namespace our {
             return entities;
         }
 
-
         // This marks an entity for removal by adding it to the "markedForRemoval" set.
         // The elements in the "markedForRemoval" set will be removed and deleted when "deleteMarkedEntities" is called.
-        void markForRemoval(Entity* entity){
-            if(entities.find(entity) != entities.end())
+        void markForRemoval(Entity* entity) {
+            if(entities.find(entity) != entities.end()) {
                 markedForRemoval.insert(entity);
+                entity->enabled = false;
+            }
         }
 
         // This removes the elements in "markedForRemoval" from the "entities" set.
         // Then each of these elements are deleted.
-        void deleteMarkedEntities(){
-            for(auto entity: markedForRemoval){
+        void deleteMarkedEntities() {
+            for(auto entity : markedForRemoval) {
                 entities.erase(entity);
                 delete entity;
             }
@@ -59,8 +60,8 @@ namespace our {
         }
 
         //This deletes all entities in the world
-        void clear(){
-            for(auto entity: entities){
+        void clear() {
+            for(auto entity : entities) {
                 delete entity;
             }
             entities.clear();
@@ -68,13 +69,13 @@ namespace our {
         }
 
         //Since the world owns all of its entities, they should be deleted alongside it.
-        ~World(){
+        ~World() {
             clear();
         }
 
         // The world should not be copyable
-        World(const World&) = delete;
-        World &operator=(World const &) = delete;
+        World(const World&)            = delete;
+        World& operator=(World const&) = delete;
     };
 
-}
+} // namespace our

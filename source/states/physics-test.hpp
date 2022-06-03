@@ -1,9 +1,11 @@
 #pragma once
 
 #include "components/camera.hpp"
+#include "components/rotating-turret.hpp"
+#include "systems/projectile-system.hpp"
+#include "systems/rotating-turret-system.hpp"
 #include "ecs/entity.hpp"
-#include "ecs/rigidbody.hpp"
-#include "ecs/shooter.hpp"
+#include "components/rotating-turret.hpp"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
@@ -26,13 +28,16 @@ class PhysicsTest : public our::State {
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
     our::Physics p;
+    our::RotatingTurretSystem rotatingTurretSys;
+    our::ProjectileSystem projectileSystem;
+
     float dt;
 
-    void onInitialize() override ;
-    
-    void onDraw(double deltaTime) override ;
+    void onInitialize() override;
 
-    void onDestroy() override ;
+    void onDraw(double deltaTime) override;
 
-    void onImmediateGui() override ;
+    void onDestroy() override;
+
+    void onImmediateGui() override;
 };

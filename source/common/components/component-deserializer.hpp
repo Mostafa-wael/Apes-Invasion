@@ -2,11 +2,12 @@
 
 #include "../ecs/entity.hpp"
 #include "camera.hpp"
-#include "ecs/rigidbody.hpp"
-#include "ecs/shooter.hpp"
+#include "rigidbody.hpp"
 #include "free-camera-controller.hpp"
 #include "mesh-renderer.hpp"
 #include "movement.hpp"
+#include "rigidbody.hpp"
+#include "rotating-turret.hpp"
 
 namespace our {
 
@@ -25,8 +26,8 @@ namespace our {
             component = entity->addComponent<MovementComponent>();
         } else if(type == RigidBody::getID()) {
             component = entity->addComponent<RigidBody>();
-        } else if(type == Shooter::getID()) {
-            component = entity->addComponent<Shooter>();
+        } else if(type == RotatingTurret::getID()) {
+            component = entity->addComponent<RotatingTurret>();
         }
 
         if(component) component->deserialize(data);
