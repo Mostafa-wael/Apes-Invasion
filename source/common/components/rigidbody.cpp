@@ -1,15 +1,21 @@
 #include "rigidbody.hpp"
+#include "../ecs/entity.hpp"
+#include "../systems/physics.hpp"
 #include "components/mesh-renderer.hpp"
-#include "entity.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtx/euler_angles.hpp"
+#include "systems/physics.hpp"
 #include <cstdio>
 #include <stdexcept>
 #include <string>
 
 namespace our { // namespace our
+
+    void RigidBody::init(Physics* phys) {
+        physicsSystem = phys;
+    }
 
     void RigidBody::fromMeshRenderer(MeshRendererComponent* meshRenderer, std::string type, float mass) {
         auto [aabbCenter, aabbHalfExtents] = getAABBWorldScale(meshRenderer->mesh);
@@ -23,19 +29,19 @@ namespace our { // namespace our
         glm::mat4 wPos = glm::translate(glm::mat4(1), worldTranslation);
         t.setFromOpenGLMatrix(glm::value_ptr(wPos * wRot));
 
-        int colFlags  = body->getCollisionFlags();
+        int colFlags  = bulletRB->getCollisionFlags();
         int kinematic = btCollisionObject::CF_KINEMATIC_OBJECT;
 
         if(resetMovement) {
-            body->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
-            body->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
-            body->clearForces();
+            bulletRB->setLinearVelocity(btVector3(0.0f, 0.0f, 0.0f));
+            bulletRB->setAngularVelocity(btVector3(0.0f, 0.0f, 0.0f));
+            bulletRB->clearForces();
         }
 
         if(colFlags & kinematic) {
-            body->getMotionState()->setWorldTransform(t);
+            bulletRB->getMotionState()->setWorldTransform(t);
         } else
-            body->setWorldTransform(t);
+            bulletRB->setWorldTransform(t);
     }
 
     void RigidBody::deserialize(const nlohmann::json& data) {
@@ -87,25 +93,25 @@ namespace our { // namespace our
         btDefaultMotionState* myMotionState = new btDefaultMotionState(transform);
         btRigidBody::btRigidBodyConstructionInfo rbInfo(m, myMotionState, btColl, localInertia);
 
-        body = new btRigidBody(rbInfo);
+        bulletRB = new btRigidBody(rbInfo);
 
         // Simulates physics, gets affected by other dynamic objects
         if(type == "dynamic")
-            body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_DYNAMIC_OBJECT);
+            bulletRB->setCollisionFlags(bulletRB->getCollisionFlags() | btCollisionObject::CF_DYNAMIC_OBJECT);
 
         // Simulates physics, NOT affected by other dynamic objects but affects them.
         else if(type == "kinematic")
-            body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
+            bulletRB->setCollisionFlags(bulletRB->getCollisionFlags() | btCollisionObject::CF_KINEMATIC_OBJECT);
 
         // No physics simulation, only collision?
         else if(type == "static")
-            body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+            bulletRB->setCollisionFlags(bulletRB->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
 
         // Always simulate
         // Bullet disables simulation after an object stays still or moves very slowly for some time.
         // Just for debugging
-        body->setUserPointer(getOwner());
-        body->setActivationState(DISABLE_DEACTIVATION);
+        bulletRB->setUserPointer(getOwner());
+        bulletRB->setActivationState(DISABLE_DEACTIVATION);
 
         if(getOwner()->getParent()) {
             printf("Entity %s has a rigidbody component, setting parent to null due to technical limitations\n", getOwner()->name.c_str());
@@ -122,5 +128,9 @@ namespace our { // namespace our
         auto [wAABBPos, aabbHalfExtents] = meshComp->getAABB(wScale);
         wAABBPos                         = glm::translate(glm::mat4(1), wPos) * glm::vec4(wAABBPos, 1);
         return {wAABBPos, aabbHalfExtents};
+    }
+
+    RigidBody::~RigidBody() {
+        physicsSystem->dynamicsWorld->removeRigidBody(bulletRB);
     }
 } // namespace our

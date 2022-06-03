@@ -1,4 +1,5 @@
 #include "physics.hpp"
+#include "../components/rigidbody.hpp"
 #include "LinearMath/btVector3.h"
 #include "ecs/entity.hpp"
 #include "input/keyboard.hpp"
@@ -29,12 +30,20 @@ namespace our {
 
         world = w;
 
-        for(auto&& e : world->getEntities())
-            if(auto rb = e->getComponent<RigidBody>()) dynamicsWorld->addRigidBody(rb->body);
+        for(auto&& e : world->getEntities()) {
+            if(auto rb = e->getComponent<RigidBody>()) {
+                dynamicsWorld->addRigidBody(rb->bulletRB);
+
+                // Need a refrence to the physics system so we can remove the rigidbody on its destruction
+                rb->init(this); 
+            }
+        }
     }
 
     void Physics::update(float dt) {
-        debugDraw();
+
+        if(drawDebug)
+            debugDraw();
 
         if(!simulate || framesToSimulate == 0) {
             return;
@@ -44,6 +53,8 @@ namespace our {
         int i;
 
         dynamicsWorld->stepSimulation(dt);
+
+        collisionCallbacks();
 
         bulletToOur();
 
@@ -90,7 +101,7 @@ namespace our {
             if(auto rb = e->getComponent<RigidBody>()) {
 
                 btTransform rbT;
-                rb->body->getMotionState()->getWorldTransform(rbT);
+                rb->bulletRB->getMotionState()->getWorldTransform(rbT);
 
                 glm::vec3 newWorldTranslation = {rbT.getOrigin().x(), rbT.getOrigin().y(), rbT.getOrigin().z()};
                 glm::quat newWorldRotation =
@@ -128,9 +139,12 @@ namespace our {
         ImGui::Begin("Physics");
         ImGui::Indent(10);
 
+        ImGui::Checkbox("Debug drawing enabled", &drawDebug);
+        
         if(ImGui::Checkbox("simulate", &simulate) && simulate) {
             ourToBullet();
         }
+
 
         ImGui::InputInt("frames to simulate", &framesToSimulate);
 
@@ -156,4 +170,29 @@ namespace our {
         ImGui::End();
     };
 
+    void Physics::collisionCallbacks() {
+        btDispatcher* dp       = dynamicsWorld->getDispatcher();
+        const int numManifolds = dp->getNumManifolds();
+
+        for(int m = 0; m < numManifolds; ++m) {
+
+            btPersistentManifold* man = dp->getManifoldByIndexInternal(m);
+            const btRigidBody* obA    = static_cast<const btRigidBody*>(man->getBody0());
+            const btRigidBody* obB    = static_cast<const btRigidBody*>(man->getBody1());
+
+            Entity* entityA = static_cast<Entity*>(obA->getUserPointer());
+            Entity* entityB = static_cast<Entity*>(obB->getUserPointer());
+
+            if(entityA->enabled && entityB->enabled) {
+                RigidBody* aRB = entityA->getComponent<RigidBody>();
+                RigidBody* bRB = entityB->getComponent<RigidBody>();
+
+                if(aRB && aRB->onCollision)
+                    aRB->onCollision(bRB);
+
+                if(bRB && bRB->onCollision)
+                    bRB->onCollision(aRB);
+            }
+        }
+    }
 } // namespace our

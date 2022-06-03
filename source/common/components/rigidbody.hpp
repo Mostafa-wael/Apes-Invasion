@@ -19,16 +19,26 @@
 #include "glm/vec3.hpp"
 #include "imgui.h"
 #include "mesh/mesh.hpp"
+#include "systems/physics.hpp"
 #include <cstdio>
+#include <functional>
 #include <string>
 
 namespace our {
+    class Physics;
 
     class RigidBody : public Component {
     public:
-        btRigidBody* body;
+        btRigidBody* bulletRB;
+        Physics* physicsSystem;
+
+        // Need this as a function object so we don't need to create different classes
+        // for ALL different onCollision calls
+        std::function<void(RigidBody* other)> onCollision;
 
         RigidBody() = default;
+
+        void init(Physics* phys);
 
         void fromMeshRenderer(MeshRendererComponent* meshRenderer, std::string type, float mass);
 
@@ -60,13 +70,13 @@ namespace our {
             std::string id = std::to_string((long long)this);
 
             btTransform t;
-            body->getMotionState()->getWorldTransform(t);
+            bulletRB->getMotionState()->getWorldTransform(t);
             float pos[3] = {t.getOrigin().x(), t.getOrigin().getY(), t.getOrigin().getZ()};
 
             ImGui::DragFloat3(("Rigid body position##" + id).c_str(), pos);
 
             std::string type = "dynamic";
-            int collFlags    = body->getCollisionFlags();
+            int collFlags    = bulletRB->getCollisionFlags();
 
             if(collFlags & btCollisionObject::CF_KINEMATIC_OBJECT)
                 type = "kinematic";
@@ -75,5 +85,12 @@ namespace our {
 
             ImGui::LabelText("", "Type: %s", type.c_str());
         }
+
+        void setOnCollision(
+            std::function<void(RigidBody* other)> callback) {
+            onCollision = callback;
+        }
+
+        ~RigidBody();
     };
 } // namespace our

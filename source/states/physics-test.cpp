@@ -1,4 +1,5 @@
 #include "physics-test.hpp"
+#include "components/rotating-turret.hpp"
 #include "systems/entity-debugger.hpp"
 
 void PhysicsTest::onInitialize() {
@@ -31,25 +32,17 @@ void PhysicsTest::onInitialize() {
 
     p.initialize(&world);
 
-    for(auto&& e : world.getEntities()) {
-        if(auto s = e->getComponent<our::Shooter>()) {
-            s->init(&p);
-        }
-    }
+    rotatingTurretSys.init(&world, &p);
 }
 
 void PhysicsTest::onDraw(double deltaTime) {
     // Here, we just run a bunch of systems to control the world logic
     movementSystem.update(&world, (float)deltaTime);
     cameraController.update(&world, (float)deltaTime);
-
-    for(auto&& e : world.getEntities()) {
-        if(auto s = e->getComponent<our::Shooter>())
-            s->update(deltaTime);
-    }
-
+    rotatingTurretSys.update(&world, (float)(deltaTime));
     // And finally we use the renderer system to draw the scene
     renderer.render(&world);
+    projectileSystem.update(&world, dt);
 
     p.update(deltaTime);
 

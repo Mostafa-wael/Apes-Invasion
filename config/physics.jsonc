@@ -204,7 +204,7 @@
                 */
             },
             {
-                "name": "cube",
+                "name": "Rotating Turret",
                 "rotation": [
                     0,
                     45,
@@ -225,10 +225,15 @@
                         "type": "Rigid Body",
                         "useMeshBoundingBox": true,
                         "rigidBodyType": "dynamic"
-                    }
-                    ,
+                    },
                     {
-                        "type": "Shooter"
+                        "type": "Rotating Turret",
+                        "projectilesPerEvent": 8,
+                        "firingDelay": 0.5,
+                        "projetileLifetime": 5,
+                        "rotationSpeed": 3,
+                        "projectileSpeed": 20,
+                        "spawnDistance": 5
                     }
                 ]
             },
@@ -249,19 +254,22 @@
                         "type": "Mesh Renderer",
                         "mesh": "cube",
                         "material": "moon"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "dynamic"
                     }
-                    // ,
-                    // {
-                    //     "type": "Rigid Body",
-                    //     "useMeshBoundingBox": true,
-                    //     "rigidBodyType": "dynamic"
-                    // }
                 ],
                 "children": [
                     //,
                     {
                         "name": "monkey",
-                        "position" : [-1,-1, -1],
+                        "position": [
+                            -1,
+                            -1,
+                            -1
+                        ],
                         "rotation": [
                             -45,
                             0,

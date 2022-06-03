@@ -12,8 +12,8 @@
       "cwd": "${workspaceRoot}",
       "environment": [],
       "externalConsole": false,
-      "program": "",
       "preLaunchTask": "CMake: Build Debug",
+      // Windows specific settings
       "windows": {
         "args": [
           "-c=config\\physics.jsonc"
@@ -22,13 +22,15 @@
         "program": "${workspaceRoot}\\bin\\GAME_APPLICATION.exe",
         "MIMode": "gdb"
       },
+      // Linux specific settings
       "linux": {
         "args": [
-          "-c='config/light-test.jsonc'"
+          "-c='config/physics.jsonc'"
         ],
         "program": "${workspaceRoot}/bin/GAME_APPLICATION",
         "MIMode": "gdb"
       },
+      // Enable pretty printing for strings, vectors, etc...
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",

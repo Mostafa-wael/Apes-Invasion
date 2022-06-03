@@ -5,7 +5,6 @@
 #include "component.hpp"
 #include "components/mesh-renderer.hpp"
 #include "ecs/IImGuiDrawable.h"
-#include "ecs/rigidbody.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp"
@@ -47,7 +46,7 @@ namespace our {
             "Rigid Body",
             "Shooter"};
 
-        int currComponent = 0;
+        static inline int currComponent = 0;
 
         World* getWorld() const { return world; } // Returns the world to which this entity belongs
 
