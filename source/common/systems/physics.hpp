@@ -59,6 +59,8 @@ namespace our {
 
         bool hit = false;
 
+        bool drawDebug = false;
+
         void initialize(World* w);
 
         void update(float dt);

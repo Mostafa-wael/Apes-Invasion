@@ -6,7 +6,7 @@
     {
       "label": "CMake: Build Debug",
       "type": "shell",
-      "command": "cmake --build ./build --target GAME_APPLICATION -j6",
+      "command": "cmake --build ./build --target GAME_APPLICATION -j12",
       "group": {
         "kind": "build",
         "isDefault": true

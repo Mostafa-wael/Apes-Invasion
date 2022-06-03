@@ -1,5 +1,6 @@
 #pragma once
 
+#include "asset-loader.hpp"
 #include "components/projectile.hpp"
 #include "ecs/world.hpp"
 namespace our {

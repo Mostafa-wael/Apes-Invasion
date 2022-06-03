@@ -1,6 +1,7 @@
 #pragma once
 #include "../components/rotating-turret.hpp"
 #include "../ecs/world.hpp"
+#include "mesh/mesh-utils.hpp"
 #include "systems/physics.hpp"
 
 namespace our {
@@ -31,15 +32,13 @@ namespace our {
 
                         Entity* turretEntity = rotatingTurret->getOwner();
                         glm::vec3 forward    = turretEntity->getForward();
-                        for(int i = 0; i < rotatingTurret->projectilesPerDelay; i++) {
+                        for(int i = 0; i < rotatingTurret->projectilesPerEvent; i++) {
 
                             glm::vec3 spawnPos = turretEntity->getWorldTranslation() + forward * rotatingTurret->spawnDist + turretEntity->getUp();
-                            auto projectile    = spawnProjectile(world, rotatingTurret, spawnPos, forward * rotatingTurret->projectileVelocity);
-
-                            physicsSystem->dynamicsWorld->addRigidBody(projectile->getComponent<RigidBody>()->bulletRB);
+                            auto projectile    = spawnProjectile(world, rotatingTurret, spawnPos, forward * rotatingTurret->projectileSpeed);
 
                             // Rotate the forward vector by 360/numberProjectiles each firing event
-                            forward = toMat4(glm::angleAxis(glm::radians(360.0f / rotatingTurret->projectilesPerDelay), glm::vec3(0, 1, 0))) * glm::vec4(forward, 1);
+                            forward = toMat4(glm::angleAxis(glm::radians(360.0f / rotatingTurret->projectilesPerEvent), glm::vec3(0, 1, 0))) * glm::vec4(forward, 1);
                         }
                     }
                 }
@@ -55,18 +54,24 @@ namespace our {
             e->setParent(rt->getOwner());
 
             auto mR      = e->addComponent<MeshRendererComponent>();
-            mR->mesh     = AssetLoader<Mesh>::get("sphere");
+            mR->mesh     = mesh_utils::sphere({6,6});
             mR->material = AssetLoader<Material>::get("danger");
 
             auto rb = e->addComponent<RigidBody>();
             rb->fromSphereTranslationRotation(1, e->localTransform.position, {0, 0, 0}, "dynamic", 1);
             rb->physicsSystem = physicsSystem;
-            rb->bulletRB->clearGravity();
+
+            // Some stuff require us to already have the rigidbody added to bullet's physics world
+            physicsSystem->dynamicsWorld->addRigidBody(rb->bulletRB);
+
+            // One of them is disabling gravity
+            rb->bulletRB->setGravity({0,0,0});
 
             auto mv = movementVelocity;
             rb->bulletRB->setLinearVelocity({mv.x, mv.y, mv.z});
 
             auto proj = e->addComponent<Projectile>();
+            proj->lifetime = rt->projectileLifetime;
 
             // Set collision callback
             // std::bind takes a function as the first argument

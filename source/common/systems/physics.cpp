@@ -41,7 +41,9 @@ namespace our {
     }
 
     void Physics::update(float dt) {
-        debugDraw();
+
+        if(drawDebug)
+            debugDraw();
 
         if(!simulate || framesToSimulate == 0) {
             return;
@@ -137,9 +139,12 @@ namespace our {
         ImGui::Begin("Physics");
         ImGui::Indent(10);
 
+        ImGui::Checkbox("Debug drawing enabled", &drawDebug);
+        
         if(ImGui::Checkbox("simulate", &simulate) && simulate) {
             ourToBullet();
         }
+
 
         ImGui::InputInt("frames to simulate", &framesToSimulate);
 
