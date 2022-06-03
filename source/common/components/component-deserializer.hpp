@@ -9,6 +9,7 @@
 #include "rigidbody.hpp"
 #include "rotating-turret.hpp"
 #include "player-controller.hpp"
+#include "light.hpp"
 
 namespace our {
 
@@ -31,6 +32,8 @@ namespace our {
             component = entity->addComponent<RotatingTurret>();
         } else if (type ==  PlayerControllerComponent::getID()){
             component = entity->addComponent<PlayerControllerComponent>();
+        } else if (type ==  LightComponent::getID()){
+            component = entity->addComponent<LightComponent>();
         }
 
         if(component) component->deserialize(data);

@@ -1,7 +1,6 @@
 #include "asset-loader.hpp"
 
 #include "deserialize-utils.hpp"
-#include "light/light.hpp"
 #include "material/material.hpp"
 #include "mesh/mesh-utils.hpp"
 #include "mesh/mesh.hpp"
@@ -43,56 +42,6 @@ namespace our {
                 assets[name]     = texture_utils::loadImage(path);
             }
         }
-    };
-
-    // This will load all the textures defined in "data"
-    // data must be in the form:
-    //    { type : "directional", ... }
-    template <>
-    void AssetLoader<Light>::deserialize(const nlohmann::json& data) {
-        
-        if(!data.is_array()) return;
-        Light* lights = new Light[data.size()];
-        int index = 0;
-
-        for(const auto& lightData : data) {
-            if(lightData.is_object()) {
-                std::string type = lightData["type"];
-                Light light;
-                light.enabled = lightData.value("enabled", true);
-                if(type == "directional") {
-                    light.type      = LightType::DIRECTIONAL;
-                    light.direction = lightData["direction"];
-                    light.color     = lightData["color"];
-                } else if(type == "point") {
-                    light.type                  = LightType::POINT;
-                    light.position              =   lightData["position"];
-                    light.color                 =  lightData["color"];
-                    light.attenuation.constant  = lightData["attenuation"]["constant"];
-                    light.attenuation.linear    = lightData["attenuation"]["linear"];
-                    light.attenuation.quadratic = lightData["attenuation"]["quadratic"];
-                } else if(type == "spot") {
-                    light.type             = LightType::SPOT;
-                    light.position         = lightData["position"];
-                    light.direction        = lightData["direction"];   
-                    light.color            = lightData["color"];
-                    light.spot_angle.inner = lightData["spot_angle"]["inner"];
-                    light.spot_angle.outer = lightData["spot_angle"]["outer"];
-                } else if(type == "sky") {
-                    light.type                   = LightType::SKY;
-                    light.sky_light.top_color    = lightData["sky_light"]["top_color"];
-                    light.sky_light.bottom_color = lightData["sky_light"]["bottom_color"];
-                    light.sky_light.middle_color = lightData["sky_light"]["middle_color"];
-                } else {
-                    throw std::runtime_error("Unknown light type: " + type);
-                }
-
-                lights[index] = light;
-                index++;
-            }
-        }
-
-        assets["lights"]     = lights;
     };
 
     // This will load all the samplers defined in "data"
@@ -162,8 +111,7 @@ namespace our {
             AssetLoader<Mesh>::deserialize(assetData["meshes"]);
         if(assetData.contains("materials"))
             AssetLoader<Material>::deserialize(assetData["materials"]);
-        if(assetData.contains("lights"))
-            AssetLoader<Light>::deserialize(assetData["lights"]);
+        
     }
 
     void clearAllAssets() {
@@ -172,7 +120,6 @@ namespace our {
         AssetLoader<Sampler>::clear();
         AssetLoader<Mesh>::clear();
         AssetLoader<Material>::clear();
-        AssetLoader<Light>::clear();
     }
 
 } // namespace our

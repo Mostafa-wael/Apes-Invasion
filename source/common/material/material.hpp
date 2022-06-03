@@ -87,4 +87,19 @@ namespace our {
         }
     }
 
+
+// This contains all the material properties and texture maps for the object.
+
+class LightMaterial : public TexturedMaterial {
+    public:
+        Texture2D*  albedo_map;
+        Texture2D*  specular_map;
+        Texture2D*  ambient_occlusion_map;
+        Texture2D*  roughness_map;
+        Texture2D*  emissive_map;
+
+
+        void setup() const override;
+        void deserialize(const nlohmann::json& data) override;
+    };
 } // namespace our

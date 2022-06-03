@@ -22,6 +22,10 @@
                 "textured": {
                     "vs": "assets/shaders/textured.vert",
                     "fs": "assets/shaders/textured.frag"
+                },
+                "light": {
+                    "vs": "assets/shaders/light.vert",
+                    "fs": "assets/shaders/light.frag"
                 }
             },
             "textures": {
@@ -149,57 +153,7 @@
                     "texture": "moon",
                     "sampler": "default"
                 }
-            },
-            "lights": [
-                {
-                    "type": "directional",
-                    "color": [
-                        1.0,
-                        0.0,
-                        0.0
-                    ],
-                    "direction": [
-                        -1,
-                        -1,
-                        -1
-                    ],
-                    "enabled": true
-                },
-                {
-                    "type": "directional",
-                    "color": [
-                        0.0,
-                        1.0,
-                        0.0
-                    ],
-                    "direction": [
-                        -1,
-                        -1,
-                        -1
-                    ],
-                    "enabled": true
-                },
-                {
-                    "type": "sky",
-                    "sky_light": {
-                        "top_color": [
-                            1.0,
-                            1.0,
-                            1.0
-                        ],
-                        "bottom_color": [
-                            0.5,
-                            0.2,
-                            0.1
-                        ],
-                        "middle_color": [
-                            0.2,
-                            0.1,
-                            0.7
-                        ]
-                    }
-                }
-            ]
+            }
         },
         "world": [
             {
@@ -216,6 +170,7 @@
                     {
                         "type": "Free Camera Controller"
                     }
+        
                 ],
                 "children": [
                     {
@@ -455,7 +410,53 @@
                         ]
                     }
                 ]
+            },
+            {
+            "name": "light",
+            "position": [
+                0,
+                10,
+                0
+            ],
+            "components":
+            [
+                {
+                "type": "Light",
+                "typeLight": "directional",
+                "color": [
+                    1.0,
+                    0.0,
+                    0.0
+                ],
+                "direction": [
+                    -1,
+                    -1,
+                    -1  
+                ],
+                "enabled": true
+                },
+            {
+                "type": "sky",
+                "sky_light": {
+                    "top_color": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "bottom_color": [
+                        0.5,
+                        0.2,
+                        0.1
+                    ],
+                    "middle_color": [
+                        0.2,
+                        0.1,
+                        0.7
+                    ]
+                }
+            }
+            ]
             }
         ]
-    }
+}
 }
