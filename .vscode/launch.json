@@ -25,7 +25,7 @@
       // Linux specific settings
       "linux": {
         "args": [
-          "-c='config/light-test.jsonc'"
+          "-c='config/app.jsonc'"
         ],
         "program": "${workspaceRoot}/bin/GAME_APPLICATION",
         "MIMode": "gdb",

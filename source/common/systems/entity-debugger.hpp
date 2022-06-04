@@ -15,26 +15,41 @@
 #include "glm/geometric.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
 #include "imgui.h"
+#include "systems/physics.hpp"
 #include <cstring>
+#include <iostream>
 
 namespace our {
     class EntityDebugger {
         static inline char entityName[128];
         static inline float moveToObjDist = 10.0f;
         static inline bool wireframe      = false;
+        static inline bool enabled        = false;
 
     public:
         static inline Application* app;
         static inline Entity* selectedEntity;
         static inline CameraComponent* editorCamera;
+        static inline PhysicsSystem* physicsSystem;
         static inline float objectPickDist = 1000;
 
-        static void init(CameraComponent* camera, Application* a) {
-            editorCamera = camera;
-            app          = a;
+        static void init(CameraComponent* camera, Application* a, PhysicsSystem* phys) {
+            editorCamera  = camera;
+            app           = a;
+            physicsSystem = phys;
         }
 
         static void update(World* world, float deltaTime) {
+
+            if(app->getKeyboard().justPressed(GLFW_KEY_TAB)) {
+                enabled = !enabled;
+            }
+
+            if(!enabled) {
+                app->getMouse().lockMouse(app->getWindow());
+            } else {
+                app->getMouse().unlockMouse(app->getWindow());
+            }
 
             ImGui::Begin("Help", NULL, ImGuiWindowFlags_HorizontalScrollbar);
 
@@ -47,7 +62,7 @@ namespace our {
             ImGui::BulletText("Press F to teleport near that object");
             ImGui::Indent(-10);
             ImGui::BulletText("Note that objects with rigidbodies do not support scaling, you'll only scale the mesh, not the collision");
-
+            ImGui::BulletText("Press tab to toggle the entity debugger");
 
             ImGui::End();
 
@@ -128,6 +143,9 @@ namespace our {
             }
 
             ImGui::End();
+
+            if(physicsSystem)
+                physicsSystem->onImmediateGui();
         }
 
         static void addEntity(char* entityName, World* world) {

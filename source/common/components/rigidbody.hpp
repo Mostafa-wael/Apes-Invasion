@@ -25,12 +25,12 @@
 #include <string>
 
 namespace our {
-    class Physics;
+    class PhysicsSystem;
 
     class RigidBody : public Component {
     public:
         btRigidBody* bulletRB;
-        Physics* physicsSystem;
+        PhysicsSystem* physicsSystem;
 
         // Need this as a function object so we don't need to create different classes
         // for ALL different onCollision calls
@@ -38,7 +38,7 @@ namespace our {
 
         RigidBody() = default;
 
-        void init(Physics* phys);
+        void init(PhysicsSystem* phys);
 
         void fromMeshRenderer(MeshRendererComponent* meshRenderer, std::string type, float mass);
 

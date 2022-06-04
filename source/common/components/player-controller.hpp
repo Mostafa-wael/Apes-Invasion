@@ -8,7 +8,7 @@ namespace our {
     class PlayerControllerComponent : public Component {
     public:
         float speed                = 5;
-        float boostSpeedMultiplier = 20;
+        float boostSpeedMultiplier = 0.7;
         float maxSpeed             = 12.0f;
 
         // Vertical and horzontal mouse sensitivities repectively
