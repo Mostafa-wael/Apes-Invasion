@@ -3,6 +3,7 @@
 #include "../ecs/entity.hpp"
 #include "camera.hpp"
 #include "rigidbody.hpp"
+#include "components/health.hpp"
 #include "free-camera-controller.hpp"
 #include "mesh-renderer.hpp"
 #include "movement.hpp"
@@ -34,6 +35,8 @@ namespace our {
             component = entity->addComponent<PlayerControllerComponent>();
         } else if (type ==  LightComponent::getID()){
             component = entity->addComponent<LightComponent>();
+        } else if (type == HealthComponent::getID()){
+            component = entity->addComponent<HealthComponent>();
         }
 
         if(component) component->deserialize(data);
