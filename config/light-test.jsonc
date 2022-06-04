@@ -20,7 +20,9 @@
                 },
                 "textured": {
                     "vs": "assets/shaders/textured.vert",
-                    "fs": "assets/shaders/textured.frag"
+                    "fs": "assets/shaders/textured.frag",
+                    "reticle-vs": "assets/shaders/reticle.vert",
+                    "reticle-fs": "assets/shaders/reticle.frag"
                 },
                 "light": {
                     "vs": "assets/shaders/light.vert",
@@ -29,6 +31,7 @@
             },
             "textures": {
                 "monkey": "assets/textures/monkey.png",
+                "reticle": "assets/textures/reticle.png",
                 "albedo": "assets/textures/asphalt/albedo.jpg",
                 "emissive": "assets/textures/asphalt/emissive.jpg",
                 "roughness": "assets/textures/asphalt/roughness.jpg",
