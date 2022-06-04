@@ -242,7 +242,7 @@ namespace our {
                 opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
                 switch(light->typeLight) {
                 case LightType::DIRECTIONAL:
-                    opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
+                    opaqueCommand.material->shader->set(prefix + "direction", light->direction);
                     opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
                     opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     break;
@@ -255,7 +255,7 @@ namespace our {
                     break;
                 case LightType::SPOT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
-                    opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
+                    opaqueCommand.material->shader->set(prefix + "direction", light->direction);
                     opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
                     opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,

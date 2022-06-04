@@ -64,7 +64,6 @@ namespace our {
     void LightMaterial::deserialize(const nlohmann::json& data) {
        TexturedMaterial::deserialize(data);
         if(!data.is_object()) return;
-        std::cout<<"LightMaterial::deserialize"<<std::endl;
         albedo_map = AssetLoader<Texture2D>::get(data.value("albedo", ""));
         specular_map = AssetLoader<Texture2D>::get(data.value("specular", ""));
         emissive_map = AssetLoader<Texture2D>::get(data.value("emissive", ""));

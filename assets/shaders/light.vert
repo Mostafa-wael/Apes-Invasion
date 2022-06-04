@@ -23,11 +23,12 @@ out Varyings {
     vec3 world;
 } vsout;
 
+
 void main() {
     // First we compute the world position.
     vsout.world = (object_to_world * vec4(position, 1.0f)).xyz;
     // Then we compute the view vector (vertex to eye vector in the world space) to be used for specular computation later.
-    vsout.view = camera_position - vsout.world;
+    vsout.view = normalize(camera_position - vsout.world);
     // Then we compute normal in the world space (Note that w=0 since this is a vector).
     vsout.normal = normalize((object_to_world_inv_transpose * vec4(normal, 0.0f)).xyz);
     // Finally, we compute the position in the homogenous clip space and send the rest of the data.
