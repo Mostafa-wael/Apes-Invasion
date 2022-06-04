@@ -65,10 +65,9 @@
                         1,
                         1
                     ],
-                    "texture": "monkey",
                     "sampler": "default",
-                    "albedo": "albedo",
-                    "emissive": "emissive",
+                    "albedo": "monkey",
+                    "emissive": "",
                     "roughness": "roughness",
                     "specular": "specular",
                     "ambient_occlusion": "ambient_occlusion"
@@ -334,20 +333,20 @@
                 "name": "light",
                 "position": [
                     0,
-                    10,
-                    0
+                    0,
+                    1
                 ],
                 "components": [
                     {
                         "type": "Light",
                         "typeLight": "directional",
                         "diffuse": [
+                            1.0,
                             0,
-                            1,
                             0
                         ],
                         "specular": [
-                            1,
+                            1.0,
                             0,
                             0
                         ],
@@ -356,10 +355,10 @@
                             -1,
                             -1
                         ],
-                        "enabled": true
+                        "enabled": false
                     }
                 ]
             }
-        ]
+        ]   
     }
 }

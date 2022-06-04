@@ -49,7 +49,7 @@ void main(){
     vec3 view = normalize(fs_in.view);
     vec3 normal = normalize(fs_in.normal);
 
-    vec3 material_diffuse = texture(material.albedo, fs_in.tex_coord).rgb;
+    vec3 material_diffuse =  texture(material.albedo, fs_in.tex_coord).rgb;
     vec3 material_specular = texture(material.specular, fs_in.tex_coord).rgb;
     vec3 material_ambient = material_diffuse * texture(material.ambient_occlusion, fs_in.tex_coord).r;
     

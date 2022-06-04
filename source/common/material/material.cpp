@@ -75,57 +75,58 @@ namespace our {
      // This function should call the setup of its parent and
     // set the "tint" uniform to the value in the member variable tint
     void  LightMaterial::setup() const {
-        TexturedMaterial::setup();
-
+        TintedMaterial::setup();
+        this->shader->set("alphaThreshold", this->alphaThreshold);
+        this->sampler->bind(0);
         if(albedo_map != nullptr)
         {
             // select an active texture unit -> 1
-            glActiveTexture(GL_TEXTURE1);
+            glActiveTexture(GL_TEXTURE0);
             // bind the texture to unit 1
             this->albedo_map->bind();
             // bind the sampler to unit 1 
-            this->sampler->bind(1);
-            shader->set("material.diffuse", 1);
+            this->sampler->bind(0);
+            shader->set("material.diffuse", 0);
         }
         if(specular_map != nullptr)
         {
             // select an active texture unit -> 1
-            glActiveTexture(GL_TEXTURE2);
+            glActiveTexture(GL_TEXTURE1);
             // bind the texture to unit 1
             this->specular_map->bind();
             // bind the sampler to unit 1 
-            this->sampler->bind(2);
-            shader->set("material.specular", 2);
+            this->sampler->bind(1);
+            shader->set("material.specular", 1);
         }
         if(emissive_map != nullptr)
         {
             // select an active texture unit -> 1
-            glActiveTexture(GL_TEXTURE3);
+            glActiveTexture(GL_TEXTURE2);
             // bind the texture to unit 1
             this->emissive_map->bind();
             // bind the sampler to unit 1 
-            this->sampler->bind(3);
-            shader->set("material.emissive", 3);
+            this->sampler->bind(2);
+            shader->set("material.emissive", 2);
         }
         if(ambient_occlusion_map != nullptr)
         {
             // select an active texture unit -> 1
-            glActiveTexture(GL_TEXTURE4);
+            glActiveTexture(GL_TEXTURE3);
             // bind the texture to unit 1
             this->ambient_occlusion_map->bind();
             // bind the sampler to unit 1 
-            this->sampler->bind(4);
-            shader->set("material.ambient_occlusion", 4);
+            this->sampler->bind(3);
+            shader->set("material.ambient_occlusion", 3);
         }
         if(roughness_map != nullptr)
         {
             // select an active texture unit -> 1
-            glActiveTexture(GL_TEXTURE5);
+            glActiveTexture(GL_TEXTURE4);
             // bind the texture to unit 1
             this->roughness_map->bind();
             // bind the sampler to unit 1 
-            this->sampler->bind(5);
-            shader->set("material.roughness", 5);
+            this->sampler->bind(4);
+            shader->set("material.roughness", 4);
         }
 
         glActiveTexture(GL_TEXTURE0);
