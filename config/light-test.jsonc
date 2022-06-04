@@ -28,7 +28,12 @@
                 }
             },
             "textures": {
-                "monkey": "assets/textures/monkey.png"
+                "monkey": "assets/textures/monkey.png",
+                "albedo": "assets/textures/asphalt/albedo.jpg",
+                "emissive": "assets/textures/asphalt/emissive.jpg",
+                "roughness": "assets/textures/asphalt/roughness.jpg",
+                "specular": "assets/textures/asphalt/specular.jpg",
+                "ambient_occlusion": "assets/textures/asphalt/ambient_occlusion.jpg"
             },
             "meshes": {
                 "monkey": "assets/models/monkey.obj"
@@ -58,7 +63,12 @@
                         1
                     ],
                     "texture": "monkey",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "albedo": "albedo",
+                    "emissive": "emissive",
+                    "roughness": "roughness",
+                    "specular": "specular",
+                    "ambient_occlusion": "ambient_occlusion"
                 },
                 "moon": {
                     "type": "textured",

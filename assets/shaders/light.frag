@@ -89,6 +89,6 @@ void main(){
             }
         }
 
-        frag_color.rgb += (lights[0].diffuse + lights[0].specular);
+        frag_color.rgb += (diffuse + specular) * attenuation;
     }
 }

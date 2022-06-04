@@ -60,14 +60,27 @@ namespace our {
         sampler        = AssetLoader<Sampler>::get(data.value("sampler", ""));
     }
 
+    // This function read the material data from a json object
+    void LightMaterial::deserialize(const nlohmann::json& data) {
+       TexturedMaterial::deserialize(data);
+        if(!data.is_object()) return;
+        std::cout<<"LightMaterial::deserialize"<<std::endl;
+        albedo_map = AssetLoader<Texture2D>::get(data.value("albedo", ""));
+        specular_map = AssetLoader<Texture2D>::get(data.value("specular", ""));
+        emissive_map = AssetLoader<Texture2D>::get(data.value("emissive", ""));
+        roughness_map = AssetLoader<Texture2D>::get(data.value("roughness", ""));
+        ambient_occlusion_map =  AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
+       }
+
      // This function should call the setup of its parent and
     // set the "tint" uniform to the value in the member variable tint
     void  LightMaterial::setup() const {
         TexturedMaterial::setup();
 
-
+        std::cout << "LightMaterial::setup()" << std::endl;
         if(albedo_map != nullptr)
         {
+            std::cout << "albedo map" << std::endl;
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE1);
             // bind the texture to unit 1
@@ -78,6 +91,7 @@ namespace our {
         }
         else if(specular_map != nullptr)
         {
+            std::cout << "specular map" << std::endl;
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE2);
             // bind the texture to unit 1
@@ -88,6 +102,7 @@ namespace our {
         }
         else if(emissive_map != nullptr)
         {
+            std::cout << "emissive map" << std::endl;
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE3);
             // bind the texture to unit 1
@@ -98,6 +113,7 @@ namespace our {
         }
         else if(ambient_occlusion_map != nullptr)
         {
+            std::cout << "ambient occlusion map" << std::endl;
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE4);
             // bind the texture to unit 1
@@ -108,6 +124,7 @@ namespace our {
         }
         else if(roughness_map != nullptr)
         {
+            std::cout << "roughness map" << std::endl;
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE5);
             // bind the texture to unit 1
@@ -121,16 +138,6 @@ namespace our {
 
     }
 
-    // This function read the material data from a json object
-    void LightMaterial::deserialize(const nlohmann::json& data) {
-       TexturedMaterial::deserialize(data);
-        if(!data.is_object()) return;
-        albedo_map = AssetLoader<Texture2D>::get(data.value("albedo", ""));
-        specular_map = AssetLoader<Texture2D>::get(data.value("specular", ""));
-        emissive_map = AssetLoader<Texture2D>::get(data.value("emissive", ""));
-        roughness_map = AssetLoader<Texture2D>::get(data.value("roughness", ""));
-        ambient_occlusion_map =  AssetLoader<Texture2D>::get(data.value("ambient_occlusion", ""));
-
-       }
+    
 
 } // namespace our
