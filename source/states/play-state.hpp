@@ -1,6 +1,8 @@
 #pragma once
 
 #include "components/projectile.hpp"
+#include "asset-loader.hpp"
+#include "glad/gl.h"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
@@ -22,6 +24,10 @@
 #include "systems/player-shooter-system.hpp"
 #include "systems/projectile-system.hpp"
 #include "systems/rotating-turret-system.hpp"
+#include "mesh/mesh.hpp"
+#include "shader/shader.hpp"
+#include "texture/texture2d.hpp"
+#include <texture/texture-utils.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -37,6 +43,11 @@ class Playstate : public our::State {
 
     our::PhysicsSystem physicsSystem;
     float dt;
+
+
+    our::ShaderProgram* reticleShader;
+    our::Mesh* reticleMesh;
+    our::Texture2D* reticleTexture;
 
     void onInitialize() override {
 
@@ -84,6 +95,26 @@ class Playstate : public our::State {
         playerShooterSystem.init(&world, getApp(), &physicsSystem);
 
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
+
+
+        reticleShader = new our::ShaderProgram();
+        reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-vs"], GL_VERTEX_SHADER);
+        reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-fs"], GL_FRAGMENT_SHADER);
+        reticleShader->link();
+        
+
+        std::vector<our::Vertex> vertices = {
+            { {-0.08, -0.08,  0}, {0, 0, 0, 0}, {0.00, 0.00}, {0, 0, 0} },
+            { { 0.08, -0.08,  0}, {0, 0, 0, 0}, {1.00, 0.00}, {0, 0, 0} },
+            { { 0.08,  0.08,  0}, {0, 0, 0, 0}, {1.00, 1.00}, {0, 0, 0} },
+            { {-0.08,  0.08,  0}, {0, 0, 0, 0}, {0.00, 1.00}, {0, 0, 0} },
+        };
+        std::vector<unsigned int> elements = {
+            0, 1, 2,
+            2, 3, 0,
+        };
+        reticleMesh = new our::Mesh(vertices, elements);
+        reticleTexture = our::texture_utils::loadImage(config["assets"]["textures"]["reticle"]);
     }
 
     void onDraw(double deltaTime) override {
@@ -103,6 +134,15 @@ class Playstate : public our::State {
 
         world.deleteMarkedEntities();
         dt = deltaTime;
+
+
+
+        reticleShader->use();
+        glActiveTexture(GL_TEXTURE0);
+        reticleTexture->bind();
+        reticleShader->set("tex", 0);
+        reticleMesh->draw();
+
     }
 
     void onDestroy() override {
