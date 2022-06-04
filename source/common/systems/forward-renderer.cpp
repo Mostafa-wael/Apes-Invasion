@@ -133,10 +133,10 @@ namespace our {
 
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent* camera = nullptr;
-        
+
         opaqueCommands.clear();
         transparentCommands.clear();
-        
+
         for(auto entity : world->getEntities()) {
 
             // Skip this entity altogether if it's not enabled
@@ -163,11 +163,10 @@ namespace our {
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
-
-                if(auto light = entity->getComponent<LightComponent>(); light) {
-                    std::cout << "Light found" << std::endl;
-                    lights.push_back(light);
-                }
+            }
+            
+            if(auto light = entity->getComponent<LightComponent>(); light) {
+                lights.push_back(light);
             }
         }
 
@@ -214,7 +213,6 @@ namespace our {
         //TODO: (Req 8) Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
         int numLights = lights.size();
 
         //TODO: (Req 8) Draw all the opaque commands
@@ -232,10 +230,6 @@ namespace our {
                 if(!light->enabled) continue;
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
-                std::cout << "Light " << i << " is enabled" << std::endl;
-
-                std::cout << "light diffuse: " << light->diffuse.x << " " << light->diffuse.y << " " << light->diffuse.z << std::endl;
-
                 opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
                 switch(light->typeLight) {
                 case LightType::DIRECTIONAL:
@@ -248,7 +242,7 @@ namespace our {
                     opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
                     opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
-                     light->attenuation.linear, light->attenuation.quadratic));
+                                                                                          light->attenuation.linear, light->attenuation.quadratic));
                     break;
                 case LightType::SPOT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
@@ -256,7 +250,7 @@ namespace our {
                     opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
                     opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
-                     light->attenuation.linear, light->attenuation.quadratic));
+                                                                                          light->attenuation.linear, light->attenuation.quadratic));
                     opaqueCommand.material->shader->set(prefix + "core_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:

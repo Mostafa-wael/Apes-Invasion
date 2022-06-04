@@ -117,6 +117,8 @@ namespace our {
             shader->set("mat.roughness", 5);
         }
 
+        glActiveTexture(GL_TEXTURE0);
+
     }
 
     // This function read the material data from a json object

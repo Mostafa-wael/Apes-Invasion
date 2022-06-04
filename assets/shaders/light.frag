@@ -46,48 +46,49 @@ in Varyings {
 out vec4 frag_color;
 
 void main(){
-    // vec3 view = normalize(fs_in.view);
-    // vec3 normal = normalize(fs_in.normal);
+    vec3 view = normalize(fs_in.view);
+    vec3 normal = normalize(fs_in.normal);
 
-    // vec3 material_diffuse = texture(material.albedo, fs_in.tex_coord).rgb;
-    // vec3 material_specular = texture(material.specular, fs_in.tex_coord).rgb;
-    // vec3 material_ambient = material_diffuse * texture(material.ambient_occlusion, fs_in.tex_coord).r;
+    vec3 material_diffuse = texture(material.albedo, fs_in.tex_coord).rgb;
+    vec3 material_specular = texture(material.specular, fs_in.tex_coord).rgb;
+    vec3 material_ambient = material_diffuse * texture(material.ambient_occlusion, fs_in.tex_coord).r;
     
-    // float material_roughness = texture(material.roughness, fs_in.tex_coord).r;
-    // float material_shininess = 2.0 / pow(clamp(material_roughness, 0.001, 0.999), 4.0) - 2.0;
+    float material_roughness = texture(material.roughness, fs_in.tex_coord).r;
+    float material_shininess = 2.0 / pow(clamp(material_roughness, 0.001, 0.999), 4.0) - 2.0;
 
-    // vec3 material_emissive = texture(material.emissive, fs_in.tex_coord).rgb;
+    vec3 material_emissive = texture(material.emissive, fs_in.tex_coord).rgb;
 
-    // vec3 sky_light = (normal.y > 0) ?
-    //     mix(sky.middle, sky.top, normal.y * normal.y) :
-    //     mix(sky.middle, sky.bottom, normal.y * normal.y);
+    vec3 sky_light = (normal.y > 0) ?
+        mix(sky.middle, sky.top, normal.y * normal.y) :
+        mix(sky.middle, sky.bottom, normal.y * normal.y);
 
-    // frag_color = vec4(material_emissive + material_ambient * sky_light, 1.0);
+    frag_color = vec4(material_emissive + material_ambient * sky_light, 1.0);
 
-    // int clamped_light_count = min(MAX_LIGHTS, light_count);
-    // for(int i = 0; i < clamped_light_count; i++){
-    //     Light light = lights[i];
+    int clamped_light_count = min(MAX_LIGHTS, light_count);
+    for(int i = 0; i < clamped_light_count; i++){
+        Light light = lights[i];
 
-    //     vec3 direction_to_light = -light.direction;
-    //     if(light.type != DIRECTIONAL){
-    //         direction_to_light = normalize(light.position - fs_in.world);
-    //     }
+        vec3 direction_to_light = -light.direction;
+        if(light.type != DIRECTIONAL){
+            direction_to_light = normalize(light.position - fs_in.world);
+        }
         
-    //     vec3 diffuse = light.diffuse * material_diffuse * max(0, dot(normal, direction_to_light));
+        vec3 diffuse = light.diffuse * material_diffuse * max(0, dot(normal, direction_to_light));
         
-    //     vec3 reflected = reflect(-direction_to_light, normal);
+        vec3 reflected = reflect(-direction_to_light, normal);
         
-    //     vec3 specular = light.specular * material_specular * pow(max(0, dot(view, reflected)), material_shininess);
+        vec3 specular = light.specular * material_specular * pow(max(0, dot(view, reflected)), material_shininess);
 
-    //     float attenuation = 1;
-    //     if(light.type != DIRECTIONAL){
-    //         float d = distance(light.position, fs_in.world);
-    //         attenuation /= dot(light.attenuation, vec3(d*d, d, 1));
-    //         if(light.type == SPOT){
-    //             float angle = acos(dot(-direction_to_light, light.direction));
-    //             attenuation *= smoothstep(light.cone_angles.y, light.cone_angles.x, angle);
-    //         }
-    //     }
+        float attenuation = 1;
+        if(light.type != DIRECTIONAL){
+            float d = distance(light.position, fs_in.world);
+            attenuation /= dot(light.attenuation, vec3(d*d, d, 1));
+            if(light.type == SPOT){
+                float angle = acos(dot(-direction_to_light, light.direction));
+                attenuation *= smoothstep(light.cone_angles.y, light.cone_angles.x, angle);
+            }
+        }
 
-        frag_color.rgb = (lights[0].diffuse + lights[0].specular);
+        frag_color.rgb += (lights[0].diffuse + lights[0].specular);
     }
+}

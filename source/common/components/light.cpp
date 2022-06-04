@@ -35,7 +35,7 @@ namespace our {
             sky_light.bottom_color = data["sky_light"]["bottom_color"];
             sky_light.middle_color = data["sky_light"]["middle_color"];
         } else {
-            throw std::runtime_error("Unknown light typeLight");
+            throw std::runtime_error("Unknown light type " + typeLocal);
         }
     }
 } // namespace our
