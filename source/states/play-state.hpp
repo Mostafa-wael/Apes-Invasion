@@ -151,18 +151,8 @@ class Playstate : public our::State {
     }
 
     void onImmediateGui() override {
-        ImGui::Begin("Debug");
-        
-        getApp()->getMouse().unlockMouse(getApp()->getWindow());
-            
 
-        ImGui::DragFloat3("light position", &light->position.x);        
-        ImGui::DragFloat3("light direction", &light->direction.x);        
-        ImGui::DragFloat2("light spot_angle", &light->spot_angle.inner);        
-
-        ImGui::End();
-
-        // our::EntityDebugger::update(&world, dt);
+        our::EntityDebugger::update(&world, dt);
 
     }
 };

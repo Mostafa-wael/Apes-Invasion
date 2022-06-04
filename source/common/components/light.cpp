@@ -27,6 +27,9 @@ namespace our {
             direction        = data["direction"];
             diffuse          = data["diffuse"];
             specular         = data["specular"];
+            attenuation.constant  = data["attenuation"]["constant"];
+            attenuation.linear    = data["attenuation"]["linear"];
+            attenuation.quadratic = data["attenuation"]["quadratic"];
             spot_angle.inner = data["spot_angle"]["inner"];
             spot_angle.outer = data["spot_angle"]["outer"];
         } else if(typeLocal == "sky") {

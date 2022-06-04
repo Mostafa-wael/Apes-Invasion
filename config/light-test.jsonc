@@ -204,7 +204,7 @@
                     {
                         "type": "Light",
                         "typeLight": "point",
-                        "enabled": false,
+                        "enabled": true,
                         "position": [
                             0,
                             0,
