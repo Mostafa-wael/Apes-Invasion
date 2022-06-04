@@ -7,17 +7,17 @@
 namespace our {
     class PlayerControllerComponent : public Component {
     public:
-        float speed                = 5;
-        float boostSpeedMultiplier = 0.7;
-        float maxSpeed             = 12.0f;
+        float speed                  = 5;
+        float boostImpulseMultiplier = 1.4;
+        float maxSpeed               = 12.0f;
 
         // Vertical and horzontal mouse sensitivities repectively
         glm::vec2 rotationSensitivity = glm::vec2(0.5, 1);
 
         virtual void deserialize(const nlohmann::json& data) override {
-            speed                = data.value("movementSpeed", speed);
-            boostSpeedMultiplier = data.value("boostSpeedMultiplier", boostSpeedMultiplier);
-            rotationSensitivity  = data.value("rotationSensitivity", rotationSensitivity);
+            speed                  = data.value("movementSpeed", speed);
+            boostImpulseMultiplier = data.value("boostSpeedMultiplier", boostImpulseMultiplier);
+            rotationSensitivity    = data.value("rotationSensitivity", rotationSensitivity);
         }
 
         static std::string getID() {

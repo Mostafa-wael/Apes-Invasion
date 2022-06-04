@@ -47,6 +47,7 @@ namespace our {
 
             if(!enabled) {
                 app->getMouse().lockMouse(app->getWindow());
+                return;
             } else {
                 app->getMouse().unlockMouse(app->getWindow());
             }

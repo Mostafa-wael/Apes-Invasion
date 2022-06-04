@@ -53,10 +53,10 @@ namespace our {
 
             // If left shift is pressed, apply an impulse to the local left or right
             if(app->getKeyboard().isPressed(GLFW_KEY_A) && app->getKeyboard().justPressed(GLFW_KEY_LEFT_SHIFT))
-                bulletRB->applyCentralImpulse(glmToBtVector3(-right * speed * playerController->boostSpeedMultiplier));
+                bulletRB->applyCentralImpulse(glmToBtVector3(-right * speed * playerController->boostImpulseMultiplier));
 
             if(app->getKeyboard().isPressed(GLFW_KEY_D) && app->getKeyboard().justPressed(GLFW_KEY_LEFT_SHIFT))
-                bulletRB->applyCentralImpulse(glmToBtVector3(right * speed * playerController->boostSpeedMultiplier));
+                bulletRB->applyCentralImpulse(glmToBtVector3(right * speed * playerController->boostImpulseMultiplier));
 
             // Cap speed at the controller's max
             if(bulletRB->getLinearVelocity().norm() < playerController->maxSpeed * speed) {

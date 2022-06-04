@@ -8,6 +8,7 @@
 #include "systems/physics.hpp"
 #include "util.h"
 #include <functional>
+#include <unordered_set>
 
 namespace our {
     class Projectile : public Component {
@@ -15,17 +16,20 @@ namespace our {
     public:
         float lifetime = 2; // How long this projectile will stay alive for
         Material* material;
+        World* world;
 
         Projectile() : material(AssetLoader<Material>::get("defaultProjectileMaterial")), lifetime(1){};
         Projectile(Material* mat, float life) : material(mat), lifetime(life) {}
 
         // Has implicit `this` or `Shooter*` as the first argument
-        void onCollision(World* world, Entity* owner, RigidBody* other) {
+        // owner: entity carrying this component, need to pass it manually for the callback
+        void onCollision(RigidBody* other) {
+            auto projectileRB = getOwner()->getComponent<RigidBody>();
 
-            // Arbitrary effect to debug collision
-            other->bulletRB->applyCentralImpulse({0, 2, 0});
+            // Ignore other objects that have the same tag as you
+            if(projectileRB->tag == other->tag) return;
 
-            world->markForRemoval(owner);
+            other->bulletRB->applyCentralForce(projectileRB->bulletRB->getLinearVelocity() * projectileRB->bulletRB->getMass());
         }
 
         void deserialize(const nlohmann::json& data) {

@@ -31,6 +31,7 @@ namespace our {
     public:
         btRigidBody* bulletRB;
         PhysicsSystem* physicsSystem;
+        std::string tag;
 
         // Need this as a function object so we don't need to create different classes
         // for ALL different onCollision calls

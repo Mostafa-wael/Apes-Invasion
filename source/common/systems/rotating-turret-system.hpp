@@ -15,6 +15,10 @@ namespace our {
             physicsSystem = physicsSys;
             for(auto&& entity : world->getEntities()) {
                 auto rt = entity->getComponent<RotatingTurret>();
+                if(rt){
+                    rt->init();
+                }
+                
                 auto rb = entity->getComponent<RigidBody>();
                 if(rt && rb) {
                     rb->bulletRB->setGravity({0, 0, 0});

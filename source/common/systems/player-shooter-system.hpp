@@ -12,11 +12,14 @@ namespace our {
         PhysicsSystem* phys;
         World* world;
 
-public:
+    public:
         void init(World* w, Application* a, PhysicsSystem* p) {
             for(auto&& entity : w->getEntities()) {
-                if(auto ps = entity->getComponent<PlayerShooter>())
+                if(auto ps = entity->getComponent<PlayerShooter>()) {
                     playerShooter = ps;
+                    playerShooter->init(w);
+                    break;
+                }
             }
             app   = a;
             phys  = p;

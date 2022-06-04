@@ -3,6 +3,7 @@
 #include "components/projectile.hpp"
 #include "components/rigidbody.hpp"
 #include "ecs/entity.hpp"
+#include "ecs/world.hpp"
 #include "systems/physics.hpp"
 #include "util.h"
 #include "json/json.hpp"
@@ -18,6 +19,7 @@ namespace our {
     class IShootingBehaviour {
     public:
         bool canFire = true;
+        std::string projectileTag;
 
         // Defines what projectiles will be spawned when shooting
         Projectile* projectileToShoot;
@@ -44,7 +46,7 @@ namespace our {
     public:
         DefaultShootingBehaviour(float ps, float fd, float sd, float pl, float pbcd) : projectileSpeed(ps), firingDelay(fd), spawnDist(sd), projectileLifetime(pl), projectilesBeforeCooldown(pbcd) {
             projectilesLeft = projectilesBeforeCooldown;
-            timer = firingDelay;
+            timer           = firingDelay;
         }
 
         virtual void shoot(World* world, PhysicsSystem* physics, Entity* shootingEntity, glm::vec3 spawnPos, glm::vec3 velocity) override {
@@ -55,7 +57,10 @@ namespace our {
                 auto projectileRB        = projectileEntity->getComponent<RigidBody>();
 
                 projectileRB->setOnCollision(std::bind(
-                    &Projectile::onCollision, projectileComponent, world, projectileEntity, std::placeholders::_1));
+                    &Projectile::onCollision, projectileComponent, std::placeholders::_1));
+
+                projectileRB->tag = projectileTag;
+
             } else {
                 canFire = false;
             }
@@ -67,8 +72,8 @@ namespace our {
             }
 
             if(timer < 0) {
-                canFire = true;
-                timer   = firingDelay - dt;
+                canFire         = true;
+                timer           = firingDelay - dt;
                 projectilesLeft = projectilesBeforeCooldown;
             }
 
@@ -82,13 +87,20 @@ namespace our {
 
         static std::string getID() { return "Player Shooter"; }
 
+        void init(World* world) {
+            shootingBehaviour->projectileToShoot->world = world;
+            auto playerRB                               = getOwner()->getComponent<RigidBody>(); // Ignore the ship's collision
+            
+            playerRB->tag                               = "player";
+            shootingBehaviour->projectileTag            = playerRB->tag;
+        }
+
         virtual void deserialize(const nlohmann::json& data) {
 
-            float projectileLifetime = 5;
-            shootingBehaviour = new DefaultShootingBehaviour(20, 0.1, 5, projectileLifetime, 1);
-            shootingBehaviour->projectileToShoot = new Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime);
+            float projectileLifetime                       = 5;
+            shootingBehaviour                              = new DefaultShootingBehaviour(70, 0.1, 7, projectileLifetime, 1);
+            shootingBehaviour->projectileToShoot           = new Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime);
             shootingBehaviour->projectileToShoot->lifetime = 2.0f;
-
         }
     };
 } // namespace our

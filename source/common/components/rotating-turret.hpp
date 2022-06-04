@@ -25,7 +25,7 @@
 namespace our {
     class RotatingTurret : public Component {
     public:
-        float firingDelay = 0.5;         // Delay between shooting events
+        float firingDelay = 0.5; // Delay between shooting events
 
         float projectileLifetime = 2; // How long each projectile should stay alive before removing itself
         int projectilesPerEvent  = 4; //  How many projectiles to spawn around the turret
@@ -35,6 +35,17 @@ namespace our {
         float spawnDist       = 4.0f;  // How far away radially the projectiles spawn
 
         IShootingBehaviour* shootingBehaviour;
+
+        void init() {
+            // TODO: Replace this when we have multiple shooting behaviours
+            shootingBehaviour                              = new DefaultShootingBehaviour(projectileSpeed, firingDelay, spawnDist, projectileLifetime, projectilesPerEvent);
+            shootingBehaviour->projectileToShoot           = new Projectile(AssetLoader<Material>::get("danger"), projectileLifetime);
+            shootingBehaviour->projectileToShoot->lifetime = projectileLifetime;
+
+            auto turretRB                    = getOwner()->getComponent<RigidBody>();
+            turretRB->tag                    = "turret";
+            shootingBehaviour->projectileTag = turretRB->tag;
+        }
 
         static std::string getID() { return "Rotating Turret"; }
         virtual std::string getIDPolymorphic() override { return getID(); }
@@ -46,12 +57,6 @@ namespace our {
             rotationSpeed       = data.value("rotationSpeed", 5);
             projectileSpeed     = data.value("projectileSpeed", 15.0f);
             spawnDist           = data.value("spawnDistance", 4.0f);
-
-
-            // TODO: Replace this when we have multiple shooting behaviours
-            shootingBehaviour = new DefaultShootingBehaviour(projectileSpeed, firingDelay, spawnDist, projectileLifetime, projectilesPerEvent);
-            shootingBehaviour->projectileToShoot = new Projectile(AssetLoader<Material>::get("danger"), projectileLifetime);
-            shootingBehaviour->projectileToShoot->lifetime = projectileLifetime;
         }
     };
 } // namespace our
