@@ -130,11 +130,18 @@ namespace our {
     }
 
     void ForwardRenderer::render(World* world) {
+
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent* camera = nullptr;
+
         opaqueCommands.clear();
         transparentCommands.clear();
+
         for(auto entity : world->getEntities()) {
+
+            // Skip this entity altogether if it's not enabled
+            if(!entity->enabled) continue;
+
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) camera = entity->getComponent<CameraComponent>();
 
@@ -149,15 +156,6 @@ namespace our {
 
                 if(!command.mesh || !command.material) continue;
 
-                // I think this is a bit more concise?
-                // Perhaps use it once the everything is working
-                // RenderCommand cmd = {
-                //     meshRenderer->getOwner()->getLocalToWorldMatrix(),
-                //     glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1)),
-                //     meshRenderer->mesh,
-                //     meshRenderer->material,
-                // };
-
                 // if it is transparent, we add it to the transparent commands list
                 if(command.material->transparent) {
                     transparentCommands.push_back(command);
@@ -165,9 +163,10 @@ namespace our {
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
-                if(auto light = entity->getComponent<LightComponent>(); light) {
-                    lights.push_back(light);
-                }
+            }
+            
+            if(auto light = entity->getComponent<LightComponent>(); light) {
+                lights.push_back(light);
             }
         }
 
@@ -214,7 +213,6 @@ namespace our {
         //TODO: (Req 8) Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
         int numLights = lights.size();
 
         //TODO: (Req 8) Draw all the opaque commands
@@ -236,29 +234,29 @@ namespace our {
                 switch(light->typeLight) {
                 case LightType::DIRECTIONAL:
                     opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
-                    opaqueCommand.material->shader->set(prefix + "color", light->color);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     break;
                 case LightType::POINT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
-                    opaqueCommand.material->shader->set(prefix + "color", light->color);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
+                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
+                                                                                          light->attenuation.linear, light->attenuation.quadratic));
                     break;
                 case LightType::SPOT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
                     opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
-                    opaqueCommand.material->shader->set(prefix + "color", light->color);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
-                    opaqueCommand.material->shader->set(prefix + "inner_angle", light->spot_angle.inner);
-                    opaqueCommand.material->shader->set(prefix + "outer_angle", light->spot_angle.outer);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
+                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
+                                                                                          light->attenuation.linear, light->attenuation.quadratic));
+                    opaqueCommand.material->shader->set(prefix + "core_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:
-                    opaqueCommand.material->shader->set(prefix + "top_color", light->sky_light.top_color);
-                    opaqueCommand.material->shader->set(prefix + "middle_color", light->sky_light.middle_color);
-                    opaqueCommand.material->shader->set(prefix + "bottom_color", light->sky_light.bottom_color);
+                    opaqueCommand.material->shader->set("Sky.top", light->sky_light.top_color);
+                    opaqueCommand.material->shader->set("Sky.middle", light->sky_light.middle_color);
+                    opaqueCommand.material->shader->set("Sky.bottom", light->sky_light.bottom_color);
                     break;
                 }
                 light_index++;

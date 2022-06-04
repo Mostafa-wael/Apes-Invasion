@@ -3,7 +3,7 @@
 #include "../asset-loader.hpp"
 #include "deserialize-utils.hpp"
 #include "material/material.hpp"
-
+#include <iostream>
 namespace our {
 
     // This function should setup the pipeline state and set the shader to be used
@@ -65,6 +65,7 @@ namespace our {
     void  LightMaterial::setup() const {
         TexturedMaterial::setup();
 
+
         if(albedo_map != nullptr)
         {
             // select an active texture unit -> 1
@@ -115,6 +116,8 @@ namespace our {
             this->sampler->bind(5);
             shader->set("mat.roughness", 5);
         }
+
+        glActiveTexture(GL_TEXTURE0);
 
     }
 

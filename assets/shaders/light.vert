@@ -18,12 +18,9 @@ uniform vec3 camera_position;
 out Varyings {
     vec4 color;
     vec2 tex_coord;
-    // We will need to send the vertex position in the world space,
-    vec3 world;
-    // the view vector (vertex to eye vector in the world space),
-    vec3 view;
-    // and the surface normal in the world space.
     vec3 normal;
+    vec3 view;
+    vec3 world;
 } vsout;
 
 void main() {

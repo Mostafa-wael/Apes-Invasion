@@ -27,7 +27,7 @@ namespace our {
         }
 
         void update(float dt) {
-            if(playerShooter->shootingBehaviour->canShoot(dt) && app->getMouse().isPressed(0)) {
+            if(playerShooter && playerShooter->shootingBehaviour->canShoot(dt) && app->getMouse().isPressed(0)) {
                 glm::vec3 spawnPos = playerShooter->getOwner()->getWorldTranslation() + playerShooter->getOwner()->getForward() * 10.0f;
                 playerShooter->shootingBehaviour->shoot(world, phys, playerShooter->getOwner(), spawnPos, playerShooter->getOwner()->getForward() * 20.0f);
             }

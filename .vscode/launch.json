@@ -5,6 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
+      // "logging": { "engineLogging": true },
       "name": "Build and Run",
       "type": "cppdbg",
       "request": "launch",
@@ -16,7 +17,7 @@
       // Windows specific settings
       "windows": {
         "args": [
-          "-c=config\\physics.jsonc"
+          "-c='config\\light-test.jsonc'"
         ],
         "miDebuggerPath": "C:\\Users\\Abdelrahman\\Downloads\\winlibs-x86_64-posix-seh-gcc-11.3.0-llvm-14.0.3-mingw-w64ucrt-10.0.0-r3\\mingw64\\bin\\gdb.exe",
         "program": "${workspaceRoot}\\bin\\GAME_APPLICATION.exe",
@@ -25,7 +26,7 @@
       // Linux specific settings
       "linux": {
         "args": [
-          "-c='config/app.jsonc'"
+          "-c='config/light-test.jsonc'"
         ],
         "program": "${workspaceRoot}/bin/GAME_APPLICATION",
         "MIMode": "gdb",

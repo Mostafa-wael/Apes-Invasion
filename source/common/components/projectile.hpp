@@ -8,18 +8,19 @@
 #include "systems/physics.hpp"
 #include "util.h"
 #include <functional>
+#include <string>
 #include <unordered_set>
 
 namespace our {
     class Projectile : public Component {
 
     public:
-        float lifetime = 2; // How long this projectile will stay alive for
         Material* material;
-        World* world;
+        float lifetime = 2; // How long this projectile will stay alive for
+        std::string rigidbodyTag;
 
-        Projectile() : material(AssetLoader<Material>::get("defaultProjectileMaterial")), lifetime(1){};
-        Projectile(Material* mat, float life) : material(mat), lifetime(life) {}
+        Projectile() = default;
+        Projectile(Material* mat, float life, std::string tag) : material(mat), lifetime(life), rigidbodyTag(tag) {}
 
         // Has implicit `this` or `Shooter*` as the first argument
         // owner: entity carrying this component, need to pass it manually for the callback
@@ -30,6 +31,13 @@ namespace our {
             if(projectileRB->tag == other->tag) return;
 
             other->bulletRB->applyCentralForce(projectileRB->bulletRB->getLinearVelocity() * projectileRB->bulletRB->getMass());
+
+            if(getOwner())
+                getOwner()->getWorld()->markForRemoval(getOwner());
+                
+            auto otherProjectile = other->getOwner()->getComponent<Projectile>();
+            if(otherProjectile)
+                otherProjectile->getOwner()->getWorld()->markForRemoval(otherProjectile->getOwner());
         }
 
         void deserialize(const nlohmann::json& data) {
@@ -37,16 +45,21 @@ namespace our {
             // are created at runtime.
         }
 
-        virtual Entity* spawn(World* world, PhysicsSystem* physics, Entity* shootingEntity, float lifetime, glm::vec3 spawnPos, glm::vec3 velocity) {
+        static Entity* spawn(
+            World* world,
+            PhysicsSystem* physics,
+            glm::vec3 spawnPos,
+            glm::vec3 velocity,
+            Projectile projectile) {
             auto e  = world->add();
             e->name = "sphere##" + std::to_string((long long)e);
-            e->setParent(shootingEntity);
 
             auto mR      = e->addComponent<MeshRendererComponent>();
             mR->mesh     = mesh_utils::sphere({6, 6});
-            mR->material = material;
+            mR->material = projectile.material;
 
             auto rb = e->addComponent<RigidBody>();
+            rb->tag = projectile.rigidbodyTag;
             rb->fromSphereTranslationRotation(1, spawnPos, {0, 0, 0}, "dynamic", 1);
             rb->physicsSystem = physics;
 
@@ -58,7 +71,7 @@ namespace our {
             rb->bulletRB->setLinearVelocity(glmToBtVector3(velocity));
 
             auto proj      = e->addComponent<Projectile>();
-            proj->lifetime = lifetime;
+            proj->lifetime = projectile.lifetime;
 
             return e;
         }

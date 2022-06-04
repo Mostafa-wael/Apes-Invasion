@@ -22,7 +22,7 @@ namespace our {
         std::string projectileTag;
 
         // Defines what projectiles will be spawned when shooting
-        Projectile* projectileToShoot;
+        Projectile projectileToShoot;
 
         // Add other functions / fields to use in `shoot` if needed
 
@@ -51,7 +51,7 @@ namespace our {
 
         virtual void shoot(World* world, PhysicsSystem* physics, Entity* shootingEntity, glm::vec3 spawnPos, glm::vec3 velocity) override {
             if(canFire && projectilesLeft-- > 0) {
-                auto projectileEntity = projectileToShoot->spawn(world, physics, shootingEntity, projectileLifetime, spawnPos, velocity);
+                auto projectileEntity = Projectile::spawn(world, physics, spawnPos, velocity, projectileToShoot);
 
                 auto projectileComponent = projectileEntity->getComponent<Projectile>();
                 auto projectileRB        = projectileEntity->getComponent<RigidBody>();
@@ -88,19 +88,17 @@ namespace our {
         static std::string getID() { return "Player Shooter"; }
 
         void init(World* world) {
-            shootingBehaviour->projectileToShoot->world = world;
-            auto playerRB                               = getOwner()->getComponent<RigidBody>(); // Ignore the ship's collision
-            
-            playerRB->tag                               = "player";
-            shootingBehaviour->projectileTag            = playerRB->tag;
+            auto playerRB = getOwner()->getComponent<RigidBody>(); // Ignore the ship's collision
+
+            float projectileLifetime             = 5;
+            shootingBehaviour                    = new DefaultShootingBehaviour(50, 0.1, 7, projectileLifetime, 1);
+            playerRB->tag = "player";
+
+            shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime, playerRB->tag);
+
         }
 
         virtual void deserialize(const nlohmann::json& data) {
-
-            float projectileLifetime                       = 5;
-            shootingBehaviour                              = new DefaultShootingBehaviour(70, 0.1, 7, projectileLifetime, 1);
-            shootingBehaviour->projectileToShoot           = new Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime);
-            shootingBehaviour->projectileToShoot->lifetime = 2.0f;
         }
     };
 } // namespace our
