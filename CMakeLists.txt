@@ -113,6 +113,7 @@ set(COMMON_SOURCES
 # Define the directories in which to search for the included headers
 include_directories(
         source/common
+        vendor/glm
         vendor/glfw/include
         vendor/glad/include
         vendor/glm
@@ -165,6 +166,7 @@ link_directories(
         vendor/bullet/src/clew
         vendor/bullet/src/LinearMath
 )
+
 
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files

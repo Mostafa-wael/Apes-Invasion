@@ -19,7 +19,6 @@ namespace our {
     class IShootingBehaviour {
     public:
         bool canFire = true;
-        std::string projectileTag;
 
         // Defines what projectiles will be spawned when shooting
         Projectile projectileToShoot;
@@ -40,11 +39,10 @@ namespace our {
         float projectileSpeed         = 10;
         float firingDelay             = 0.2;
         float spawnDist               = 5;
-        float projectileLifetime      = 2;
         int projectilesBeforeCooldown = 4;
 
     public:
-        DefaultShootingBehaviour(float ps, float fd, float sd, float pl, float pbcd) : projectileSpeed(ps), firingDelay(fd), spawnDist(sd), projectileLifetime(pl), projectilesBeforeCooldown(pbcd) {
+        DefaultShootingBehaviour(float ps, float fd, float sd, float pl, float pbcd) : projectileSpeed(ps), firingDelay(fd), spawnDist(sd),projectilesBeforeCooldown(pbcd) {
             projectilesLeft = projectilesBeforeCooldown;
             timer           = firingDelay;
         }
@@ -58,8 +56,6 @@ namespace our {
 
                 projectileRB->setOnCollision(std::bind(
                     &Projectile::onCollision, projectileComponent, std::placeholders::_1));
-
-                projectileRB->tag = projectileTag;
 
             } else {
                 canFire = false;
@@ -91,7 +87,7 @@ namespace our {
             auto playerRB = getOwner()->getComponent<RigidBody>(); // Ignore the ship's collision
 
             float projectileLifetime             = 5;
-            shootingBehaviour                    = new DefaultShootingBehaviour(50, 0.1, 7, projectileLifetime, 1);
+            shootingBehaviour                    = new DefaultShootingBehaviour(50, 0.1, 7, projectileLifetime, 3);
             playerRB->tag = "player";
 
             shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime, playerRB->tag);
