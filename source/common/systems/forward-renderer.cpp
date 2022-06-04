@@ -130,11 +130,18 @@ namespace our {
     }
 
     void ForwardRenderer::render(World* world) {
+
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent* camera = nullptr;
+        
         opaqueCommands.clear();
         transparentCommands.clear();
+        
         for(auto entity : world->getEntities()) {
+
+            // Skip this entity altogether if it's not enabled
+            if(!entity->enabled) continue;
+
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) camera = entity->getComponent<CameraComponent>();
 
@@ -149,15 +156,6 @@ namespace our {
 
                 if(!command.mesh || !command.material) continue;
 
-                // I think this is a bit more concise?
-                // Perhaps use it once the everything is working
-                // RenderCommand cmd = {
-                //     meshRenderer->getOwner()->getLocalToWorldMatrix(),
-                //     glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1)),
-                //     meshRenderer->mesh,
-                //     meshRenderer->material,
-                // };
-
                 // if it is transparent, we add it to the transparent commands list
                 if(command.material->transparent) {
                     transparentCommands.push_back(command);
@@ -165,6 +163,7 @@ namespace our {
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
+
                 if(auto light = entity->getComponent<LightComponent>(); light) {
                     lights.push_back(light);
                 }

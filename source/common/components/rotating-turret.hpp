@@ -38,13 +38,11 @@ namespace our {
 
         void init() {
             // TODO: Replace this when we have multiple shooting behaviours
-            shootingBehaviour                              = new DefaultShootingBehaviour(projectileSpeed, firingDelay, spawnDist, projectileLifetime, projectilesPerEvent);
-            shootingBehaviour->projectileToShoot           = new Projectile(AssetLoader<Material>::get("danger"), projectileLifetime);
-            shootingBehaviour->projectileToShoot->lifetime = projectileLifetime;
+            shootingBehaviour = new DefaultShootingBehaviour(projectileSpeed, firingDelay, spawnDist, projectileLifetime, projectilesPerEvent);
 
-            auto turretRB                    = getOwner()->getComponent<RigidBody>();
-            turretRB->tag                    = "turret";
-            shootingBehaviour->projectileTag = turretRB->tag;
+            auto turretRB                        = getOwner()->getComponent<RigidBody>();
+            turretRB->tag                        = "turret";
+            shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("danger"), projectileLifetime, turretRB->tag);
         }
 
         static std::string getID() { return "Rotating Turret"; }
