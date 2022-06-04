@@ -147,12 +147,7 @@
                 ]
             },
             {
-                "name": "light",
-                "position": [
-                    0,
-                    0,
-                    1
-                ],
+                "name": "sky_light",
                 "components": [
                     {
                         "type": "Light",
@@ -175,11 +170,16 @@
                                 1.0
                             ]
                         }
-                    },
+                    }
+                ]
+            },
+            {
+                "name": "directional_light",
+                "components": [
                     {
                         "type": "Light",
                         "typeLight": "directional",
-                        "enabled": false,
+                        "enabled": true,
                         "diffuse": [
                             1.0,
                             0,
@@ -195,11 +195,16 @@
                             -1,
                             0
                         ]
-                    },
+                    }
+                ]
+            },
+            {
+                "name": "point_light",
+                "components": [
                     {
                         "type": "Light",
                         "typeLight": "point",
-                        "enabled": false,
+                        "enabled": true,
                         "position": [
                             0,
                             0,
@@ -220,7 +225,12 @@
                             "linear": 0.0,
                             "constant": 0.0
                         }
-                    },
+                    }
+                ]
+            },
+            {
+                "name": "spot_light",
+                "components": [
                     {
                         "type": "Light",
                         "typeLight": "spot",
@@ -232,17 +242,17 @@
                         ],
                         "position": [
                             0,
-                            0,
-                            1
+                            1,
+                            0
                         ],
                         "diffuse": [
                             0.0,
-                            1.0,
+                            0.1,
                             0.0
                         ],
                         "specular": [
                             0.0,
-                            1.0,
+                            0.1,
                             0.0
                         ],
                         "attenuation": {

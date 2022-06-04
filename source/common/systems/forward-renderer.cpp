@@ -137,6 +137,8 @@ namespace our {
 
         opaqueCommands.clear();
         transparentCommands.clear();
+        // for lights 
+        std::vector<LightComponent *> lights;
 
         for(auto entity : world->getEntities()) {
 
@@ -165,7 +167,6 @@ namespace our {
                     opaqueCommands.push_back(command);
                 }
             }
-
             if(auto light = entity->getComponent<LightComponent>(); light) {
                 lights.push_back(light);
             }
