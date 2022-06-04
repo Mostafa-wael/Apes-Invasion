@@ -27,7 +27,7 @@ class PhysicsTest : public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
-    our::Physics p;
+    our::PhysicsSystem p;
     our::RotatingTurretSystem rotatingTurretSys;
     our::ProjectileSystem projectileSystem;
 

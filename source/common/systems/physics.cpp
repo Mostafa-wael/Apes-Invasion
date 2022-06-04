@@ -8,7 +8,7 @@
 #include <cstddef>
 
 namespace our {
-    void Physics::initialize(World* w) {
+    void PhysicsSystem::initialize(World* w) {
         ///collision configuration contains default setup for memory, collision setup. Advanced users can create their own configuration.
         collisionConfiguration = new btDefaultCollisionConfiguration();
 
@@ -40,7 +40,7 @@ namespace our {
         }
     }
 
-    void Physics::update(float dt) {
+    void PhysicsSystem::update(float dt) {
 
         if(drawDebug)
             debugDraw();
@@ -61,7 +61,7 @@ namespace our {
         editorPickObject();
     }
 
-    void Physics::destroy() {
+    void PhysicsSystem::destroy() {
 
         for(int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
             btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
@@ -88,14 +88,14 @@ namespace our {
         delete collisionConfiguration;
     }
 
-    void Physics::editorPickObject() {
+    void PhysicsSystem::editorPickObject() {
         if(EntityDebugger::app->getMouse().justPressed(GLFW_MOUSE_BUTTON_1)) {
             EntityDebugger::pickObject(dynamicsWorld);
         }
     }
 
     // Reads data from bullet physics and updates object transform for graphics drawing
-    void Physics::bulletToOur() {
+    void PhysicsSystem::bulletToOur() {
         for(auto&& e : world->getEntitiesMut()) {
             if(!e->enabled) continue;
             if(auto rb = e->getComponent<RigidBody>()) {
@@ -113,7 +113,7 @@ namespace our {
         }
     }
 
-    void Physics::debugDraw() const {
+    void PhysicsSystem::debugDraw() const {
 
         auto pMat = EntityDebugger::editorCamera->getProjectionMatrix(EntityDebugger::app->getWindowSize());
         debugDrawer->SetMatrices(EntityDebugger::editorCamera->getViewMatrix(), pMat);
@@ -123,7 +123,7 @@ namespace our {
     }
 
     // Reads our data and sets bullet rigidbodies with it
-    void Physics::ourToBullet() {
+    void PhysicsSystem::ourToBullet() {
         for(auto e : world->getEntities()) {
             if(!e->enabled) continue;
 
@@ -135,7 +135,7 @@ namespace our {
         }
     }
 
-    void Physics::onImmediateGui() {
+    void PhysicsSystem::onImmediateGui() {
         ImGui::Begin("Physics");
         ImGui::Indent(10);
 
@@ -170,7 +170,7 @@ namespace our {
         ImGui::End();
     };
 
-    void Physics::collisionCallbacks() {
+    void PhysicsSystem::collisionCallbacks() {
         btDispatcher* dp       = dynamicsWorld->getDispatcher();
         const int numManifolds = dp->getNumManifolds();
 

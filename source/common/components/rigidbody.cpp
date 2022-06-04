@@ -13,7 +13,7 @@
 
 namespace our { // namespace our
 
-    void RigidBody::init(Physics* phys) {
+    void RigidBody::init(PhysicsSystem* phys) {
         physicsSystem = phys;
     }
 
@@ -114,7 +114,7 @@ namespace our { // namespace our
         bulletRB->setActivationState(DISABLE_DEACTIVATION);
 
         if(getOwner()->getParent()) {
-            printf("Entity %s has a rigidbody component, setting parent to null due to technical limitations\n", getOwner()->name.c_str());
+            // printf("Entity %s has a rigidbody component, setting parent to null due to technical limitations\n", getOwner()->name.c_str());
             getOwner()->setParent(nullptr);
         }
     }

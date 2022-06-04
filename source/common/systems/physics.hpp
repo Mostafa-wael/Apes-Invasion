@@ -42,7 +42,7 @@ namespace our {
         bool mFullscreen;
     };
 
-    class Physics : public IImGuiDrawable {
+    class PhysicsSystem : public IImGuiDrawable {
     public:
         btDefaultCollisionConfiguration* collisionConfiguration;
         btCollisionDispatcher* dispatcher;

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/projectile.hpp"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
@@ -18,6 +19,9 @@
 #include "components/camera.hpp"
 #include "components/rigidbody.hpp"
 #include "ecs/entity.hpp"
+#include "systems/player-shooter-system.hpp"
+#include "systems/projectile-system.hpp"
+#include "systems/rotating-turret-system.hpp"
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -27,12 +31,15 @@ class Playstate : public our::State {
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
     our::PlayerControllerSystem playerControllerSystem;
+    our::RotatingTurretSystem rotatingTurretSystem;
+    our::ProjectileSystem projectileSystem;
+    our::PlayerShooterSystem playerShooterSystem;
 
-    our::Physics p;
+    our::PhysicsSystem physicsSystem;
     float dt;
 
     void onInitialize() override {
-        
+
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
 
@@ -54,10 +61,9 @@ class Playstate : public our::State {
         renderer.initialize(size, config["renderer"]);
         renderer.app = getApp();
 
-        p.initialize(&world);
+        physicsSystem.initialize(&world);
 
-
-        our::CameraComponent* cam = nullptr;
+        our::CameraComponent* cam                        = nullptr;
         our::PlayerControllerComponent* playerController = nullptr;
         for(auto e : world.getEntities()) {
             if(auto camComp = e->getComponent<our::CameraComponent>())
@@ -70,9 +76,14 @@ class Playstate : public our::State {
                 break;
         }
 
-        our::EntityDebugger::init(cam, getApp());
 
         playerControllerSystem.init(playerController, getApp());
+
+        rotatingTurretSystem.init(&world, &physicsSystem);
+
+        playerShooterSystem.init(&world, getApp(), &physicsSystem);
+
+        our::EntityDebugger::init(cam, getApp(), &physicsSystem);
     }
 
     void onDraw(double deltaTime) override {
@@ -82,9 +93,13 @@ class Playstate : public our::State {
 
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
-        p.update(deltaTime);
+        physicsSystem.update(deltaTime);
 
         playerControllerSystem.update(dt);
+        playerShooterSystem.update(dt);
+        rotatingTurretSystem.update(&world, dt);
+
+        projectileSystem.update(&world, dt);
 
         world.deleteMarkedEntities();
         dt = deltaTime;
@@ -97,15 +112,10 @@ class Playstate : public our::State {
         cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
-        p.destroy();
+        physicsSystem.destroy();
     }
 
     void onImmediateGui() override {
-        ImGui::Begin("KAK Engine");
-        ImGui::Text("Current frametime: %f", dt);
         our::EntityDebugger::update(&world, dt);
-        ImGui::End();
-
-        p.onImmediateGui();
     }
 };

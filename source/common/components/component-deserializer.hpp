@@ -3,6 +3,7 @@
 #include "../ecs/entity.hpp"
 #include "camera.hpp"
 #include "rigidbody.hpp"
+#include "components/player-shooter.hpp"
 #include "components/health.hpp"
 #include "free-camera-controller.hpp"
 #include "mesh-renderer.hpp"
@@ -33,6 +34,8 @@ namespace our {
             component = entity->addComponent<RotatingTurret>();
         } else if (type ==  PlayerControllerComponent::getID()){
             component = entity->addComponent<PlayerControllerComponent>();
+        } else if (type == PlayerShooter::getID()){
+            component = entity->addComponent<PlayerShooter>();
         } else if (type ==  LightComponent::getID()){
             component = entity->addComponent<LightComponent>();
         } else if (type == HealthComponent::getID()){
