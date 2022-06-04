@@ -152,7 +152,7 @@
                     {
                         "type": "Light",
                         "typeLight": "sky",
-                        "enabled": true,
+                        "enabled": false,
                         "sky_light": {
                             "top_color": [
                                 0,
@@ -179,7 +179,7 @@
                     {
                         "type": "Light",
                         "typeLight": "directional",
-                        "enabled": true,
+                        "enabled": false,
                         "diffuse": [
                             1.0,
                             0,
@@ -204,7 +204,7 @@
                     {
                         "type": "Light",
                         "typeLight": "point",
-                        "enabled": true,
+                        "enabled": false,
                         "position": [
                             0,
                             0,

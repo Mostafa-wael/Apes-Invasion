@@ -167,14 +167,14 @@ namespace our {
                     opaqueCommands.push_back(command);
                 }
             }
-            if(auto light = entity->getComponent<LightComponent>(); light) {
+            if(auto light = entity->getComponent<LightComponent>(); light && light->enabled) {
                 if(light->typeLight == LightType::SKY) {
                     auto litShader = AssetLoader<ShaderProgram>::get("light");
                     litShader->use();
                     litShader->set("sky.top", light->sky_light.top_color);
                     litShader->set("sky.middle", light->sky_light.middle_color);
                     litShader->set("sky.bottom", light->sky_light.bottom_color);
-                } else if(light->enabled)
+                } else
                     lights.push_back(light);
             }
         }
