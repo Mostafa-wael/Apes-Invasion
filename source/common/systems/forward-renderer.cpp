@@ -4,6 +4,7 @@
 #include "../texture/texture-utils.hpp"
 #include "GLFW/glfw3.h"
 #include "asset-loader.hpp"
+#include "components/light.hpp"
 #include "glad/gl.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/fwd.hpp"
@@ -164,7 +165,7 @@ namespace our {
                     opaqueCommands.push_back(command);
                 }
             }
-            
+
             if(auto light = entity->getComponent<LightComponent>(); light) {
                 lights.push_back(light);
             }
@@ -220,22 +221,18 @@ namespace our {
         for(auto opaqueCommand : opaqueCommands) {
             opaqueCommand.material->setup();
             opaqueCommand.material->shader->set("transform", VP * opaqueCommand.localToWorld);
-            opaqueCommand.material->shader->set("view_projection", VP); 
-            opaqueCommand.material->shader->set("camera_position", cameraForward); 
-            opaqueCommand.material->shader->set("object_to_world", opaqueCommand.localToWorld); 
-            opaqueCommand.material->shader->set("object_to_world_inv_transpose", glm::transpose(glm::inverse(opaqueCommand.localToWorld))); 
-
-
-
-
+            opaqueCommand.material->shader->set("view_projection", VP);
+            opaqueCommand.material->shader->set("camera_position", cameraForward);
+            opaqueCommand.material->shader->set("object_to_world", opaqueCommand.localToWorld);
+            opaqueCommand.material->shader->set("object_to_world_inv_transpose", glm::transpose(glm::inverse(opaqueCommand.localToWorld)));
 
             // We will go through all the lights and send the enabled ones to the shader.
             int light_index           = 0;
             const int MAX_LIGHT_COUNT = 16;
 
             opaqueCommand.material->shader->set("light_count", numLights);
-            for(int i = 0; i < numLights; i++) {
-                LightComponent* light = lights[i];
+            for(LightComponent* light : lights)
+            {
                 if(!light->enabled) continue;
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
@@ -263,9 +260,9 @@ namespace our {
                     opaqueCommand.material->shader->set(prefix + "core_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:
-                    opaqueCommand.material->shader->set("Sky.top", light->sky_light.top_color);
-                    opaqueCommand.material->shader->set("Sky.middle", light->sky_light.middle_color);
-                    opaqueCommand.material->shader->set("Sky.bottom", light->sky_light.bottom_color);
+                    opaqueCommand.material->shader->set("sky.top", light->sky_light.top_color);
+                    opaqueCommand.material->shader->set("sky.middle", light->sky_light.middle_color);
+                    opaqueCommand.material->shader->set("sky.bottom", light->sky_light.bottom_color);
                     break;
                 }
                 light_index++;
