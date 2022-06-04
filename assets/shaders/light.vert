@@ -8,12 +8,12 @@ layout(location = 3) in vec3 normal;
 
 // We will need to do the light processing in the world space so we will break our transformations into 2 stages:
 // 1- Object to World.
-uniform mat4 object_to_world;
-uniform mat4 object_to_world_inv_transpose; // The inverse transpose will be used to transform the surface normal.
+uniform mat4 object_to_world; // M
+uniform mat4 object_to_world_inv_transpose; // M_IT // The inverse transpose will be used to transform the surface normal.
 // 2- World to Homogenous Clipspace.
-uniform mat4 view_projection;
+uniform mat4 view_projection; // VP
 // The camera position will be used for specular computation.
-uniform vec3 camera_position;
+uniform vec3 camera_position; // eye
 
 out Varyings {
     vec4 color;
