@@ -261,6 +261,11 @@
                     },
                     {
                         "type": "Rigid Body"
+                    },
+                    {
+                        "type": "Health",
+                        "max-health": 100,
+                        "current-health": 100
                     }
                 ],
                 "children": [
