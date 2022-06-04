@@ -220,6 +220,15 @@ namespace our {
         for(auto opaqueCommand : opaqueCommands) {
             opaqueCommand.material->setup();
             opaqueCommand.material->shader->set("transform", VP * opaqueCommand.localToWorld);
+            opaqueCommand.material->shader->set("view_projection", VP); 
+            opaqueCommand.material->shader->set("camera_position", cameraForward); 
+            opaqueCommand.material->shader->set("object_to_world", opaqueCommand.localToWorld); 
+            opaqueCommand.material->shader->set("object_to_world_inv_transpose", glm::transpose(glm::inverse(opaqueCommand.localToWorld))); 
+
+
+
+
+
             // We will go through all the lights and send the enabled ones to the shader.
             int light_index           = 0;
             const int MAX_LIGHT_COUNT = 16;
