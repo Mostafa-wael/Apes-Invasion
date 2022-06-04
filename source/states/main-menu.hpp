@@ -5,6 +5,7 @@
 
 #include "GLFW/glfw3.h"
 #include "glad/gl.h"
+#include "glm/ext/vector_float3.hpp"
 #include "input/mouse.hpp"
 #include "mesh/mesh.hpp"
 #include "shader/shader.hpp"
@@ -29,16 +30,16 @@ class MainMenu: public our::State {
 
 
         shader = new our::ShaderProgram();
-        shader->attach("assets/shaders/texture-test.vert", GL_VERTEX_SHADER);
+        shader->attach("assets/shaders/reticle.vert", GL_VERTEX_SHADER);
         shader->attach("assets/shaders/texture-test.frag", GL_FRAGMENT_SHADER);
         shader->link();
         
 
         std::vector<our::Vertex> vertices = {
-            { {-1, -1,  0}, {255, 255, 255, 255}, {0.00, 0.00}, {0, 0, 1} },
-            { { 1, -1,  0}, {255, 255, 255, 255}, {1.00, 0.00}, {0, 0, 1} },
-            { { 1,  1,  0}, {255, 255, 255, 255}, {1.00, 1.00}, {0, 0, 1} },
-            { {-1,  1,  0}, {255, 255, 255, 255}, {0.00, 1.00}, {0, 0, 1} },
+            { {-0.08, -0.08,  0}, {255, 255, 255, 0}, {0.00, 0.00}, {0, 0, 1} },
+            { { 0.08, -0.08,  0}, {255, 255, 255, 0}, {1.00, 0.00}, {0, 0, 1} },
+            { { 0.08,  0.08,  0}, {255, 255, 255, 0}, {1.00, 1.00}, {0, 0, 1} },
+            { {-0.08,  0.08,  0}, {255, 255, 255, 0}, {0.00, 1.00}, {0, 0, 1} },
         };
         std::vector<unsigned int> elements = {
             0, 1, 2,
@@ -61,7 +62,16 @@ class MainMenu: public our::State {
         mesh->draw();
 
         const auto keyboard = getApp()->getKeyboard();
+        const auto mouse = getApp()->getMouse();
 
+        shader->set("dynamic_position", 
+                    glm::vec3(
+                    mouse.getMousePosition().x,
+                    mouse.getMousePosition().y,
+                0)
+        );
+        shader->set("width", getApp()->getWindowSize().x);
+        shader->set("height", getApp()->getWindowSize().y);
 
         if (keyboard.isPressed(GLFW_KEY_ENTER)) {
             std::ifstream file_in(play_scene_path);

@@ -9,15 +9,9 @@
         },
         "fullscreen": false
     },
-    "screenshots":{
-        "directory": "screenshots",
-        "requests": [
-            { "file": "GameX.png", "frame":  1 }
-        ]
-    },
     "scene": {
         "textures": {
-            "start_menu": "assets/textures/start.png"
+            "start_menu": "assets/textures/reticle.png"
         }
     }
 }
