@@ -1,6 +1,7 @@
 #include "light.hpp"
 #include "../deserialize-utils.hpp"
 #include "../ecs/entity.hpp"
+#include <iostream>
 namespace our {
     // Reads linearVelocity & angularVelocity from the given json object
     void LightComponent::deserialize(const nlohmann::json& data) {
@@ -10,11 +11,13 @@ namespace our {
         if(typeLocal == "directional") {
             typeLight      = LightType::DIRECTIONAL;
             direction = data["direction"];
-            color     = data["color"];
+            diffuse     = data["diffuse"];
+            specular    = data["specular"];
         } else if(typeLocal == "point") {
             typeLight             = LightType::POINT;
             position              = data["position"];
-            color                 = data["color"];
+            diffuse               = data["diffuse"];
+            specular              = data["specular"];
             attenuation.constant  = data["attenuation"]["constant"];
             attenuation.linear    = data["attenuation"]["linear"];
             attenuation.quadratic = data["attenuation"]["quadratic"];
@@ -22,7 +25,8 @@ namespace our {
             typeLight        = LightType::SPOT;
             position         = data["position"];
             direction        = data["direction"];
-            color            = data["color"];
+            diffuse          = data["diffuse"];
+            specular         = data["specular"];
             spot_angle.inner = data["spot_angle"]["inner"];
             spot_angle.outer = data["spot_angle"]["outer"];
         } else if(typeLocal == "sky") {

@@ -3,7 +3,7 @@
 #include "../asset-loader.hpp"
 #include "deserialize-utils.hpp"
 #include "material/material.hpp"
-
+#include <iostream>
 namespace our {
 
     // This function should setup the pipeline state and set the shader to be used
@@ -64,6 +64,7 @@ namespace our {
     // set the "tint" uniform to the value in the member variable tint
     void  LightMaterial::setup() const {
         TexturedMaterial::setup();
+
 
         if(albedo_map != nullptr)
         {

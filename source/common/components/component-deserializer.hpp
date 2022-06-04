@@ -11,7 +11,7 @@
 #include "rotating-turret.hpp"
 #include "player-controller.hpp"
 #include "light.hpp"
-
+#include <iostream>
 namespace our {
 
     // Given a json object, this function picks and creates a component in the given entity

@@ -166,6 +166,7 @@ namespace our {
                     opaqueCommands.push_back(command);
                 }
                 if(auto light = entity->getComponent<LightComponent>(); light) {
+                    std::cout << "Light found" << std::endl;
                     lights.push_back(light);
                 }
             }
@@ -232,33 +233,37 @@ namespace our {
                 if(!light->enabled) continue;
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
+                std::cout << "Light " << i << " is enabled" << std::endl;
+
+                std::cout << "light diffuse: " << light->diffuse.x << " " << light->diffuse.y << " " << light->diffuse.z << std::endl;
+
                 opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
                 switch(light->typeLight) {
                 case LightType::DIRECTIONAL:
                     opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
-                    opaqueCommand.material->shader->set(prefix + "color", light->color);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     break;
                 case LightType::POINT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
-                    opaqueCommand.material->shader->set(prefix + "color", light->color);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
+                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
+                     light->attenuation.linear, light->attenuation.quadratic));
                     break;
                 case LightType::SPOT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
                     opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
-                    opaqueCommand.material->shader->set(prefix + "color", light->color);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
-                    opaqueCommand.material->shader->set(prefix + "inner_angle", light->spot_angle.inner);
-                    opaqueCommand.material->shader->set(prefix + "outer_angle", light->spot_angle.outer);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
+                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
+                     light->attenuation.linear, light->attenuation.quadratic));
+                    opaqueCommand.material->shader->set(prefix + "core_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:
-                    opaqueCommand.material->shader->set(prefix + "top_color", light->sky_light.top_color);
-                    opaqueCommand.material->shader->set(prefix + "middle_color", light->sky_light.middle_color);
-                    opaqueCommand.material->shader->set(prefix + "bottom_color", light->sky_light.bottom_color);
+                    opaqueCommand.material->shader->set("Sky.top", light->sky_light.top_color);
+                    opaqueCommand.material->shader->set("Sky.middle", light->sky_light.middle_color);
+                    opaqueCommand.material->shader->set("Sky.bottom", light->sky_light.bottom_color);
                     break;
                 }
                 light_index++;
