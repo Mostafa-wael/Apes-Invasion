@@ -70,9 +70,9 @@ namespace our {
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE1);
             // bind the texture to unit 1
-            albedo_map->bind();
+            this->albedo_map->bind();
             // bind the sampler to unit 1 
-            sampler->bind(1);
+            this->sampler->bind(1);
             shader->set("mat.diffuse", 1);
         }
         else if(specular_map != nullptr)
@@ -80,9 +80,9 @@ namespace our {
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE2);
             // bind the texture to unit 1
-            specular_map->bind();
+            this->specular_map->bind();
             // bind the sampler to unit 1 
-            sampler->bind(2);
+            this->sampler->bind(2);
             shader->set("mat.specular", 2);
         }
         else if(emissive_map != nullptr)
@@ -90,9 +90,9 @@ namespace our {
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE3);
             // bind the texture to unit 1
-            emissive_map->bind();
+            this->emissive_map->bind();
             // bind the sampler to unit 1 
-            sampler->bind(3);
+            this->sampler->bind(3);
             shader->set("mat.emissive", 3);
         }
         else if(ambient_occlusion_map != nullptr)
@@ -100,9 +100,9 @@ namespace our {
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE4);
             // bind the texture to unit 1
-            ambient_occlusion_map->bind();
+            this->ambient_occlusion_map->bind();
             // bind the sampler to unit 1 
-            sampler->bind(4);
+            this->sampler->bind(4);
             shader->set("mat.ambient_occlusion", 4);
         }
         else if(roughness_map != nullptr)
@@ -110,9 +110,9 @@ namespace our {
             // select an active texture unit -> 1
             glActiveTexture(GL_TEXTURE5);
             // bind the texture to unit 1
-            roughness_map->bind();
+            this->roughness_map->bind();
             // bind the sampler to unit 1 
-            sampler->bind(5);
+            this->sampler->bind(5);
             shader->set("mat.roughness", 5);
         }
 

@@ -32,15 +32,15 @@ struct Light {
 
     // Position is used for point and spot lights. Direction is used for directional and spot lights.
     vec3 position, direction;
- struct {
-            float constant, linear, quadratic;
-        } attenuation; // Used for Point and Spot Lights only
-        struct {
-            float inner, outer;
-        } spot_angle; // Used for Spot Lights only
-        struct {
-            glm::vec3 top_color, middle_color, bottom_color;
-        } sky_light;
+    struct {
+        float constant, linear, quadratic;
+    } attenuation; // Used for Point and Spot Lights only
+    struct {
+        float inner, outer;
+    } spot_angle; // Used for Spot Lights only
+    struct {
+        glm::vec3 top_color, middle_color, bottom_color;
+    } sky_light;
 };
 
 

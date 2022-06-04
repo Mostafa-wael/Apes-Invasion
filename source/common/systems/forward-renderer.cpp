@@ -233,13 +233,14 @@ namespace our {
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
                 opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
-                opaqueCommand.material->shader->set(prefix + "color", light->color);
                 switch(light->typeLight) {
                 case LightType::DIRECTIONAL:
                     opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
+                    opaqueCommand.material->shader->set(prefix + "color", light->color);
                     break;
                 case LightType::POINT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
+                    opaqueCommand.material->shader->set(prefix + "color", light->color);
                     opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
                     opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
                     opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
@@ -247,6 +248,7 @@ namespace our {
                 case LightType::SPOT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
                     opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
+                    opaqueCommand.material->shader->set(prefix + "color", light->color);
                     opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
                     opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
                     opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);

@@ -10,7 +10,6 @@
     },
     "scene": {
         "renderer": {
-            "sky": "assets/textures/space-galaxy-background.jpg",
             "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
         "assets": {
@@ -29,17 +28,10 @@
                 }
             },
             "textures": {
-                "moon": "assets/textures/moon.jpg",
-                "grass": "assets/textures/grass_ground_d.jpg",
-                "wood": "assets/textures/wood.jpg",
-                "glass": "assets/textures/glass-panels.png",
                 "monkey": "assets/textures/monkey.png"
             },
             "meshes": {
-                "cube": "assets/models/cube.obj",
-                "monkey": "assets/models/monkey.obj",
-                "plane": "assets/models/plane.obj",
-                "sphere": "assets/models/sphere.obj"
+                "monkey": "assets/models/monkey.obj"
             },
             "samplers": {
                 "default": {},
@@ -48,74 +40,9 @@
                 }
             },
             "materials": {
-                "metal": {
-                    "type": "tinted",
-                    "shader": "tinted",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        0.45,
-                        0.4,
-                        0.5,
-                        1
-                    ]
-                },
-                "glass": {
+               "monkey": {
                     "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        },
-                        "blending": {
-                            "enabled": true,
-                            "sourceFactor": "GL_SRC_ALPHA",
-                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-                        },
-                        "depthMask": false
-                    },
-                    "transparent": true,
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "glass",
-                    "sampler": "pixelated"
-                },
-                "grass": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "grass",
-                    "sampler": "default"
-                },
-                "monkey": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "shader": "light",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": false
@@ -434,27 +361,7 @@
                     -1  
                 ],
                 "enabled": true
-                },
-            {
-                "type": "sky",
-                "sky_light": {
-                    "top_color": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "bottom_color": [
-                        0.5,
-                        0.2,
-                        0.1
-                    ],
-                    "middle_color": [
-                        0.2,
-                        0.1,
-                        0.7
-                    ]
                 }
-            }
             ]
             }
         ]
