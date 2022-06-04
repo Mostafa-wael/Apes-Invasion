@@ -95,7 +95,7 @@ namespace our {
         } else if(type == "textured") {
             return new TexturedMaterial();
         } 
-        else if(type == "light") {
+        else if(type == "lighted") {
             return new LightMaterial();
         } else {
             return new Material();
