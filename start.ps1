@@ -1,1 +1,1 @@
-./bin/GAME_APPLICATION.exe -c='config/start.jsonc'
+./bin/GAME_APPLICATION.exe -c='config/app.jsonc'

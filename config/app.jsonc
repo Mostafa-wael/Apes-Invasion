@@ -21,7 +21,9 @@
                 },
                 "textured": {
                     "vs": "assets/shaders/textured.vert",
-                    "fs": "assets/shaders/textured.frag"
+                    "fs": "assets/shaders/textured.frag",
+                    "reticle-vs": "assets/shaders/reticle.vert",
+                    "reticle-fs": "assets/shaders/reticle.frag"
                 }
             },
             "textures": {
@@ -31,6 +33,7 @@
                 "glass": "assets/textures/glass-panels.png",
                 "monkey": "assets/textures/monkey.png",
                 "spaceship02": "assets/textures/1001_Base_Color.png",
+                "reticle": "assets/textures/reticle.png",
                 "spaceship01": "assets/textures/Intergalactic Spaceship_color_4.jpg"
             },
             "meshes": {
