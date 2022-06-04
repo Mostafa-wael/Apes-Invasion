@@ -1,5 +1,4 @@
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#pragma once
 
 #include <glm/vec2.hpp>
 #include <glad/gl.h>
@@ -114,6 +113,7 @@ namespace our {
         [[nodiscard]] const Mouse& getMouse() const { return mouse; }
 
         [[nodiscard]] const nlohmann::json& getConfig() const { return app_config; }
+        const void setConfig(nlohmann::json config) { this->app_config = config; }
 
         // Get the size of the frame buffer of the window in pixels.
         glm::ivec2 getFrameBufferSize() {
@@ -131,6 +131,3 @@ namespace our {
         }
     };
 }
-
-
-#endif //APPLICATION_H

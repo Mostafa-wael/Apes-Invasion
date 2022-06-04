@@ -1,4 +1,5 @@
 #include "application.hpp"
+#include "imgui.h"
 
 #include <iostream>
 #include <fstream>
@@ -17,12 +18,12 @@
 #include <imgui_impl/imgui_impl_glfw.h>
 #include <imgui_impl/imgui_impl_opengl3.h>
 
-#if !defined(NDEBUG)
+// #if !defined(NDEBUG)
 // If NDEBUG (no debug) is not defined, enable OpenGL debug messages
 #define ENABLE_OPENGL_DEBUG_MESSAGES
-#endif
+// #endif
 
-#include "texture/screenshot.h"
+#include "texture/screenshot.hpp"
 
 std::string default_screenshot_filepath() {
     std::stringstream stream;
@@ -201,6 +202,7 @@ int our::Application::run(int run_for_frames) {
     // Start the ImGui context and set dark style (just my preference :D)
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
+    ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     ImGuiIO& io = ImGui::GetIO();
     ImGui::StyleColorsDark();
 

@@ -1,0 +1,17 @@
+{
+    "start-scene": "main-menu",
+    "window":
+    {
+        "title":"GameX",
+        "size": {
+            "width": 1280,
+            "height": 720
+        },
+        "fullscreen": false
+    },
+    "scene": {
+        "textures": {
+            "start_menu": "assets/textures/reticle.png"
+        }
+    }
+}

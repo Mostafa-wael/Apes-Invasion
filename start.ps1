@@ -1,0 +1,1 @@
+./bin/GAME_APPLICATION.exe -c='config/start.jsonc'
