@@ -29,15 +29,15 @@ public:
         auto& config = getApp()->getConfig()["scene"];
 
         shader = new our::ShaderProgram();
-        shader->attach("assets/shaders/reticle.vert", GL_VERTEX_SHADER);
+        shader->attach("assets/shaders/texture-test.vert", GL_VERTEX_SHADER);
         shader->attach("assets/shaders/texture-test.frag", GL_FRAGMENT_SHADER);
         shader->link();
 
         std::vector<our::Vertex> vertices = {
-            { {-0.08, -0.08,  0}, {255, 255, 255, 0}, {0.00, 0.00}, {0, 0, 1} },
-            { { 0.08, -0.08,  0}, {255, 255, 255, 0}, {1.00, 0.00}, {0, 0, 1} },
-            { { 0.08,  0.08,  0}, {255, 255, 255, 0}, {1.00, 1.00}, {0, 0, 1} },
-            { {-0.08,  0.08,  0}, {255, 255, 255, 0}, {0.00, 1.00}, {0, 0, 1} },
+            { {-1, -1,  0}, {255, 255, 255, 255}, {0.00, 0.00}, {0, 0, 1} },
+            { { 1, -1,  0}, {255, 255, 255, 255}, {1.00, 0.00}, {0, 0, 1} },
+            { { 1,  1,  0}, {255, 255, 255, 255}, {1.00, 1.00}, {0, 0, 1} },
+            { {-1,  1,  0}, {255, 255, 255, 255}, {0.00, 1.00}, {0, 0, 1} },
         };
         std::vector<unsigned int> elements = {
             0,
@@ -48,7 +48,7 @@ public:
             0,
         };
         mesh = new our::Mesh(vertices, elements);
-        if(config.contains("textures") && config.contains("start_menu"))
+        if(config.contains("textures") && config["textures"].contains("start_menu"))
             texture = our::texture_utils::loadImage(config["textures"]["start_menu"]);
     }
 

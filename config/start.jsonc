@@ -11,7 +11,7 @@
     },
     "scene": {
         "textures": {
-            "start_menu": "assets/textures/reticle.png"
+            "start_menu": "assets/textures/start.png"
         }
     }
 }

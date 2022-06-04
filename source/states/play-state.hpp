@@ -6,6 +6,7 @@
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
 #include "imgui.h"
+#include "mesh/mesh-utils.hpp"
 #include "systems/entity-debugger.hpp"
 #include "systems/physics.hpp"
 #include <application.hpp>
@@ -101,19 +102,8 @@ class Playstate : public our::State {
         reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-vs"], GL_VERTEX_SHADER);
         reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-fs"], GL_FRAGMENT_SHADER);
         reticleShader->link();
-        
 
-        std::vector<our::Vertex> vertices = {
-            { {-0.08, -0.08,  0}, {0, 0, 0, 0}, {0.00, 0.00}, {0, 0, 0} },
-            { { 0.08, -0.08,  0}, {0, 0, 0, 0}, {1.00, 0.00}, {0, 0, 0} },
-            { { 0.08,  0.08,  0}, {0, 0, 0, 0}, {1.00, 1.00}, {0, 0, 0} },
-            { {-0.08,  0.08,  0}, {0, 0, 0, 0}, {0.00, 1.00}, {0, 0, 0} },
-        };
-        std::vector<unsigned int> elements = {
-            0, 1, 2,
-            2, 3, 0,
-        };
-        reticleMesh = new our::Mesh(vertices, elements);
+        reticleMesh = our::mesh_utils::loadReticle();
         reticleTexture = our::texture_utils::loadImage(config["assets"]["textures"]["reticle"]);
     }
 
