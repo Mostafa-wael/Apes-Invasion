@@ -46,7 +46,7 @@
             },
             "materials": {
                 "monkey": {
-                    "type": "textured",
+                    "type": "lighted", // in the materials.hpp file
                     "shader": "light",
                     "pipelineState": {
                         "faceCulling": {
@@ -69,26 +69,6 @@
                     "roughness": "roughness",
                     "specular": "specular",
                     "ambient_occlusion": "ambient_occlusion"
-                },
-                "moon": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "moon",
-                    "sampler": "default"
                 }
             }
         },
