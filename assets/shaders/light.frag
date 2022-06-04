@@ -20,6 +20,7 @@ in Varyings {
 #define TYPE_POINT          1
 #define TYPE_SPOT           2
 
+
 // Now we will use a single struct for all light types.
 struct Light {
     // This will hold the light type.
@@ -31,18 +32,17 @@ struct Light {
 
     // Position is used for point and spot lights. Direction is used for directional and spot lights.
     vec3 position, direction;
-    // Attentuation factors are used for point and spot lights.
-    float attenuation_constant;
-    float attenuation_linear;
-    float attenuation_quadratic;
-    // Cone angles are used for spot lights.
-    float inner_angle, outer_angle;
+    struct {
+        float constant, linear, quadratic;
+    } attenuation; // Used for Point and Spot Lights only
+    struct {
+        float inner, outer;
+    } spot_angle; // Used for Spot Lights only
+    struct {
+        glm::vec3 top_color, middle_color, bottom_color;
+    } sky_light;
 };
 
-// The sky light will allow us to vary the ambient light based on the surface normal which is slightly more realistic compared to constant ambient lighting.
-struct SkyLight {
-    vec3 top_color, middle_color, bottom_color;
-};
 
 // This will define the maximum number of lights we can receive.
 #define MAX_LIGHT_COUNT 16
@@ -51,7 +51,7 @@ struct SkyLight {
 uniform TexturedMaterial material;
 uniform Light lights[MAX_LIGHT_COUNT];
 uniform int light_count;
-uniform SkyLight sky_light;
+
 
 out vec4 frag_color;
 

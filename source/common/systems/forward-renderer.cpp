@@ -1,15 +1,14 @@
 #include "forward-renderer.hpp"
+#include "../components/rigidbody.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 #include "GLFW/glfw3.h"
 #include "asset-loader.hpp"
-#include "../components/rigidbody.hpp"
 #include "glad/gl.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include <iostream>
-#include <light/light.hpp>
 
 namespace our {
 
@@ -74,7 +73,7 @@ namespace our {
             colorTarget = texture_utils::empty(GL_RGBA8, windowSize);
 
             depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT24, windowSize);
-            
+
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
 
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(), 0);
@@ -166,6 +165,9 @@ namespace our {
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
+                if(auto light = entity->getComponent<LightComponent>(); light) {
+                    lights.push_back(light);
+                }
             }
         }
 
@@ -178,7 +180,7 @@ namespace our {
         // Get the camera's forward vector transformed to world space
         glm::vec3 cameraForward = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, 0.0, -1, 0);
 
-        // Project the positions of both objects on the camera's forward vector 
+        // Project the positions of both objects on the camera's forward vector
         // The one with the higher distance should be drawn first.
         std::sort(transparentCommands.begin(), transparentCommands.end(),
                   [cameraForward](const RenderCommand& first, const RenderCommand& second) {
@@ -212,53 +214,52 @@ namespace our {
         //TODO: (Req 8) Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Light* lights = AssetLoader<Light>::get("lights");
 
-        int numLights = AssetLoader<Light>::getNumAssets();
+        int numLights = lights.size();
 
         //TODO: (Req 8) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
         for(auto opaqueCommand : opaqueCommands) {
             opaqueCommand.material->setup();
             opaqueCommand.material->shader->set("transform", VP * opaqueCommand.localToWorld);
-            // opaqueCommand.material->shader->set("lights", light_arr);
             // We will go through all the lights and send the enabled ones to the shader.
-            int light_index = 0;
+            int light_index           = 0;
             const int MAX_LIGHT_COUNT = 16;
 
             opaqueCommand.material->shader->set("light_count", numLights);
-            for(int i = 0;i<numLights;i++) {
-                Light light = lights[i];
-                if(!light.enabled) continue;
+            for(int i = 0; i < numLights; i++) {
+                LightComponent* light = lights[i];
+                if(!light->enabled) continue;
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
-                opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light.type));
-                opaqueCommand.material->shader->set(prefix + "color", light.color);
-                // std::cout<<light.color.x<<" "<<light.color.y<<" "<<light.color.z<<std::endl;
-                switch (light.type) {
-                    case LightType::DIRECTIONAL:
-                        opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light.direction));
-                        break;
-                    case LightType::POINT:
-                        opaqueCommand.material->shader->set(prefix + "position", light.position);
-                        opaqueCommand.material->shader->set(prefix + "attenuation_constant", light.attenuation.constant);
-                        opaqueCommand.material->shader->set(prefix + "attenuation_linear", light.attenuation.linear);
-                        opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light.attenuation.quadratic);
-                        break;
-                    case LightType::SPOT:
-                        opaqueCommand.material->shader->set(prefix + "position", light.position);
-                        opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light.direction));
-                        opaqueCommand.material->shader->set(prefix + "attenuation_constant", light.attenuation.constant);
-                        opaqueCommand.material->shader->set(prefix + "attenuation_linear", light.attenuation.linear);
-                        opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light.attenuation.quadratic);
-                        opaqueCommand.material->shader->set(prefix + "inner_angle", light.spot_angle.inner);
-                        opaqueCommand.material->shader->set(prefix + "outer_angle", light.spot_angle.outer);
-                        break;
-                    case LightType::SKY:
-                        opaqueCommand.material->shader->set(prefix + "top_color", light.sky_light.top_color);
-                        opaqueCommand.material->shader->set(prefix + "middle_color", light.sky_light.middle_color);
-                        opaqueCommand.material->shader->set(prefix + "bottom_color", light.sky_light.bottom_color);
-                        break;
+                opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
+                switch(light->typeLight) {
+                case LightType::DIRECTIONAL:
+                    opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
+                    opaqueCommand.material->shader->set(prefix + "color", light->color);
+                    break;
+                case LightType::POINT:
+                    opaqueCommand.material->shader->set(prefix + "position", light->position);
+                    opaqueCommand.material->shader->set(prefix + "color", light->color);
+                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
+                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
+                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
+                    break;
+                case LightType::SPOT:
+                    opaqueCommand.material->shader->set(prefix + "position", light->position);
+                    opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
+                    opaqueCommand.material->shader->set(prefix + "color", light->color);
+                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
+                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
+                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
+                    opaqueCommand.material->shader->set(prefix + "inner_angle", light->spot_angle.inner);
+                    opaqueCommand.material->shader->set(prefix + "outer_angle", light->spot_angle.outer);
+                    break;
+                case LightType::SKY:
+                    opaqueCommand.material->shader->set(prefix + "top_color", light->sky_light.top_color);
+                    opaqueCommand.material->shader->set(prefix + "middle_color", light->sky_light.middle_color);
+                    opaqueCommand.material->shader->set(prefix + "bottom_color", light->sky_light.bottom_color);
+                    break;
                 }
                 light_index++;
                 if(light_index >= MAX_LIGHT_COUNT) break;

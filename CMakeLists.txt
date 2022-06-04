@@ -95,6 +95,10 @@ set(COMMON_SOURCES
         source/common/components/free-camera-controller.cpp
         source/common/components/movement.hpp
         source/common/components/movement.cpp
+        source/common/components/light.hpp
+        source/common/components/light.cpp
+        source/common/components/health.hpp
+        source/common/components/health.cpp
         source/common/components/component-deserializer.hpp
 
         source/common/systems/forward-renderer.hpp
@@ -102,8 +106,6 @@ set(COMMON_SOURCES
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
         source/common/systems/physics.cpp
-
-        source/common/light/light.hpp
         
         source/common/util.cpp
 )
