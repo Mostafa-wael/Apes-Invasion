@@ -156,7 +156,30 @@
                 "components": [
                     {
                         "type": "Light",
+                        "typeLight": "sky",
+                        "enabled": false,
+                        "sky_light": {
+                            "top_color": [
+                                0,
+                                0,
+                                1.0
+                            ],
+                            "middle_color": [
+                                0,
+                                0,
+                                1.0
+                            ],
+                            "bottom_color": [
+                                0,
+                                0,
+                                1.0
+                            ]
+                        }
+                    },
+                    {
+                        "type": "Light",
                         "typeLight": "directional",
+                        "enabled": false,
                         "diffuse": [
                             1.0,
                             0,
@@ -171,11 +194,69 @@
                             0,
                             -1,
                             0
+                        ]
+                    },
+                    {
+                        "type": "Light",
+                        "typeLight": "point",
+                        "enabled": false,
+                        "position": [
+                            0,
+                            0,
+                            1
                         ],
-                        "enabled": false
+                        "diffuse": [
+                            0.0,
+                            0,
+                            1.0
+                        ],
+                        "specular": [
+                            0.0,
+                            0,
+                            1.0
+                        ],
+                        "attenuation": {
+                            "quadratic": 1.0,
+                            "linear": 0.0,
+                            "constant": 0.0
+                        }
+                    },
+                    {
+                        "type": "Light",
+                        "typeLight": "spot",
+                        "enabled": false,
+                        "direction": [
+                            0,
+                            0,
+                            1
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            1
+                        ],
+                        "diffuse": [
+                            0.0,
+                            1.0,
+                            0.0
+                        ],
+                        "specular": [
+                            0.0,
+                            1.0,
+                            0.0
+                        ],
+                        "attenuation": {
+                            "quadratic": 1.0,
+                            "linear": 0.0,
+                            "constant": 0.0
+                        },
+                        "spot_angle": {
+                            "inner": 0.5,
+                            "outer": 0.5
+                        }
                     }
                 ]
             }
-        ]   
+        ]
     }
 }

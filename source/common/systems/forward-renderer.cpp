@@ -247,16 +247,16 @@ namespace our {
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
                     opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
                     opaqueCommand.material->shader->set(prefix + "specular", light->specular);
-                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
-                                                                                          light->attenuation.linear, light->attenuation.quadratic));
+                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
+                                                                                          light->attenuation.linear, light->attenuation.constant));
                     break;
                 case LightType::SPOT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
                     opaqueCommand.material->shader->set(prefix + "direction", light->direction);
                     opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
                     opaqueCommand.material->shader->set(prefix + "specular", light->specular);
-                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.constant,
-                                                                                          light->attenuation.linear, light->attenuation.quadratic));
+                     opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
+                                                                                          light->attenuation.linear, light->attenuation.constant));
                     opaqueCommand.material->shader->set(prefix + "core_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:
