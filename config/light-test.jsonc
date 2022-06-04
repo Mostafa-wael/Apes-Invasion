@@ -40,7 +40,7 @@
                 }
             },
             "materials": {
-               "monkey": {
+                "monkey": {
                     "type": "textured",
                     "shader": "light",
                     "pipelineState": {
@@ -97,7 +97,6 @@
                     {
                         "type": "Free Camera Controller"
                     }
-        
                 ],
                 "children": [
                     {
@@ -339,31 +338,35 @@
                 ]
             },
             {
-            "name": "light",
-            "position": [
-                0,
-                10,
-                0
-            ],
-            "components":
-            [
-                {
-                "type": "Light",
-                "typeLight": "directional",
-                "color": [
-                    1.0,
-                    0.0,
-                    0.0
+                "name": "light",
+                "position": [
+                    0,
+                    10,
+                    0
                 ],
-                "direction": [
-                    -1,
-                    -1,
-                    -1  
-                ],
-                "enabled": true
-                }
-            ]
+                "components": [
+                    {
+                        "type": "Light",
+                        "typeLight": "directional",
+                        "diffuse": [
+                            0,
+                            1,
+                            0
+                        ],
+                        "specular": [
+                            1,
+                            0,
+                            0
+                        ],
+                        "direction": [
+                            -1,
+                            -1,
+                            -1
+                        ],
+                        "enabled": true
+                    }
+                ]
             }
         ]
-}
+    }
 }
