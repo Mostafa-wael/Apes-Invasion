@@ -234,11 +234,11 @@
                     {
                         "type": "Light",
                         "typeLight": "spot",
-                        "enabled": false,
+                        "enabled": true,
                         "direction": [
                             0,
-                            0,
-                            -1
+                            -1,
+                            0
                         ],
                         "position": [
                             0,
@@ -246,23 +246,23 @@
                             1
                         ],
                         "diffuse": [
-                            0.1,
-                            0.1,
+                            1,
+                            1,
                             0.0
                         ],
                         "specular": [
-                            0.1,
-                            0.1,
+                            1,
+                            1,
                             0.0
                         ],
                         "attenuation": {
-                            "quadratic": 0.001,
-                            "linear": 0.001,
-                            "constant": 0.001
+                            "quadratic": 1.0,
+                            "linear": 0.0,
+                            "constant": 0.0
                         },
                         "spot_angle": {
-                            "inner": 0.01,
-                            "outer": 0.01
+                            "inner": 0.0,
+                            "outer": 3.14
                         }
                     }
                 ]

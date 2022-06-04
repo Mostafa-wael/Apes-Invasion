@@ -82,7 +82,7 @@ void main(){
         float attenuation = 1;
         if(light.type != DIRECTIONAL){
             float d = distance(light.position, fs_in.world);
-            attenuation /= dot(light.attenuation, vec3(d*d, d, 1));
+            attenuation /=  dot(vec3(light.attenuation.x, light.attenuation.y, light.attenuation.z), vec3(d*d, d, 1));
             if(light.type == SPOT){
                 float angle = acos(dot(-direction_to_light, light.direction));
                 attenuation *= smoothstep(light.cone_angles.y, light.cone_angles.x, angle);

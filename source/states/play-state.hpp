@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/light.hpp"
 #include "components/projectile.hpp"
 #include "asset-loader.hpp"
 #include "glad/gl.h"
@@ -49,6 +50,7 @@ class Playstate : public our::State {
     our::ShaderProgram* reticleShader;
     our::Mesh* reticleMesh;
     our::Texture2D* reticleTexture;
+    our:: LightComponent* light;
 
     void onInitialize() override {
 
@@ -84,7 +86,10 @@ class Playstate : public our::State {
             if(auto playerCont = e->getComponent<our::PlayerControllerComponent>())
                 playerController = playerCont;
 
-            if(playerController && cam)
+            if(auto lightComp = e->getComponent<our::LightComponent>())
+                light = lightComp;
+
+            if(playerController && cam && light)
                 break;
         }
 
@@ -146,6 +151,18 @@ class Playstate : public our::State {
     }
 
     void onImmediateGui() override {
-        our::EntityDebugger::update(&world, dt);
+        ImGui::Begin("Debug");
+        
+        getApp()->getMouse().unlockMouse(getApp()->getWindow());
+            
+
+        ImGui::DragFloat3("light position", &light->position.x);        
+        ImGui::DragFloat3("light direction", &light->direction.x);        
+        ImGui::DragFloat2("light spot_angle", &light->spot_angle.inner);        
+
+        ImGui::End();
+
+        // our::EntityDebugger::update(&world, dt);
+
     }
 };
