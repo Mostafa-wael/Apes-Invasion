@@ -1,7 +1,68 @@
-# GameX
-Repo for CMP2023's computer graphics project. The aim is to use OpenGL (plus some helper libraries) to create a game.
+# Apes Invasion
 
-## Included Libraries
+Apes are invading the world! Save us!
+
+
+![Intro](assets/textures/Apes_Invasion.png "Intro")
+
+<div align="center">
+  
+[![GitHub contributors](https://img.shields.io/github/contributors/We2Am-BaSsem/GameX)](https://github.com/Eagle-Hunting-Game/contributors)
+[![GitHub issues](https://img.shields.io/github/issues/We2Am-BaSsem/GameX)](https://github.com/We2Am-BaSsem/GameX/issues)
+[![GitHub forks](https://img.shields.io/github/forks/We2Am-BaSsem/GameX)](https://github.com/We2Am-BaSsem/GameX/network)
+[![GitHub stars](https://img.shields.io/github/stars/We2Am-BaSsem/GameX)](https://github.com/We2Am-BaSsem/GameX/stargazers)
+[![GitHub license](https://img.shields.io/github/license/We2Am-BaSsem/GameX)](https://github.com/We2Am-BaSsem/GameX/blob/master/LICENSE)
+
+</div>
+
+## 📝 Table of Contents
+
+- [Get Started](#Install)
+- [Technology](#tech)
+- [Included Libraries](#IncludedLibraries)
+- [Screenshots](#Screenshots)
+- [Play](#play)
+- [Screenshots](#Screenshots)
+
+## 💻 Built Using <a name = "tech"></a>
+- [C++]()
+- [OpenGL](https://www.opengl.org/)
+## 🎮How to play<a name = "play"></a>
+- Use *A* to move left.
+- Use *D* to move right.
+- Use *W* to move front.
+- Use *S* to move back.
+- Use *Right Click* to fire.
+
+## 🎥 Demo <a name = "demo"></a>
+
+[Demo video]()
+
+## 📷 Screenshots <a name = "Screenshots"></a> 
+![Intro](assets/textures/start2.png "Intro")
+![Win](assets/textures/win.png "Win")
+![gameOver](assets/textures/gameOver.png "gameOver")
+
+
+## 🏁 Get Started <a name = "Install"></a>
+1. **Clone the repository**
+```
+git clone https://github.com/We2Am-BaSsem/GameX.git
+```
+2. **Install Visual Studio Code**
+
+3. **Open the folder in Visual Studio Code**
+
+4. **Build the project**
+
+5. **Open a terminal (Terminal > New Terminal)**
+
+6. **Run this Command**
+```
+.\bin\GAME_APPLICATION.exe"
+```
+
+## 💻 Included Libraries <a name = "IncludedLibraries"></a>
 
 - [glfw 3.3](https://github.com/glfw/glfw)
 - [glad 2](https://github.com/Dav1dde/glad/tree/glad2)
@@ -16,14 +77,5 @@ Repo for CMP2023's computer graphics project. The aim is to use OpenGL (plus som
 - [imguizmo](https://github.com/CedricGuillemet/ImGuizmo)
 
 
-## Steps to fix GLFW platform specific errors (dlfcn.h / windows.h)
-When cloning or pulling you might get some errors when building if someone on another OS has uploaded cache files. These errors usually have something with:
-- `dlfcn.h` when building on windows with cache files from linux.
-- `windows.h` when building on linux with cache files from windows.
-  
-You can fix this easily by running `killCaches` with powershell on windows/linux and it will recursively delete `CMakeCache.txt, Makefile, and CMakeFiles`.
-Then go to `vendor/glfw` and run `cmake . -G "Unix Makefiles"`
-Then go to the project root and and configure and build, it should go smoothely go this time.
 
-_**HEED MY WARNING: NEVER USE SCALING WITH BULLET PHYSICS OR IT WILL BREAK**_
 
