@@ -24,9 +24,14 @@
                     "fs": "assets/shaders/textured.frag",
                     "reticle-vs": "assets/shaders/reticle.vert",
                     "reticle-fs": "assets/shaders/reticle.frag"
+                },
+                "light": {
+                    "vs": "assets/shaders/light.vert",
+                    "fs": "assets/shaders/light.frag"
                 }
             },
             "textures": {
+                // objects
                 "moon": "assets/textures/moon.jpg",
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
@@ -34,7 +39,13 @@
                 "monkey": "assets/textures/monkey.png",
                 "spaceship02": "assets/textures/1001_Base_Color.png",
                 "reticle": "assets/textures/reticle.png",
-                "spaceship01": "assets/textures/Intergalactic Spaceship_color_4.jpg"
+                "spaceship01": "assets/textures/Intergalactic Spaceship_color_4.jpg",
+                // materials
+                "albedo": "assets/textures/asphalt/albedo.jpg",
+                "emissive": "assets/textures/asphalt/emissive.jpg",
+                "roughness": "assets/textures/asphalt/roughness.jpg",
+                "specular": "assets/textures/asphalt/specular.jpg",
+                "ambient_occlusion": "assets/textures/asphalt/ambient_occlusion.jpg"
             },
             "meshes": {
                 "cube": "assets/models/cube.obj",
@@ -157,7 +168,7 @@
                 },
                 "monkey": {
                     "type": "textured",
-                    "shader": "textured",
+                    "shader": "light",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": false
@@ -173,7 +184,12 @@
                         1
                     ],
                     "texture": "monkey",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "albedo": "albedo",
+                    "emissive": "emissive",
+                    "roughness": "roughness",
+                    "specular": "specular",
+                    "ambient_occlusion": "ambient_occlusion"
                 },
                 "moon": {
                     "type": "textured",
@@ -270,7 +286,7 @@
                     },
                     {
                         "type": "Player Shooter"
-                    } ,
+                    },
                     {
                         "type": "Rigid Body"
                     },
@@ -291,6 +307,50 @@
                         "components": [
                             {
                                 "type": "Camera"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "spot_light",
+                        "rotation": [
+                            90,
+                            0,
+                            0
+                        ],
+                        "components": [
+                            {
+                                "type": "Light",
+                                "typeLight": "spot",
+                                "enabled": true,
+                                "direction": [
+                                    0,
+                                    -1,
+                                    0
+                                ],
+                                "position": [
+                                    0,
+                                    0,
+                                    1
+                                ],
+                                "diffuse": [
+                                    0,
+                                    0,
+                                    1.0
+                                ],
+                                "specular": [
+                                    0,
+                                    0,
+                                    1.0
+                                ],
+                                "attenuation": {
+                                    "quadratic": 0.0,
+                                    "linear": 0.0,
+                                    "constant": 1.0
+                                },
+                                "spot_angle": {
+                                    "inner": 0.0,
+                                    "outer": 0.5
+                                }
                             }
                         ]
                     }
@@ -377,25 +437,50 @@
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "cube",
-                        "material": "metal"
-                    },
-                    {
-                        "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
-                        "rigidBodyType": "dynamic"
-                    },
-                    {
-                        "type": "Rotating Turret",
-                        "projectilesPerEvent": 8,
-                        "firingDelay": 0.5,
-                        "projetileLifetime": 5,
-                        "rotationSpeed": 3,
-                        "projectileSpeed": 20,
-                        "spawnDistance": 5
+                        "mesh": "monkey", // "mesh": "cube",
+                        "material": "monkey"  // "material": "metal"                      
                     }
+                    // {
+                    //     "type": "Rigid Body",
+                    //     "useMeshBoundingBox": true,
+                    //     "rigidBodyType": "dynamic"
+                    // }
+                    // {
+                    //     "type": "Rotating Turret",
+                    //     "projectilesPerEvent": 8,
+                    //     "firingDelay": 0.5,
+                    //     "projetileLifetime": 5,
+                    //     "rotationSpeed": 3,
+                    //     "projectileSpeed": 20,
+                    //     "spawnDistance": 5
+                    // }
                 ]
             }
+            // {
+            //     "name": "directional_light",
+            //     "components": [
+            //         {
+            //             "type": "Light",
+            //             "typeLight": "directional",
+            //             "enabled": true,
+            //             "diffuse": [
+            //                 0,
+            //                 1,
+            //                 0
+            //             ],
+            //             "specular": [
+            //                 0,
+            //                 1,
+            //                 0
+            //             ],
+            //             "direction": [
+            //                 0,
+            //                 -1,
+            //                 0
+            //             ]
+            //         }
+            //     ]
+            // }
         ]
     }
 }

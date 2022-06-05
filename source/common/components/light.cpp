@@ -6,13 +6,13 @@ namespace our {
     // Reads linearVelocity & angularVelocity from the given json object
     void LightComponent::deserialize(const nlohmann::json& data) {
         if(!data.is_object()) return;
-        std::string typeLocal    = data.value("typeLight",  "");
-        enabled = data.value("enabled", true);
+        std::string typeLocal = data.value("typeLight", "");
+        enabled               = data.value("enabled", true);
         if(typeLocal == "directional") {
-            typeLight      = LightType::DIRECTIONAL;
+            typeLight = LightType::DIRECTIONAL;
             direction = data["direction"];
-            diffuse     = data["diffuse"];
-            specular    = data["specular"];
+            diffuse   = data["diffuse"];
+            specular  = data["specular"];
         } else if(typeLocal == "point") {
             typeLight             = LightType::POINT;
             position              = data["position"];
@@ -22,16 +22,16 @@ namespace our {
             attenuation.linear    = data["attenuation"]["linear"];
             attenuation.quadratic = data["attenuation"]["quadratic"];
         } else if(typeLocal == "spot") {
-            typeLight        = LightType::SPOT;
-            position         = data["position"];
-            direction        = data["direction"];
-            diffuse          = data["diffuse"];
-            specular         = data["specular"];
+            typeLight             = LightType::SPOT;
+            position              = data["position"];
+            direction             = data["direction"];
+            diffuse               = data["diffuse"];
+            specular              = data["specular"];
             attenuation.constant  = data["attenuation"]["constant"];
             attenuation.linear    = data["attenuation"]["linear"];
             attenuation.quadratic = data["attenuation"]["quadratic"];
-            spot_angle.inner = data["spot_angle"]["inner"];
-            spot_angle.outer = data["spot_angle"]["outer"];
+            spot_angle.inner      = data["spot_angle"]["inner"];
+            spot_angle.outer      = data["spot_angle"]["outer"];
         } else if(typeLocal == "sky") {
             typeLight              = LightType::SKY;
             sky_light.top_color    = data["sky_light"]["top_color"];
@@ -40,5 +40,6 @@ namespace our {
         } else {
             throw std::runtime_error("Unknown light type " + typeLocal);
         }
+        
     }
 } // namespace our
