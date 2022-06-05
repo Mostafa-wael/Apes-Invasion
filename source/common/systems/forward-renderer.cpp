@@ -244,8 +244,8 @@ namespace our {
                 if(!light->enabled) continue;
                 light->position = light->getOwner()->getWorldTranslation();
                 light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, 0.0, 0);
-                std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
-                std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
+                // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
+                // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
 
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
@@ -270,7 +270,7 @@ namespace our {
                     opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
                                                                                           light->attenuation.linear, light->attenuation.constant));
-                    opaqueCommand.material->shader->set(prefix + "core_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
+                    opaqueCommand.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:
                     break;

@@ -49,7 +49,7 @@ void main(){
     vec3 view = normalize(fs_in.view);
     vec3 normal = normalize(fs_in.normal);
 
-    vec3 material_diffuse =  texture(material.albedo, fs_in.tex_coord).rgb;
+    vec3 material_diffuse = texture(material.albedo, fs_in.tex_coord).rgb;
     vec3 material_specular = texture(material.specular, fs_in.tex_coord).rgb;
     vec3 material_ambient = material_diffuse * texture(material.ambient_occlusion, fs_in.tex_coord).r;
     
@@ -85,7 +85,12 @@ void main(){
             attenuation /= dot(light.attenuation, vec3(d*d, d, 1));
             if(light.type == SPOT){
                 float angle = acos(dot(-direction_to_light, light.direction));
-                attenuation *= smoothstep(light.cone_angles.y, light.cone_angles.x, angle);
+                if (light.cone_angles.x >= light.cone_angles.y) {
+                    attenuation *= 0.0;
+                } else {
+                    attenuation *= smoothstep(light.cone_angles.y, light.cone_angles.x, angle);
+                }
+                // attenuation *= (angle < light.cone_angles.x) ? 1 : 0;
             }
         }
 

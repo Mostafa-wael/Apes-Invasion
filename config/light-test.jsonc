@@ -80,7 +80,7 @@
                 "position": [
                     0,
                     0,
-                    10
+                    3
                 ],
                 "components": [
                     {
@@ -232,13 +232,13 @@
                 "name": "spot_light",
                 "rotation": [
                     90,
-                    0,
+                    180,
                     0
                 ],
                 "position": [
                     0,
                     0,
-                    1
+                    -5
                 ],
                 "components": [
                     {
@@ -266,9 +266,9 @@
                             0.0
                         ],
                         "attenuation": {
-                            "quadratic": 1.0,
+                            "quadratic": 0.0,
                             "linear": 0.0,
-                            "constant": 0.0
+                            "constant": 1.0
                         },
                         "spot_angle": {
                             "inner": 0.0,

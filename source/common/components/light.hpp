@@ -25,7 +25,7 @@ namespace our {
         glm::vec3 position;  // Used for Point and Spot Lights only
         glm::vec3 direction; // Used for Directional and Spot Lights only
         struct {
-            float constant, linear, quadratic;
+            float quadratic, linear, constant;
         } attenuation; // Used for Point and Spot Lights only
         struct {
             float inner, outer;
@@ -39,6 +39,12 @@ namespace our {
         virtual std::string getIDPolymorphic() override { return getID(); }
          // Reads linearVelocity & angularVelocity from the given json object
         void deserialize(const nlohmann::json& data) override;
+
+        
+        virtual void onImmediateGui() override {
+            ImGui::DragFloat2("light spot_angle", &this->spot_angle.inner);        
+            ImGui::DragFloat3("light attenuation", &this->attenuation.quadratic);
+        }
 
 }; 
 } // namespace our
