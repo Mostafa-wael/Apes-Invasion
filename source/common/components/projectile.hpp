@@ -46,7 +46,6 @@ namespace our {
             if(other->getOwner()->getComponent<HealthComponent>()) 
             {
                 other->getOwner()->getComponent<HealthComponent>()->damage(damageAmount);
-
             }
             
         }

@@ -318,8 +318,8 @@
                     },
                     {
                         "type": "Health",
-                        "max-health": 100,
-                        "current-health": 100
+                        "max-health": 10000,
+                        "current-health": 10000
                     }
                 ],
                 "children": [

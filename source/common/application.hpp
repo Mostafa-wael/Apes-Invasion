@@ -73,6 +73,7 @@ namespace our {
     public:
 
         bool isGameOver = false;
+        int score = 0;
 
         // Create an application with following configuration
         Application(const nlohmann::json& app_config) : app_config(app_config) {}

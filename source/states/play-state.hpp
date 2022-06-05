@@ -31,6 +31,7 @@
 #include "texture/texture2d.hpp"
 #include <texture/texture-utils.hpp>
 #include "systems/targeting-enemy-system.hpp"
+#include "systems/health-system.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -45,6 +46,7 @@ class Playstate : public our::State {
     our::RotatingTurretSystem rotatingTurretSystem;
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
+    our::HealthSystem healthSystem;
     our::TargetingEnemySystem targetingEnemySystem;
     our::Entity* player;
 
@@ -106,6 +108,8 @@ class Playstate : public our::State {
 
         targetingEnemySystem.init(&world, &physicsSystem);
 
+        healthSystem.init(&world, getApp(), &physicsSystem);
+
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
 
         reticleShader = new our::ShaderProgram();
@@ -157,6 +161,8 @@ class Playstate : public our::State {
 
         projectileSystem.update(&world, dt);
 
+        healthSystem.update(dt);
+
         world.deleteMarkedEntities();
         dt = deltaTime;
 
@@ -180,7 +186,10 @@ class Playstate : public our::State {
     }
 
     void onImmediateGui() override {
-        player->getComponent<our::HealthComponent>()->onImmediateGui(); // print player's health
+        player->getComponent<our::HealthComponent>()->onImmediateGui();
+        ImGui::Begin("Score", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove);
+        ImGui::Text("Score: %d", getApp()->score);
+        ImGui::End();
 
         our::EntityDebugger::update(&world, dt);
     }
