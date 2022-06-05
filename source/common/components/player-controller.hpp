@@ -1,3 +1,4 @@
+#pragma once
 #include "../deserialize-utils.hpp"
 #include "ecs/component.hpp"
 #include "glm/glm.hpp"

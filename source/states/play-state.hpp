@@ -30,6 +30,7 @@
 #include "systems/rotating-turret-system.hpp"
 #include "texture/texture2d.hpp"
 #include <texture/texture-utils.hpp>
+#include "systems/targeting-enemy-system.hpp"
 #include <fstream>
 #include <iostream>
 
@@ -44,6 +45,7 @@ class Playstate : public our::State {
     our::RotatingTurretSystem rotatingTurretSystem;
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
+    our::TargetingEnemySystem targetingEnemySystem;
     our::Entity* player;
 
     our::PhysicsSystem physicsSystem;
@@ -105,6 +107,8 @@ class Playstate : public our::State {
 
         playerShooterSystem.init(&world, getApp(), &physicsSystem);
 
+        targetingEnemySystem.init(&world, &physicsSystem);
+
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
 
         reticleShader = new our::ShaderProgram();
@@ -153,6 +157,7 @@ class Playstate : public our::State {
         playerControllerSystem.update(dt);
         playerShooterSystem.update(dt);
         rotatingTurretSystem.update(&world, dt);
+        targetingEnemySystem.update(&world, dt);
 
         projectileSystem.update(&world, dt);
 

@@ -6,7 +6,7 @@
 #include <string>
 
 namespace our {
-
+    
     class Entity; // A forward declaration of the Entity Class
 
     // A component is a data container that can be added to an entity.

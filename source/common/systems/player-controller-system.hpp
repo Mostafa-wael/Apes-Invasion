@@ -1,3 +1,4 @@
+#pragma once
 #include "Dynamics/btRigidBody.h"
 #include "GLFW/glfw3.h"
 #include "application.hpp"

@@ -100,12 +100,14 @@ set(COMMON_SOURCES
         source/common/components/health.hpp
         source/common/components/health.cpp
         source/common/components/component-deserializer.hpp
+        source/common/components/targeting-enemy.hpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
         source/common/systems/physics.cpp
+        source/common/systems/targeting-enemy-system.hpp
         
         source/common/util.cpp
         vendor/miniaudio.h

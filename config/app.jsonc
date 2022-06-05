@@ -527,6 +527,40 @@
             // }
             ,
             {
+                "name": "Targeting Enemy",
+                "rotation": [
+                    0,
+                    0,
+                    45
+                ],
+                "position": [
+                    -5,
+                    -5,
+                    -5
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "monkey", // "mesh": "cube",
+                        "material": "glass" // "material": "metal"                      
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "kinematic"
+                    },
+                    {
+                        "type": "Targeting Enemy",
+                        "projectilesPerEvent": 8,
+                        "firingDelay": 0.5,
+                        "projetileLifetime": 5,
+                        "rotationSpeed": 3,
+                        "projectileSpeed": 20,
+                        "spawnDistance": 5
+                    }
+                ]
+            },
+            {
                 "name": "sky_light",
                 "components": [
                     {
