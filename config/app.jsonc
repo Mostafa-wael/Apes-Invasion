@@ -45,7 +45,9 @@
                 "emissive": "assets/textures/asphalt/emissive.jpg",
                 "roughness": "assets/textures/asphalt/roughness.jpg",
                 "specular": "assets/textures/asphalt/specular.jpg",
-                "ambient_occlusion": "assets/textures/asphalt/ambient_occlusion.jpg"
+                "ambient_occlusion": "assets/textures/asphalt/ambient_occlusion.jpg",
+                "black": "assets/textures/black.jpg",
+                "white": "assets/textures/white.jpeg"
             },
             "meshes": {
                 "cube": "assets/models/cube.obj",
@@ -283,6 +285,31 @@
                         1,
                         1
                     ]
+                },
+                "cover": {
+                    "type": "textured", // in the materials.hpp file
+                    "shader": "light",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.2,
+                        0.3,
+                        0.6,
+                        1
+                    ],
+                    "texture": "white",
+                    "sampler": "default",
+                    "albedo": "white",
+                    "specular": "black",
+                    "roughness": "black",
+                    "emissive": "white",
+                    "ambient_occlusion": "white"
                 }
             }
         },
@@ -318,8 +345,8 @@
                     },
                     {
                         "type": "Health",
-                        "max-health": 500,
-                        "current-health": 500
+                        "max-health": 100,
+                        "current-health": 100
                     }
                 ],
                 "children": [
@@ -361,12 +388,12 @@
                                 "diffuse": [
                                     0,
                                     0,
-                                    1.0
+                                    10.0
                                 ],
                                 "specular": [
                                     0,
                                     0,
-                                    1.0
+                                    10.0
                                 ],
                                 "attenuation": {
                                     "quadratic": 0.0,
@@ -447,7 +474,7 @@
                                 ],
                                 "attenuation": {
                                     "quadratic": 0.0,
-                                    "linear": 0.8,
+                                    "linear": 0.2,
                                     "constant": 1.0
                                 }
                             }
@@ -456,7 +483,7 @@
                 ]
             },
             // Sky Light
-             {
+            {
                 "name": "sky_light",
                 "components": [
                     {
@@ -465,19 +492,19 @@
                         "enabled": true,
                         "sky_light": {
                             "top_color": [
-                                0.5,
+                                5,
                                 0,
                                 0
                             ],
                             "middle_color": [
-                                0.25,
+                                2.5,
                                 0,
-                                0.25
+                                2.5
                             ],
                             "bottom_color": [
                                 0,
                                 0,
-                                0.5
+                                5
                             ]
                         }
                     }
@@ -504,7 +531,7 @@
                     },
                     {
                         "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
+                        "colliderShape": "fromMeshRenderer",
                         "rigidBodyType": "kinematic"
                     },
                     {
@@ -559,7 +586,7 @@
                     },
                     {
                         "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
+                        "colliderShape": "fromMeshRenderer",
                         "rigidBodyType": "dynamic"
                     },
                     {
@@ -614,7 +641,7 @@
                     },
                     {
                         "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
+                        "colliderShape": "fromMeshRenderer",
                         "rigidBodyType": "dynamic"
                     },
                     {
@@ -661,7 +688,7 @@
                     },
                     {
                         "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
+                        "colliderShape": "fromMeshRenderer",
                         "rigidBodyType": "dynamic"
                     },
                     {
@@ -708,7 +735,7 @@
                     },
                     {
                         "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
+                        "colliderShape": "fromMeshRenderer",
                         "rigidBodyType": "kinematic"
                     },
                     {
@@ -747,7 +774,7 @@
                     },
                     {
                         "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
+                        "colliderShape": "fromMeshRenderer",
                         "rigidBodyType": "kinematic"
                     },
                     {
@@ -763,6 +790,190 @@
                         "type": "Health",
                         "max-health": 100,
                         "current-health": 100
+                    }
+                ]
+            },
+            {
+                "name": "pickup",
+                "rotation": [
+                    0,
+                    0,
+                    45
+                ],
+                "scale": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "position": [
+                    15,
+                    15,
+                    15
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "health",
+                        "material": "health"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "kinematic"
+                    },
+                    {
+                        "type": "Pick up",
+                        "heal amount": 20
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [
+                            0,
+                            90,
+                            0
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "cover2",
+                "position": [
+                    20,
+                    -20,
+                    -20
+                ],
+                "scale": [
+                    2,
+                    10,
+                    4
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "cube",
+                        "material": "cover"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "colliderShape": "fromMeshRenderer",
+                        "rigidBodyType": "kinematic"
+                    }
+                ]
+            },
+            {
+                "name": "cover3",
+                "position": [
+                    20,
+                    0,
+                    10
+                ],
+                "scale": [
+                    10,
+                    7,
+                    5
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "cube",
+                        "material": "cover"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "colliderShape": "fromMeshRenderer",
+                        "rigidBodyType": "kinematic"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [
+                            0,
+                            0,
+                            70
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "pickup",
+                "rotation": [
+                    0,
+                    0,
+                    45
+                ],
+                "scale": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "position": [
+                    15,
+                    15,
+                    15
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "health",
+                        "material": "health"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "kinematic"
+                    },
+                    {
+                        "type": "Pick up"
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [
+                            0,
+                            90,
+                            0
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "pickup",
+                "rotation": [
+                    0,
+                    0,
+                    45
+                ],
+                "scale": [
+                    0.5,
+                    0.5,
+                    0.5
+                ],
+                "position": [
+                    -30,
+                    -20,
+                    -9
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "health",
+                        "material": "health"
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "kinematic"
+                    },
+                    {
+                        "type": "Pick up",
+                        "heal amount": 20
+
+                    },
+                    {
+                        "type": "Movement",
+                        "angularVelocity": [
+                            0,
+                            90,
+                            0
+                        ]
                     }
                 ]
             }

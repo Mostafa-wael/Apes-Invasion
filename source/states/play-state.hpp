@@ -25,15 +25,16 @@
 #include "ecs/entity.hpp"
 #include "mesh/mesh.hpp"
 #include "shader/shader.hpp"
+#include "systems/health-system.hpp"
 #include "systems/player-shooter-system.hpp"
 #include "systems/projectile-system.hpp"
 #include "systems/rotating-turret-system.hpp"
-#include "texture/texture2d.hpp"
-#include <texture/texture-utils.hpp>
 #include "systems/targeting-enemy-system.hpp"
-#include "systems/health-system.hpp"
+#include "texture/texture2d.hpp"
+#include "systems/pickup-system.hpp"
 #include <fstream>
 #include <iostream>
+#include <texture/texture-utils.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -47,6 +48,7 @@ class Playstate : public our::State {
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
     our::HealthSystem healthSystem;
+    our::PickupSystem pickupSystem;
     our::TargetingEnemySystem targetingEnemySystem;
     our::Entity* player;
 
@@ -59,8 +61,8 @@ class Playstate : public our::State {
     our::LightComponent* light;
     std::string main_menu_scene_path = "config/start.jsonc";
 
-
     void onInitialize() override {
+
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
 
@@ -108,7 +110,8 @@ class Playstate : public our::State {
 
         targetingEnemySystem.init(&world, &physicsSystem);
 
-        healthSystem.init(&world, getApp(), &physicsSystem);
+        healthSystem.init(&world, getApp());
+        pickupSystem.init(&world);
 
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
 
@@ -128,13 +131,22 @@ class Playstate : public our::State {
                 break;
             }
         }
+       
+       // get number of monkeys to set the score
+       int count = 0;
+        for(auto entity : (&world)->getEntities()) {
+            if(!entity->enabled || entity->getParent() != nullptr) continue;
+            if(entity->getComponent<our::RotatingTurret>() || entity->getComponent<our::TargetingEnemy>()) {
+                count++;
+            }
+        }
+        getApp()->max_score = count * 10;
     }
 
     void onDraw(double deltaTime) override {
 
         if(player->getComponent<our::HealthComponent>()->current_health <= 0) {
             getApp()->isGameOver = true;
-
 
             std::ifstream file_in(main_menu_scene_path);
             if(!file_in) {
@@ -146,10 +158,8 @@ class Playstate : public our::State {
             getApp()->changeState("main-menu");
         }
 
-
         if(getApp()->score >= getApp()->max_score) {
             getApp()->isGameWon = true;
-
 
             std::ifstream file_in(main_menu_scene_path);
             if(!file_in) {
@@ -201,11 +211,16 @@ class Playstate : public our::State {
     }
 
     void onImmediateGui() override {
-        player->getComponent<our::HealthComponent>()->onImmediateGui();
-        ImGui::Begin("Score", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove);
-        ImGui::Text("Score: %d", getApp()->score);
-        ImGui::End();
 
         our::EntityDebugger::update(&world, dt);
+
+        player->getComponent<our::HealthComponent>()->onImmediateGui();
+
+        ImGui::Begin("Score", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove);
+        ImGui::SetWindowFontScale(2);
+
+        ImGui::Text("Score: %d", getApp()->score);
+
+        ImGui::End();
     }
 };

@@ -19,6 +19,7 @@ namespace our {
             speed                  = data.value("movementSpeed", speed);
             boostImpulseMultiplier = data.value("boostSpeedMultiplier", boostImpulseMultiplier);
             rotationSensitivity    = data.value("rotationSensitivity", rotationSensitivity);
+            maxSpeed               = data.value("maxSpeed", maxSpeed);
         }
 
         static std::string getID() {
