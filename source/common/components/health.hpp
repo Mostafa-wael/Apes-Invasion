@@ -8,10 +8,9 @@
 namespace our {
     class HealthComponent : public Component {
     public:
-        int max_health = 100;
+        int max_health     = 100;
         int current_health = 100;
         bool changedInUI   = false;
-        
 
         static std::string getID() { return "Health"; }
 
@@ -25,13 +24,11 @@ namespace our {
         void damage(int damage_amout);
 
         virtual void onImmediateGui() override {
-            std::string healthId = std::to_string((long long)(this));
-            std::string max         = "maximum health ##" + healthId;
-            std::string cur         = "current health ##" + healthId;
-            changedInUI |= ImGui::DragInt(cur.c_str(), &current_health);
-            changedInUI |= ImGui::DragInt(max.c_str(), &max_health);
+            ImGui::Begin("Health");
+            ImGui::Text("Health: %d/%d", current_health, max_health);
             ImGui::SliderInt("health", &current_health, 0, max_health);
+            ImGui::End();
         }
     };
 
-}
+} // namespace our

@@ -6,6 +6,7 @@
 #include "ImGuizmo.h"
 #include "application.hpp"
 #include "components/camera.hpp"
+#include "components/health.hpp"
 #include "components/rigidbody.hpp"
 
 #include "ecs/entity.hpp"
@@ -41,6 +42,13 @@ namespace our {
 
         static void update(World* world, float deltaTime) {
 
+            for(auto entity : world->getEntities()) {
+                if(!entity->enabled || entity->getParent() != nullptr) continue;
+                if(entity->getComponent<RigidBody>() && entity->getComponent<RigidBody>()->tag == "player" && entity->getComponent<HealthComponent>()) {
+                    entity->getComponent<HealthComponent>()->onImmediateGui();
+                    break;
+                }
+            }
             if(app->getKeyboard().justPressed(GLFW_KEY_TAB)) {
                 enabled = !enabled;
             }
@@ -53,7 +61,6 @@ namespace our {
             }
 
             ImGui::Begin("Help", NULL, ImGuiWindowFlags_HorizontalScrollbar);
-
             ImGui::BulletText("Press WASD to move the camera, QE to move down/up");
             ImGui::BulletText("Press and hold the right mouse button to look around");
             ImGui::BulletText("Click on a physics object to select it (you should see axes on the object's pivot)");
@@ -64,7 +71,6 @@ namespace our {
             ImGui::Indent(-10);
             ImGui::BulletText("Note that objects with rigidbodies do not support scaling, you'll only scale the mesh, not the collision");
             ImGui::BulletText("Press tab to toggle the entity debugger");
-
             ImGui::End();
 
             ImGui::Begin("Entities");
