@@ -386,7 +386,9 @@
                             90,
                             0
                         ]
-                    },
+                    }
+                ],
+                "children": [
                     {
                         "name": "moon_point_light",
                         "rotation": [
@@ -440,87 +442,90 @@
                     {
                         "type": "Rigid Body",
                         "useMeshBoundingBox": true,
-                        "rigidBodyType": "dynamic"
-                    },
-                    {
-                        "type": "Rotating Turret",
-                        "projectilesPerEvent": 8,
-                        "firingDelay": 0.5,
-                        "projetileLifetime": 5,
-                        "rotationSpeed": 3,
-                        "projectileSpeed": 20,
-                        "spawnDistance": 5
+                        "rigidBodyType": "kinematic"
                     }
+                    // ,
+                    // {
+                    //     "type": "Rotating Turret",
+                    //     "projectilesPerEvent": 8,
+                    //     "firingDelay": 0.5,
+                    //     "projetileLifetime": 5,
+                    //     "rotationSpeed": 3,
+                    //     "projectileSpeed": 20,
+                    //     "spawnDistance": 5
+                    // }
                 ]
-            },
-            {
-                "name": "Rotating Turret",
-                "rotation": [
-                    45,
-                    0,
-                    0
-                ],
-                "position": [
-                    10,
-                    10,
-                    10
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey" // "material": "metal"                      
-                    },
-                    {
-                        "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
-                        "rigidBodyType": "dynamic"
-                    },
-                    {
-                        "type": "Rotating Turret",
-                        "projectilesPerEvent": 8,
-                        "firingDelay": 0.5,
-                        "projetileLifetime": 5,
-                        "rotationSpeed": 3,
-                        "projectileSpeed": 20,
-                        "spawnDistance": 5
-                    }
-                ]
-            },
-            {
-                "name": "Rotating Turret",
-                "rotation": [
-                    0,
-                    0,
-                    45
-                ],
-                "position": [
-                    -10,
-                    -10,
-                    -10
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey" // "material": "metal"                      
-                    },
-                    {
-                        "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
-                        "rigidBodyType": "dynamic"
-                    },
-                    {
-                        "type": "Rotating Turret",
-                        "projectilesPerEvent": 8,
-                        "firingDelay": 0.5,
-                        "projetileLifetime": 5,
-                        "rotationSpeed": 3,
-                        "projectileSpeed": 20,
-                        "spawnDistance": 5
-                    }
-                ]
-            },
+            }
+            // ,
+            // {
+            //     "name": "Rotating Turret",
+            //     "rotation": [
+            //         45,
+            //         0,
+            //         0
+            //     ],
+            //     "position": [
+            //         10,
+            //         10,
+            //         10
+            //     ],
+            //     "components": [
+            //         {
+            //             "type": "Mesh Renderer",
+            //             "mesh": "monkey", // "mesh": "cube",
+            //             "material": "monkey" // "material": "metal"                      
+            //         },
+            //         {
+            //             "type": "Rigid Body",
+            //             "useMeshBoundingBox": true,
+            //             "rigidBodyType": "dynamic"
+            //         },
+            //         {
+            //             "type": "Rotating Turret",
+            //             "projectilesPerEvent": 8,
+            //             "firingDelay": 0.5,
+            //             "projetileLifetime": 5,
+            //             "rotationSpeed": 3,
+            //             "projectileSpeed": 20,
+            //             "spawnDistance": 5
+            //         }
+            //     ]
+            // },
+            // {
+            //     "name": "Rotating Turret",
+            //     "rotation": [
+            //         0,
+            //         0,
+            //         45
+            //     ],
+            //     "position": [
+            //         -10,
+            //         -10,
+            //         -10
+            //     ],
+            //     "components": [
+            //         {
+            //             "type": "Mesh Renderer",
+            //             "mesh": "monkey", // "mesh": "cube",
+            //             "material": "monkey" // "material": "metal"                      
+            //         },
+            //         {
+            //             "type": "Rigid Body",
+            //             "useMeshBoundingBox": true,
+            //             "rigidBodyType": "dynamic"
+            //         },
+            //         {
+            //             "type": "Rotating Turret",
+            //             "projectilesPerEvent": 8,
+            //             "firingDelay": 0.5,
+            //             "projetileLifetime": 5,
+            //             "rotationSpeed": 3,
+            //             "projectileSpeed": 20,
+            //             "spawnDistance": 5
+            //         }
+            //     ]
+            // }
+            ,
             {
                 "name": "sky_light",
                 "components": [
