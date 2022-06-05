@@ -31,6 +31,7 @@
 #include "systems/rotating-turret-system.hpp"
 #include "systems/targeting-enemy-system.hpp"
 #include "texture/texture2d.hpp"
+#include "systems/pickup-system.hpp"
 #include <fstream>
 #include <iostream>
 #include <texture/texture-utils.hpp>
@@ -47,6 +48,7 @@ class Playstate : public our::State {
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
     our::HealthSystem healthSystem;
+    our::PickupSystem pickupSystem;
     our::TargetingEnemySystem targetingEnemySystem;
     our::Entity* player;
 
@@ -108,7 +110,8 @@ class Playstate : public our::State {
 
         targetingEnemySystem.init(&world, &physicsSystem);
 
-        healthSystem.init(&world, getApp(), &physicsSystem);
+        healthSystem.init(&world, getApp());
+        pickupSystem.init(&world);
 
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
 
