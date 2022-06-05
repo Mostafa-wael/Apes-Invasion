@@ -4,6 +4,7 @@
 #include "../texture/texture-utils.hpp"
 #include "GLFW/glfw3.h"
 #include "asset-loader.hpp"
+#include "components/light.hpp"
 #include "glad/gl.h"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/fwd.hpp"
@@ -130,11 +131,20 @@ namespace our {
     }
 
     void ForwardRenderer::render(World* world) {
+
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent* camera = nullptr;
+
         opaqueCommands.clear();
         transparentCommands.clear();
+        // for lights
+        std::vector<LightComponent*> lights;
+
         for(auto entity : world->getEntities()) {
+
+            // Skip this entity altogether if it's not enabled
+            if(!entity->enabled) continue;
+
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) camera = entity->getComponent<CameraComponent>();
 
@@ -149,15 +159,6 @@ namespace our {
 
                 if(!command.mesh || !command.material) continue;
 
-                // I think this is a bit more concise?
-                // Perhaps use it once the everything is working
-                // RenderCommand cmd = {
-                //     meshRenderer->getOwner()->getLocalToWorldMatrix(),
-                //     glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1)),
-                //     meshRenderer->mesh,
-                //     meshRenderer->material,
-                // };
-
                 // if it is transparent, we add it to the transparent commands list
                 if(command.material->transparent) {
                     transparentCommands.push_back(command);
@@ -165,9 +166,16 @@ namespace our {
                     // Otherwise, we add it to the opaque command list
                     opaqueCommands.push_back(command);
                 }
-                if(auto light = entity->getComponent<LightComponent>(); light) {
+            }
+            if(auto light = entity->getComponent<LightComponent>(); light && light->enabled) {
+                if(light->typeLight == LightType::SKY) {
+                    auto litShader = AssetLoader<ShaderProgram>::get("light");
+                    litShader->use();
+                    litShader->set("sky.top", light->sky_light.top_color);
+                    litShader->set("sky.middle", light->sky_light.middle_color);
+                    litShader->set("sky.bottom", light->sky_light.bottom_color);
+                } else
                     lights.push_back(light);
-                }
             }
         }
 
@@ -214,7 +222,6 @@ namespace our {
         //TODO: (Req 8) Clear the color and depth buffers
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
         int numLights = lights.size();
 
         //TODO: (Req 8) Draw all the opaque commands
@@ -222,41 +229,50 @@ namespace our {
         for(auto opaqueCommand : opaqueCommands) {
             opaqueCommand.material->setup();
             opaqueCommand.material->shader->set("transform", VP * opaqueCommand.localToWorld);
+            opaqueCommand.material->shader->set("view_projection", VP);
+            opaqueCommand.material->shader->set("camera_position", cameraForward);
+            opaqueCommand.material->shader->set("object_to_world", opaqueCommand.localToWorld);
+            opaqueCommand.material->shader->set("object_to_world_inv_transpose", glm::transpose(glm::inverse(opaqueCommand.localToWorld)));
+
             // We will go through all the lights and send the enabled ones to the shader.
-            int light_index           = 0;
             const int MAX_LIGHT_COUNT = 16;
 
             opaqueCommand.material->shader->set("light_count", numLights);
-            for(int i = 0; i < numLights; i++) {
-                LightComponent* light = lights[i];
+
+            int light_index = 0;
+            for(LightComponent* light : lights) {
                 if(!light->enabled) continue;
+                light->position = light->getOwner()->getWorldTranslation();
+                light->direction = light->getOwner()->getLocalToWorldMatrix() * glm::vec4(0.0, -1.0, 0.0, 0);
+                // std::cout<< "Light direction: " << light->direction.x << " " << light->direction.y << " " << light->direction.z << std::endl;
+                // std::cout<<"Light position: "<<light->position.x<<" "<<light->position.y<<" "<<light->position.z<<std::endl;
+
                 std::string prefix = "lights[" + std::to_string(light_index) + "].";
 
                 opaqueCommand.material->shader->set(prefix + "type", static_cast<int>(light->typeLight));
-                opaqueCommand.material->shader->set(prefix + "color", light->color);
                 switch(light->typeLight) {
                 case LightType::DIRECTIONAL:
-                    opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
+                    opaqueCommand.material->shader->set(prefix + "direction", light->direction);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
                     break;
                 case LightType::POINT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
+                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
+                                                                                          light->attenuation.linear, light->attenuation.constant));
                     break;
                 case LightType::SPOT:
                     opaqueCommand.material->shader->set(prefix + "position", light->position);
-                    opaqueCommand.material->shader->set(prefix + "direction", glm::normalize(light->direction));
-                    opaqueCommand.material->shader->set(prefix + "attenuation_constant", light->attenuation.constant);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_linear", light->attenuation.linear);
-                    opaqueCommand.material->shader->set(prefix + "attenuation_quadratic", light->attenuation.quadratic);
-                    opaqueCommand.material->shader->set(prefix + "inner_angle", light->spot_angle.inner);
-                    opaqueCommand.material->shader->set(prefix + "outer_angle", light->spot_angle.outer);
+                    opaqueCommand.material->shader->set(prefix + "direction", light->direction);
+                    opaqueCommand.material->shader->set(prefix + "diffuse", light->diffuse);
+                    opaqueCommand.material->shader->set(prefix + "specular", light->specular);
+                    opaqueCommand.material->shader->set(prefix + "attenuation", glm::vec3(light->attenuation.quadratic,
+                                                                                          light->attenuation.linear, light->attenuation.constant));
+                    opaqueCommand.material->shader->set(prefix + "cone_angles", glm::vec2(light->spot_angle.inner, light->spot_angle.outer));
                     break;
                 case LightType::SKY:
-                    opaqueCommand.material->shader->set(prefix + "top_color", light->sky_light.top_color);
-                    opaqueCommand.material->shader->set(prefix + "middle_color", light->sky_light.middle_color);
-                    opaqueCommand.material->shader->set(prefix + "bottom_color", light->sky_light.bottom_color);
                     break;
                 }
                 light_index++;

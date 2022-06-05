@@ -3,6 +3,7 @@
 #include "asset-loader.hpp"
 #include "btVector3.h"
 #include "components/mesh-renderer.hpp"
+#include "components/player-shooter.hpp"
 #include "components/projectile.hpp"
 #include "ecs/component.hpp"
 #include "ecs/world.hpp"
@@ -12,6 +13,7 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/trigonometric.hpp"
 #include "imgui.h"
+#include "player-shooter.hpp"
 #include "rigidbody.hpp"
 #include "systems/physics.hpp"
 #include <functional>
@@ -24,33 +26,31 @@
 namespace our {
     class RotatingTurret : public Component {
     public:
-        float firingTimer = firingDelay; // Timer to keep track of how much is left before the next shooting event
-        float firingDelay = 0.5;         // Delay between shooting events
+        IShootingBehaviour* shootingBehaviour;
+        int projectilesPerEvent = 4;     //  How many projectiles to spawn around the turret
+        float projectileSpeed   = 15.0f; // How fast the projectiles go
+        float spawnDist         = 4.0f;  // How far away radially the projectiles spawn
+        float firingDelay       = 0.5;   //
+        float rotationSpeed     = 5;     // How fast the turret rotates, constant regardless of framerate
 
-        float projectileLifetime = 2; // How long each projectile should stay alive before removing itself
-        int projectilesPerEvent  = 4; //  How many projectiles to spawn around the turret
+        void init() {
+            shootingBehaviour = new RadialShootingBehaviour(projectileSpeed, firingDelay, spawnDist, rotationSpeed, projectilesPerEvent);
 
-        float rotationSpeed      = 5;     // How fast the turret rotates, constant regardless of framerate
-        float projectileSpeed = 15.0f; // How fast the projectiles go
-        float spawnDist          = 4.0f;  // How far away radially the projectiles spawn
-
+            float projectileLifetime             = 2; // How long each projectile should stay alive before removing itself
+            auto turretRB                        = getOwner()->getComponent<RigidBody>();
+            turretRB->tag                        = "turret";
+            shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("danger"), projectileLifetime, turretRB->tag);
+        }
 
         static std::string getID() { return "Rotating Turret"; }
         virtual std::string getIDPolymorphic() override { return getID(); }
 
         virtual void deserialize(const nlohmann::json& data) override {
-            firingDelay = data.value("firingDelay", 0.5f);
-            projectileLifetime = data.value("projetileLifetime", 2);
-            projectilesPerEvent = data.value("projectilesPerEvent", 4);
-            rotationSpeed = data.value("rotationSpeed", 5);
-            projectileSpeed = data.value("projectileSpeed", 15.0f);
-            spawnDist = data.value("spawnDistance", 4.0f);
-
-            firingTimer = firingDelay;
-        }
-
-        virtual void onImmediateGui() override {
-            ImGui::ProgressBar(1 - firingTimer);
+            projectilesPerEvent = data.value("projectilesPerEvent", projectilesPerEvent);
+            projectileSpeed     = data.value("projectileSpeed", projectileSpeed);
+            spawnDist           = data.value("spawnDist", spawnDist);
+            firingDelay         = data.value("firingDelay", firingDelay);
+            rotationSpeed       = data.value("rotationSpeed", rotationSpeed);
         }
     };
 } // namespace our

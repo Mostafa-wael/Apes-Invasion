@@ -42,7 +42,7 @@ namespace our {
         bool mFullscreen;
     };
 
-    class Physics : public IImGuiDrawable {
+    class PhysicsSystem : public IImGuiDrawable {
     public:
         btDefaultCollisionConfiguration* collisionConfiguration;
         btCollisionDispatcher* dispatcher;
@@ -51,7 +51,6 @@ namespace our {
         btDiscreteDynamicsWorld* dynamicsWorld;
         // MeshRendererComponent box;
         bool simulate        = true;
-        int framesToSimulate = 10000;
 
         PhysDebugDraw* debugDrawer;
 

@@ -28,7 +28,7 @@ void PhysicsTest::onInitialize() {
         }
     }
 
-    our::EntityDebugger::init(cam, getApp());
+    our::EntityDebugger::init(cam, getApp(), &p);
 
     p.initialize(&world);
 
@@ -63,8 +63,5 @@ void PhysicsTest::onDestroy() {
 }
 
 void PhysicsTest::onImmediateGui() {
-
     our::EntityDebugger::update(&world, dt);
-
-    p.onImmediateGui();
 }

@@ -45,16 +45,16 @@ namespace our {
             points[0] = from.x();
             points[1] = from.y();
             points[2] = from.z();
-            points[3] = color.x()/255.0f;
-            points[4] = color.y()/255.0f;
-            points[5] = color.z()/255.0f;
+            points[3] = 1.0f;
+            points[4] = 1.0f;
+            points[5] = 1.0f;
 
             points[6]  = to.x();
             points[7]  = to.y();
             points[8]  = to.z();
-            points[9]  = color.x()/255.0f;
-            points[10] = color.y()/255.0f;
-            points[11] = color.z()/255.0f;
+            points[9]  = 1.0f;
+            points[10] = 1.0f;
+            points[11] = 1.0f;
 
             glBindVertexArray(VAO);
 
