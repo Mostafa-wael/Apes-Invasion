@@ -1,5 +1,6 @@
 #pragma once
 #include "asset-loader.hpp"
+#include "components/health.hpp"
 #include "ecs/component.hpp"
 #include "ecs/world.hpp"
 #include "material/material.hpp"
@@ -18,6 +19,7 @@ namespace our {
         Material* material;
         float lifetime = 2; // How long this projectile will stay alive for
         std::string rigidbodyTag;
+        int damageAmount = 10;
 
         Projectile() = default;
         Projectile(Material* mat, float life, std::string tag) : material(mat), lifetime(life), rigidbodyTag(tag) {}
@@ -26,6 +28,7 @@ namespace our {
         // owner: entity carrying this component, need to pass it manually for the callback
         void onCollision(RigidBody* other) {
             auto projectileRB = getOwner()->getComponent<RigidBody>();
+
 
             // Ignore other objects that have the same tag as you
             if(projectileRB->tag == other->tag) return;
@@ -38,6 +41,12 @@ namespace our {
             auto otherProjectile = other->getOwner()->getComponent<Projectile>();
             if(otherProjectile)
                 otherProjectile->getOwner()->getWorld()->markForRemoval(otherProjectile->getOwner());
+
+            if(other->getOwner()->getComponent<HealthComponent>()) 
+            {
+                other->getOwner()->getComponent<HealthComponent>()->damage(damageAmount);
+            }
+            
         }
 
         void deserialize(const nlohmann::json& data) {

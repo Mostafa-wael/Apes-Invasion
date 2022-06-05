@@ -439,48 +439,23 @@
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
                         "material": "monkey"  // "material": "metal"                      
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "dynamic"
+                    },
+                    {
+                        "type": "Rotating Turret",
+                        "projectilesPerEvent": 8,
+                        "firingDelay": 0.5,
+                        "projetileLifetime": 5,
+                        "rotationSpeed": 3,
+                        "projectileSpeed": 20,
+                        "spawnDistance": 5
                     }
-                    // {
-                    //     "type": "Rigid Body",
-                    //     "useMeshBoundingBox": true,
-                    //     "rigidBodyType": "dynamic"
-                    // }
-                    // {
-                    //     "type": "Rotating Turret",
-                    //     "projectilesPerEvent": 8,
-                    //     "firingDelay": 0.5,
-                    //     "projetileLifetime": 5,
-                    //     "rotationSpeed": 3,
-                    //     "projectileSpeed": 20,
-                    //     "spawnDistance": 5
-                    // }
                 ]
             }
-            // {
-            //     "name": "directional_light",
-            //     "components": [
-            //         {
-            //             "type": "Light",
-            //             "typeLight": "directional",
-            //             "enabled": true,
-            //             "diffuse": [
-            //                 0,
-            //                 1,
-            //                 0
-            //             ],
-            //             "specular": [
-            //                 0,
-            //                 1,
-            //                 0
-            //             ],
-            //             "direction": [
-            //                 0,
-            //                 -1,
-            //                 0
-            //             ]
-            //         }
-            //     ]
-            // }
         ]
     }
 }
