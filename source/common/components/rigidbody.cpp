@@ -145,6 +145,7 @@ namespace our { // namespace our
     }
 
     RigidBody::~RigidBody() {
-        physicsSystem->dynamicsWorld->removeRigidBody(bulletRB);
+        if(physicsSystem != nullptr && physicsSystem->dynamicsWorld != nullptr && bulletRB != nullptr)
+            physicsSystem->dynamicsWorld->removeRigidBody(bulletRB);
     }
 } // namespace our
