@@ -39,7 +39,7 @@
                 "ambient_occlusion": "assets/textures/asphalt/ambient_occlusion.jpg"
             },
             "meshes": {
-                "monkey": "assets/models/monkey.obj"
+                "monkey": "assets/models/Suzanne.obj"
             },
             "samplers": {
                 "default": {},
@@ -152,7 +152,7 @@
                     {
                         "type": "Light",
                         "typeLight": "sky",
-                        "enabled": false,
+                        "enabled": true,
                         "sky_light": {
                             "top_color": [
                                 0,
@@ -181,7 +181,7 @@
                         "typeLight": "directional",
                         "enabled": false,
                         "diffuse": [
-                            1.0,
+                            1,
                             0,
                             0
                         ],
@@ -244,7 +244,7 @@
                     {
                         "type": "Light",
                         "typeLight": "spot",
-                        "enabled": true,
+                        "enabled": false,
                         "direction": [
                             0,
                             1,
@@ -272,7 +272,7 @@
                         },
                         "spot_angle": {
                             "inner": 0.0,
-                            "outer": 3.14
+                            "outer": 0.2
                         }
                     }
                 ]
