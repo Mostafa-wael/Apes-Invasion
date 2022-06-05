@@ -35,7 +35,7 @@ namespace our {
 
         // Need this as a function object so we don't need to create different classes
         // for ALL different onCollision calls
-        std::function<void(RigidBody* other)> onCollision;
+        std::function<void(RigidBody* other)> onCollision = nullptr;
 
         RigidBody() = default;
 

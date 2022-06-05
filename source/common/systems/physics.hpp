@@ -51,7 +51,6 @@ namespace our {
         btDiscreteDynamicsWorld* dynamicsWorld;
         // MeshRendererComponent box;
         bool simulate        = true;
-        int framesToSimulate = 10000;
 
         PhysDebugDraw* debugDrawer;
 

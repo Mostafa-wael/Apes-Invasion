@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../ecs/component.hpp"
+#include "imgui.h"
 #include <glm/gtx/euler_angles.hpp>
 
 namespace our {
@@ -33,18 +34,39 @@ namespace our {
         struct {
             glm::vec3 top_color, middle_color, bottom_color;
         } sky_light;
-        
+
         // The ID of this component type is "Movement"
         static std::string getID() { return "Light"; }
         virtual std::string getIDPolymorphic() override { return getID(); }
-         // Reads linearVelocity & angularVelocity from the given json object
+        // Reads linearVelocity & angularVelocity from the given json object
         void deserialize(const nlohmann::json& data) override;
 
-        
         virtual void onImmediateGui() override {
-            ImGui::DragFloat2("light spot_angle", &this->spot_angle.inner);        
-            ImGui::DragFloat3("light attenuation", &this->attenuation.quadratic);
-        }
 
-}; 
+            std::string lightId = std::to_string((long long)this);
+            ImGui::Checkbox(("Light enabled##" + lightId).c_str(), &enabled);
+            if(enabled) {
+                if(typeLight == LightType::DIRECTIONAL ||
+                   typeLight == LightType::POINT ||
+                   typeLight == LightType::SPOT) {
+                    ImGui::ColorPicker3(("Diffuse##" + lightId).c_str(), &diffuse.x);
+                    ImGui::ColorPicker3(("Specular##" + lightId).c_str(), &specular.x);
+                }
+                if(typeLight == LightType::POINT ||
+                   typeLight == LightType::SPOT) {
+                       ImGui::DragFloat3(("Attenuation##"+lightId).c_str(), &attenuation.quadratic);
+                }
+
+                if (typeLight == LightType::SPOT) {
+                    ImGui::DragFloat2(("Cone angles (inner/outer)##"+lightId).c_str(), &spot_angle.inner);
+                }
+
+                if(typeLight==LightType::SKY){
+                    ImGui::ColorPicker3(("Sky top##" + lightId).c_str(), &sky_light.top_color.x);
+                    ImGui::ColorPicker3(("Sky middle##" + lightId).c_str(), &sky_light.middle_color.x);
+                    ImGui::ColorPicker3(("Sky bottom##" + lightId).c_str(), &sky_light.bottom_color.x);
+                }
+            }
+        }
+    };
 } // namespace our

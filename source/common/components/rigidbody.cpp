@@ -55,9 +55,11 @@ namespace our { // namespace our
         bool useMeshBoundingBox = true;
         std::string type        = "dynamic";
 
-        mass                = data.value("mass", mass);
-        type                = data.value("rigidBodyType", type);
-        auto colliderShape  = data.value("colliderShape", "fromMeshRenderer");
+        mass               = data.value("mass", mass);
+        type               = data.value("rigidBodyType", type);
+        auto colliderShape = data.value("colliderShape", "fromMeshRenderer");
+        float restitution  = data.value("resitution", 1);
+
         glm::vec3 wRotEuler = glm::eulerAngles(glm::quat(getOwner()->getWorldRotation()));
 
         if(colliderShape == "box") {
@@ -83,6 +85,8 @@ namespace our { // namespace our
         } else {
             throw std::runtime_error("Rigid body collider type ( " + type + " ). Type must be one of \"box\", \"fromMeshRenderer\", \"sphere\", \"convexHul\"");
         }
+
+        bulletRB->setRestitution(restitution);
     }
 
     void RigidBody::fromCollisionShapeTranslationRotation(btCollisionShape* btColl, glm::vec3 translation, glm::vec3 rotation, std::string type, float m) {

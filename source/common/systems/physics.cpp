@@ -35,7 +35,7 @@ namespace our {
                 dynamicsWorld->addRigidBody(rb->bulletRB);
 
                 // Need a refrence to the physics system so we can remove the rigidbody on its destruction
-                rb->init(this); 
+                rb->init(this);
             }
         }
     }
@@ -45,12 +45,8 @@ namespace our {
         if(drawDebug)
             debugDraw();
 
-        if(!simulate || framesToSimulate == 0) {
+        if(!simulate)
             return;
-        }
-
-        framesToSimulate--;
-        int i;
 
         dynamicsWorld->stepSimulation(dt);
 
@@ -140,13 +136,10 @@ namespace our {
         ImGui::Indent(10);
 
         ImGui::Checkbox("Debug drawing enabled", &drawDebug);
-        
+
         if(ImGui::Checkbox("simulate", &simulate) && simulate) {
             ourToBullet();
         }
-
-
-        ImGui::InputInt("frames to simulate", &framesToSimulate);
 
         for(int j = dynamicsWorld->getNumCollisionObjects() - 1; j >= 0; j--) {
 
