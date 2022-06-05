@@ -1,6 +1,9 @@
 #include "rigidbody.hpp"
 #include "../ecs/entity.hpp"
 #include "../systems/physics.hpp"
+#include "CollisionShapes/btCollisionShape.h"
+#include "CollisionShapes/btConvexHullShape.h"
+#include "CollisionShapes/btSphereShape.h"
 #include "components/mesh-renderer.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/vector_float3.hpp"
@@ -45,28 +48,40 @@ namespace our { // namespace our
     }
 
     void RigidBody::deserialize(const nlohmann::json& data) {
-        {
-            if(!data.is_object()) return;
+        if(!data.is_object()) return;
 
-            float mass              = 1;
-            glm::vec3 halfExtents   = glm::vec3(1, 1, 1);
-            bool useMeshBoundingBox = true;
-            std::string type        = "dynamic";
+        float mass              = 1;
+        glm::vec3 halfExtents   = glm::vec3(1, 1, 1);
+        bool useMeshBoundingBox = true;
+        std::string type        = "dynamic";
 
-            mass               = data.value("mass", mass);
-            useMeshBoundingBox = data.value("useMeshBoundingBox", useMeshBoundingBox);
-            type               = data.value("rigidBodyType", type);
+        mass                = data.value("mass", mass);
+        type                = data.value("rigidBodyType", type);
+        auto colliderShape  = data.value("colliderShape", "fromMeshRenderer");
+        glm::vec3 wRotEuler = glm::eulerAngles(glm::quat(getOwner()->getWorldRotation()));
 
-            if(!useMeshBoundingBox) {
-                halfExtents         = data.value("halfExtents", halfExtents);
-                glm::vec3 wRotEuler = glm::eulerAngles(glm::quat(getOwner()->getWorldRotation()));
-                this->fromExtentsTranslationRotation(halfExtents, getOwner()->getWorldTranslation(), wRotEuler, type, mass);
-            } else {
-                if(auto meshRenderer = getOwner()->getComponent<MeshRendererComponent>())
-                    this->fromMeshRenderer(meshRenderer, type, mass);
-                else
-                    throw std::runtime_error("Rigidbody with no given AABB is not attached to an entity with a mesh renderer\n");
-            }
+        if(colliderShape == "box") {
+            halfExtents = data.value("halfExtents", halfExtents);
+            this->fromExtentsTranslationRotation(halfExtents, getOwner()->getWorldTranslation(), wRotEuler, type, mass);
+        } else if(colliderShape == "fromMeshRenderer") {
+            if(auto meshRenderer = getOwner()->getComponent<MeshRendererComponent>())
+                this->fromMeshRenderer(meshRenderer, type, mass);
+            else
+                throw std::runtime_error("Rigidbody with no given AABB is not attached to an entity with a mesh renderer\n");
+
+        } else if(colliderShape == "sphere") {
+            btCollisionShape* sphereColl = new btSphereShape(data.value("radius", 1));
+            this->fromCollisionShapeTranslationRotation(sphereColl, getOwner()->getWorldTranslation(), wRotEuler, type, mass);
+        } else if(colliderShape == "convexHull") {
+
+            if(auto meshRenderer = getOwner()->getComponent<MeshRendererComponent>()) {
+                btCollisionShape* hull = new btConvexHullShape((float*)meshRenderer->mesh->verts.data(), meshRenderer->mesh->verts.size(), sizeof(glm::vec3));
+                this->fromCollisionShapeTranslationRotation(hull, getOwner()->getWorldTranslation(), wRotEuler, type, mass);
+            } else
+                throw std::runtime_error("Rigidbody with no given AABB is not attached to an entity with a mesh renderer\n");
+
+        } else {
+            throw std::runtime_error("Rigid body collider type ( " + type + " ). Type must be one of \"box\", \"fromMeshRenderer\", \"sphere\", \"convexHul\"");
         }
     }
 
@@ -122,7 +137,6 @@ namespace our { // namespace our
     std::pair<glm::vec3, glm::vec3> RigidBody::getAABBWorldScale(Mesh* meshComp) {
 
         glm::vec3 wPos   = getOwner()->getWorldTranslation();
-        glm::vec3 wRot   = glm::eulerAngles(glm::quat(getOwner()->getWorldRotation()));
         glm::vec3 wScale = getOwner()->getWorldScale();
 
         auto [wAABBPos, aabbHalfExtents] = meshComp->getAABB(wScale);
