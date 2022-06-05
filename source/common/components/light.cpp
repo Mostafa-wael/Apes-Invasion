@@ -10,12 +10,10 @@ namespace our {
         enabled               = data.value("enabled", true);
         if(typeLocal == "directional") {
             typeLight = LightType::DIRECTIONAL;
-            direction = data["direction"];
             diffuse   = data["diffuse"];
             specular  = data["specular"];
         } else if(typeLocal == "point") {
             typeLight             = LightType::POINT;
-            position              = data["position"];
             diffuse               = data["diffuse"];
             specular              = data["specular"];
             attenuation.constant  = data["attenuation"]["constant"];
@@ -23,8 +21,6 @@ namespace our {
             attenuation.quadratic = data["attenuation"]["quadratic"];
         } else if(typeLocal == "spot") {
             typeLight             = LightType::SPOT;
-            position              = data["position"];
-            direction             = data["direction"];
             diffuse               = data["diffuse"];
             specular              = data["specular"];
             attenuation.constant  = data["attenuation"]["constant"];
