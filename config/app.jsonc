@@ -311,7 +311,7 @@
                         ]
                     },
                     {
-                        "name": "spot_light",
+                        "name": "player_spot_light",
                         "rotation": [
                             90,
                             0,
@@ -359,7 +359,7 @@
             {
                 "name": "moon",
                 "position": [
-                    0,
+                    10,
                     10,
                     0
                 ],
@@ -386,6 +386,36 @@
                             90,
                             0
                         ]
+                    },
+                    {
+                        "name": "moon_point_light",
+                        "rotation": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "components": [
+                            {
+                                "type": "Light",
+                                "typeLight": "point",
+                                "enabled": true,
+                                "diffuse": [
+                                    0.0,
+                                    1.0,
+                                    10.0
+                                ],
+                                "specular": [
+                                    0.0,
+                                    1.0,
+                                    10.0
+                                ],
+                                "attenuation": {
+                                    "quadratic": 0.0,
+                                    "linear": 0.0,
+                                    "constant": 1.0
+                                }
+                            }
+                        ]
                     }
                 ]
             },
@@ -405,7 +435,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey"  // "material": "metal"                      
+                        "material": "monkey" // "material": "metal"                      
                     },
                     {
                         "type": "Rigid Body",
@@ -439,7 +469,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey"  // "material": "metal"                      
+                        "material": "monkey" // "material": "metal"                      
                     },
                     {
                         "type": "Rigid Body",
@@ -473,7 +503,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey"  // "material": "metal"                      
+                        "material": "monkey" // "material": "metal"                      
                     },
                     {
                         "type": "Rigid Body",
