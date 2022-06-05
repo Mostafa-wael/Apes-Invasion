@@ -13,6 +13,11 @@
 #include <string>
 #include <unordered_set>
 
+// #define MINIAUDIO_IMPLEMENTATION
+// #include "../../../vendor/miniaudio.h"
+// > gcc -W -Wall -Wextra -g simple_playback.c -lpthread -lm -ldl -o simple_playback
+// #include <stdio.h>
+
 namespace our {
     class Projectile : public Component {
 
@@ -46,6 +51,7 @@ namespace our {
             if(other->getOwner()->getComponent<HealthComponent>()) 
             {
                 other->getOwner()->getComponent<HealthComponent>()->damage(damageAmount);
+
             }
             
         }

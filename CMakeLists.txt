@@ -108,6 +108,7 @@ set(COMMON_SOURCES
         source/common/systems/physics.cpp
         
         source/common/util.cpp
+        vendor/miniaudio.h
 )
 
 # Define the directories in which to search for the included headers
