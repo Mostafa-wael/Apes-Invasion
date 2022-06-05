@@ -59,9 +59,6 @@ class Playstate : public our::State {
 
 
     void onInitialize() override {
-
-        std::cout << "triggeed" << std::endl;
-
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
 
@@ -127,7 +124,6 @@ class Playstate : public our::State {
                 break;
             }
         }
-        std::cout << "finished" << std::endl;
     }
 
     void onDraw(double deltaTime) override {
@@ -178,6 +174,8 @@ class Playstate : public our::State {
         cameraController.exit();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
+        world.deleteMarkedEntities();
+        world.clear();
         physicsSystem.destroy();
     }
 
