@@ -51,11 +51,15 @@ public:
         if(config.contains("textures") && config["textures"].contains("start_menu")){
             if(getApp()->isGameOver) {
                  texture = our::texture_utils::loadImage(config["textures"]["game_over_menu"]);
+            } else if(getApp()->isGameWon) {
+                 texture = our::texture_utils::loadImage(config["textures"]["game_won"]);
             } else {
                texture = our::texture_utils::loadImage(config["textures"]["start_menu"]);
             }
         }
         getApp()->isGameOver = false;
+        getApp()->isGameWon = false;
+        getApp()->score = 0;
     }
 
     void onDraw(double deltaTime) override {

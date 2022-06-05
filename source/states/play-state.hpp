@@ -146,6 +146,21 @@ class Playstate : public our::State {
             getApp()->changeState("main-menu");
         }
 
+
+        if(getApp()->score >= getApp()->max_score) {
+            getApp()->isGameWon = true;
+
+
+            std::ifstream file_in(main_menu_scene_path);
+            if(!file_in) {
+                std::cerr << "Couldn't open file: " << main_menu_scene_path << std::endl;
+                return;
+            }
+            nlohmann::json app_config = nlohmann::json::parse(file_in, nullptr, true, true);
+            getApp()->setConfig(app_config);
+            getApp()->changeState("main-menu");
+        }
+
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);

@@ -318,8 +318,8 @@
                     },
                     {
                         "type": "Health",
-                        "max-health": 10000,
-                        "current-health": 10000
+                        "max-health": 100,
+                        "current-health": 100
                     }
                 ],
                 "children": [
@@ -490,8 +490,8 @@
                     },
                     {
                         "type": "Health",
-                        "max-health": 100,
-                        "current-health": 100
+                        "max-health": 30,
+                        "current-health": 30
                     }
                 ]
             },
@@ -529,8 +529,8 @@
                     },
                     {
                         "type": "Health",
-                        "max-health": 100,
-                        "current-health": 100
+                        "max-health": 30,
+                        "current-health": 30
                     }
                 ]
             },
@@ -568,8 +568,8 @@
                     },
                     {
                         "type": "Health",
-                        "max-health": 100,
-                        "current-health": 100
+                        "max-health": 30,
+                        "current-health": 30
                     }
                 ]
             },
@@ -607,8 +607,8 @@
                     },
                     {
                         "type": "Health",
-                        "max-health": 100,
-                        "current-health": 100
+                        "max-health": 50,
+                        "current-health": 50
                     }
                 ]
             },
