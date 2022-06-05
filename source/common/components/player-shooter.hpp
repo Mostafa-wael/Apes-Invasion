@@ -102,6 +102,7 @@ namespace our {
                     auto projectileEntity = Projectile::spawn(world, physics, spawnPos, velocity, projectileToShoot);
 
                     auto projectileComponent = projectileEntity->getComponent<Projectile>();
+                    projectileComponent->damageAmount = 100;
                     auto projectileRB        = projectileEntity->getComponent<RigidBody>();
 
                     projectileRB->setOnCollision(std::bind(
@@ -141,7 +142,7 @@ namespace our {
             auto playerRB = getOwner()->getComponent<RigidBody>(); // Ignore the ship's collision
 
             float projectileLifetime             = 5;
-            shootingBehaviour                    = new RadialShootingBehaviour(20, 0.5, 5, 3, 8);
+            shootingBehaviour                    = new DefaultShootingBehaviour(20, 0.5, 5, 3);
             playerRB->tag = "player";
 
             shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime, playerRB->tag);
