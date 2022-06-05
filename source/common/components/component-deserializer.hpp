@@ -3,6 +3,7 @@
 #include "../ecs/entity.hpp"
 #include "camera.hpp"
 #include "rigidbody.hpp"
+#include "components/pick-up.hpp"
 #include "components/player-shooter.hpp"
 #include "components/health.hpp"
 #include "free-camera-controller.hpp"
@@ -43,6 +44,8 @@ namespace our {
             component = entity->addComponent<HealthComponent>();
         } else if (type == TargetingEnemy::getID()){
             component = entity->addComponent<TargetingEnemy>();
+        } else if (type == PickUp::getID()){
+            component = entity->addComponent<PickUp>();
         } else {
             std::cout << "Could not find component with type: " << type << std::endl;
         }
