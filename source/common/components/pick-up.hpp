@@ -48,7 +48,8 @@ namespace our {
         }
 
         void deserialize(const nlohmann::json& data) override {
-            
+            if(!data.is_object()) return;
+            healAmount = data.value("heal amount", healAmount);
         }
     };
 } // namespace our

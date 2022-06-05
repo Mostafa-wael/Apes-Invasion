@@ -822,7 +822,8 @@
                         "rigidBodyType": "kinematic"
                     },
                     {
-                        "type": "Pick up"
+                        "type": "Pick up",
+                        "heal amount": 20
                     },
                     {
                         "type": "Movement",
@@ -962,7 +963,9 @@
                         "rigidBodyType": "kinematic"
                     },
                     {
-                        "type": "Pick up"
+                        "type": "Pick up",
+                        "heal amount": 20
+
                     },
                     {
                         "type": "Movement",
