@@ -83,7 +83,7 @@
                 },
                 "spaceship02": {
                     "type": "textured",
-                    "shader": "textured",
+                    "shader": "light",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": false
@@ -268,6 +268,7 @@
             }
         },
         "world": [
+            // space craft
             {
                 "name": "Player ship",
                 "position": [
@@ -356,6 +357,7 @@
                     }
                 ]
             },
+            // moon
             {
                 "name": "moon",
                 "position": [
@@ -402,18 +404,18 @@
                                 "typeLight": "point",
                                 "enabled": true,
                                 "diffuse": [
-                                    0.0,
-                                    1.0,
+                                    10.0,
+                                    10.0,
                                     10.0
                                 ],
                                 "specular": [
-                                    0.0,
-                                    1.0,
+                                    10.0,
+                                    10.0,
                                     10.0
                                 ],
                                 "attenuation": {
                                     "quadratic": 0.0,
-                                    "linear": 0.0,
+                                    "linear": 0.8,
                                     "constant": 1.0
                                 }
                             }
@@ -421,6 +423,7 @@
                     }
                 ]
             },
+            // enemies
             {
                 "name": "Rotating Turret",
                 "rotation": [
@@ -452,11 +455,74 @@
                         "rotationSpeed": 3,
                         "projectileSpeed": 20,
                         "spawnDistance": 5
+                    }
+                ]
+            },
+            {
+                "name": "Rotating Turret",
+                "rotation": [
+                    45,
+                    0,
+                    0
+                ],
+                "position": [
+                    10,
+                    10,
+                    10
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "monkey", // "mesh": "cube",
+                        "material": "monkey" // "material": "metal"                      
                     },
                     {
-                        "type": "Health",
-                        "max-health": 100,
-                        "current-health": 100
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "dynamic"
+                    },
+                    {
+                        "type": "Rotating Turret",
+                        "projectilesPerEvent": 8,
+                        "firingDelay": 0.5,
+                        "projetileLifetime": 5,
+                        "rotationSpeed": 3,
+                        "projectileSpeed": 20,
+                        "spawnDistance": 5
+                    }
+                ]
+            },
+            {
+                "name": "Rotating Turret",
+                "rotation": [
+                    0,
+                    0,
+                    45
+                ],
+                "position": [
+                    -10,
+                    -10,
+                    -10
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "monkey", // "mesh": "cube",
+                        "material": "monkey" // "material": "metal"                      
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "dynamic"
+                    },
+                    {
+                        "type": "Rotating Turret",
+                        "projectilesPerEvent": 8,
+                        "firingDelay": 0.5,
+                        "projetileLifetime": 5,
+                        "rotationSpeed": 3,
+                        "projectileSpeed": 20,
+                        "spawnDistance": 5
                     }
                 ]
             },
@@ -491,11 +557,6 @@
                         "rotationSpeed": 3,
                         "projectileSpeed": 20,
                         "spawnDistance": 5
-                    },
-                    {
-                        "type": "Health",
-                        "max-health": 100,
-                        "current-health": 100
                     }
                 ]
             },
