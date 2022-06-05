@@ -24,9 +24,8 @@ namespace our {
         void damage(int damage_amout);
 
         virtual void onImmediateGui() override {
-            ImGui::Begin("Health");
-            ImGui::Text("Health: %d/%d", current_health, max_health);
-            ImGui::SliderInt("health", &current_health, 0, max_health);
+            ImGui::Begin("Health", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove);
+            ImGui::ProgressBar((current_health / (max_health * 1.0)));
             ImGui::End();
         }
     };
