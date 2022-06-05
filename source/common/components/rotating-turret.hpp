@@ -34,7 +34,7 @@ namespace our {
         float rotationSpeed     = 5;     // How fast the turret rotates, constant regardless of framerate
 
         void init() {
-            shootingBehaviour = new RadialShootingBehaviour(20, 0.5, 5, 3, 4);
+            shootingBehaviour = new RadialShootingBehaviour(projectileSpeed, firingDelay, spawnDist, rotationSpeed, projectilesPerEvent);
 
             float projectileLifetime             = 2; // How long each projectile should stay alive before removing itself
             auto turretRB                        = getOwner()->getComponent<RigidBody>();
