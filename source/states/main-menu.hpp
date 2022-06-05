@@ -48,8 +48,14 @@ public:
             0,
         };
         mesh = new our::Mesh(vertices, elements);
-        if(config.contains("textures") && config["textures"].contains("start_menu"))
-            texture = our::texture_utils::loadImage(config["textures"]["start_menu"]);
+        if(config.contains("textures") && config["textures"].contains("start_menu")){
+            if(getApp()->isGameOver) {
+                 texture = our::texture_utils::loadImage(config["textures"]["game_over_menu"]);
+            } else {
+               texture = our::texture_utils::loadImage(config["textures"]["start_menu"]);
+            }
+        }
+        getApp()->isGameOver = false;
     }
 
     void onDraw(double deltaTime) override {
@@ -65,17 +71,7 @@ public:
         }
 
         const auto keyboard = getApp()->getKeyboard();
-        const auto mouse = getApp()->getMouse();
-
-        shader->set("dynamic_position", 
-                    glm::vec3(
-                    mouse.getMousePosition().x,
-                    mouse.getMousePosition().y,
-                0)
-        );
-        shader->set("width", getApp()->getWindowSize().x);
-        shader->set("height", getApp()->getWindowSize().y);
-
+        
         if (keyboard.isPressed(GLFW_KEY_ENTER)) {
             std::ifstream file_in(play_scene_path);
             if(!file_in) {

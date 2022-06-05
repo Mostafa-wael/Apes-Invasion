@@ -11,7 +11,8 @@
     },
     "scene": {
         "textures": {
-            "start_menu": "assets/textures/start.png"
+            "start_menu": "assets/textures/start2.png",
+            "game_over_menu": "assets/textures/gameOver.png"
         }
     }
 }

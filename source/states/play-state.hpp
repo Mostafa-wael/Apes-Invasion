@@ -30,6 +30,8 @@
 #include "systems/rotating-turret-system.hpp"
 #include "texture/texture2d.hpp"
 #include <texture/texture-utils.hpp>
+#include <fstream>
+#include <iostream>
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -51,8 +53,12 @@ class Playstate : public our::State {
     our::Mesh* reticleMesh;
     our::Texture2D* reticleTexture;
     our::LightComponent* light;
+    std::string main_menu_scene_path = "config/start.jsonc";
+
 
     void onInitialize() override {
+
+        std::cout << "triggeed" << std::endl;
 
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
@@ -117,12 +123,23 @@ class Playstate : public our::State {
                 break;
             }
         }
+        std::cout << "finished" << std::endl;
     }
 
     void onDraw(double deltaTime) override {
 
         if(player->getComponent<our::HealthComponent>()->current_health <= 0) {
             getApp()->isGameOver = true;
+
+
+            std::ifstream file_in(main_menu_scene_path);
+            if(!file_in) {
+                std::cerr << "Couldn't open file: " << main_menu_scene_path << std::endl;
+                return;
+            }
+            nlohmann::json app_config = nlohmann::json::parse(file_in, nullptr, true, true);
+            getApp()->setConfig(app_config);
+            getApp()->changeState("main-menu");
         }
 
         // Here, we just run a bunch of systems to control the world logic
