@@ -24,9 +24,9 @@ namespace our {
         static inline char entityName[128];
         static inline float moveToObjDist = 10.0f;
         static inline bool wireframe      = false;
-        static inline bool enabled        = false;
 
     public:
+        static inline bool enabled        = false;
         static inline Application* app;
         static inline Entity* selectedEntity;
         static inline CameraComponent* editorCamera;
@@ -282,8 +282,6 @@ namespace our {
             dynamicsWorld->rayTest(from, to, allResults);
 
             if(allResults.hasHit()) {
-                printf("%s", "HIT!\n");
-
                 Entity* closest = nullptr;
                 float minDist   = INFINITY;
 
