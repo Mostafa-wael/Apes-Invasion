@@ -3,6 +3,7 @@
 #include "../ecs/component.hpp"
 #include "imgui.h"
 
+#include <cmath>
 #include <glm/glm.hpp>
 
 namespace our {
@@ -25,7 +26,11 @@ namespace our {
 
         virtual void onImmediateGui() override {
             ImGui::Begin("Health", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoMove);
-            ImGui::ProgressBar((current_health / (max_health * 1.0)));
+
+            ImGui::SetWindowSize({400, 20});
+            ImGui::Text("Health");
+            ImGui::SameLine();
+            ImGui::ProgressBar(current_health / float(max_health));
             ImGui::End();
         }
     };

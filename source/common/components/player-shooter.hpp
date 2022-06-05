@@ -102,7 +102,6 @@ namespace our {
                     auto projectileEntity = Projectile::spawn(world, physics, spawnPos, velocity, projectileToShoot);
 
                     auto projectileComponent = projectileEntity->getComponent<Projectile>();
-                    projectileComponent->damageAmount = 100;
                     auto projectileRB        = projectileEntity->getComponent<RigidBody>();
 
                     projectileRB->setOnCollision(std::bind(
