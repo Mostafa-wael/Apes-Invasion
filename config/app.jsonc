@@ -455,6 +455,11 @@
                         "rotationSpeed": 3,
                         "projectileSpeed": 20,
                         "spawnDistance": 5
+                    },
+                    {
+                        "type": "Health",
+                        "max-health": 100,
+                        "current-health": 100
                     }
                 ]
             },
@@ -489,6 +494,11 @@
                         "rotationSpeed": 3,
                         "projectileSpeed": 20,
                         "spawnDistance": 5
+                    },
+                    {
+                        "type": "Health",
+                        "max-health": 100,
+                        "current-health": 100
                     }
                 ]
             },
@@ -523,6 +533,11 @@
                         "rotationSpeed": 3,
                         "projectileSpeed": 20,
                         "spawnDistance": 5
+                    },
+                    {
+                        "type": "Health",
+                        "max-health": 100,
+                        "current-health": 100
                     }
                 ]
             },
@@ -557,6 +572,11 @@
                         "rotationSpeed": 3,
                         "projectileSpeed": 20,
                         "spawnDistance": 5
+                    },
+                    {
+                        "type": "Health",
+                        "max-health": 100,
+                        "current-health": 100
                     }
                 ]
             },
