@@ -1,7 +1,9 @@
 #pragma once
 #include "../components/rotating-turret.hpp"
 #include "../ecs/world.hpp"
+#include "components/player-shooter.hpp"
 #include "components/rigidbody.hpp"
+#include "glm/fwd.hpp"
 #include "mesh/mesh-utils.hpp"
 #include "systems/physics.hpp"
 
@@ -33,20 +35,11 @@ namespace our {
                     // Rotate the turret
                     auto selfRb = rotatingTurret->getOwner()->getComponent<RigidBody>();
                     if(selfRb) {
-                        selfRb->bulletRB->setAngularVelocity({0, rotatingTurret->rotationSpeed, 0});
+                        selfRb->bulletRB->setAngularVelocity({0,  dynamic_cast<RadialShootingBehaviour*>(rotatingTurret->shootingBehaviour)->rotationSpeed, 0});
                     }
 
                     if(rotatingTurret->shootingBehaviour->canShoot(dt)) {
-                        Entity* turretEntity = rotatingTurret->getOwner();
-                        glm::vec3 forward    = turretEntity->getForward();
-                        for(int i = 0; i < rotatingTurret->projectilesPerEvent; i++) {
-
-                            glm::vec3 spawnPos = turretEntity->getWorldTranslation() + forward * rotatingTurret->spawnDist + turretEntity->getUp();
-                            rotatingTurret->shootingBehaviour->shoot(world, physicsSystem, entity, spawnPos, forward * rotatingTurret->projectileSpeed);
-
-                            // Rotate the forward vector by 360/numberProjectiles each firing event
-                            forward = toMat4(glm::angleAxis(glm::radians(360.0f / rotatingTurret->projectilesPerEvent), glm::vec3(0, 1, 0))) * glm::vec4(forward, 1);
-                        }
+                        rotatingTurret->shootingBehaviour->shoot(world, physicsSystem, entity, glm::vec3(0), glm::vec3(0));
                     }
                 }
             }
