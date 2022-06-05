@@ -1,8 +1,8 @@
 #pragma once
 
+#include "asset-loader.hpp"
 #include "components/light.hpp"
 #include "components/projectile.hpp"
-#include "asset-loader.hpp"
 #include "glad/gl.h"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
@@ -23,14 +23,19 @@
 #include "components/camera.hpp"
 #include "components/rigidbody.hpp"
 #include "ecs/entity.hpp"
+#include "mesh/mesh.hpp"
+#include "shader/shader.hpp"
 #include "systems/player-shooter-system.hpp"
 #include "systems/projectile-system.hpp"
 #include "systems/rotating-turret-system.hpp"
-#include "mesh/mesh.hpp"
-#include "shader/shader.hpp"
 #include "texture/texture2d.hpp"
 #include <texture/texture-utils.hpp>
+<<<<<<< HEAD
 #include "systems/targeting-enemy-system.hpp"
+=======
+#include <fstream>
+#include <iostream>
+>>>>>>> d51948f9ce931fe0c7984e5ed73be49b34ec6d3c
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -43,18 +48,25 @@ class Playstate : public our::State {
     our::RotatingTurretSystem rotatingTurretSystem;
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
+<<<<<<< HEAD
     our::TargetingEnemySystem targetingEnemySystem;
+=======
+    our::Entity* player;
+>>>>>>> d51948f9ce931fe0c7984e5ed73be49b34ec6d3c
 
     our::PhysicsSystem physicsSystem;
     float dt;
 
-
     our::ShaderProgram* reticleShader;
     our::Mesh* reticleMesh;
     our::Texture2D* reticleTexture;
-    our:: LightComponent* light;
+    our::LightComponent* light;
+    std::string main_menu_scene_path = "config/start.jsonc";
+
 
     void onInitialize() override {
+
+        std::cout << "triggeed" << std::endl;
 
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
@@ -95,7 +107,6 @@ class Playstate : public our::State {
                 break;
         }
 
-
         playerControllerSystem.init(playerController, getApp());
 
         rotatingTurretSystem.init(&world, &physicsSystem);
@@ -106,17 +117,41 @@ class Playstate : public our::State {
 
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
 
-
         reticleShader = new our::ShaderProgram();
         reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-vs"], GL_VERTEX_SHADER);
         reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-fs"], GL_FRAGMENT_SHADER);
         reticleShader->link();
 
-        reticleMesh = our::mesh_utils::loadReticle();
+        reticleMesh    = our::mesh_utils::loadReticle();
         reticleTexture = our::texture_utils::loadImage(config["assets"]["textures"]["reticle"]);
+
+        // get the player entity
+        for(auto entity : (&world)->getEntities()) {
+            if(!entity->enabled || entity->getParent() != nullptr) continue;
+            if(entity->getComponent<our::RigidBody>() && entity->getComponent<our::RigidBody>()->tag == "player") {
+                player = entity;
+                break;
+            }
+        }
+        std::cout << "finished" << std::endl;
     }
 
     void onDraw(double deltaTime) override {
+
+        if(player->getComponent<our::HealthComponent>()->current_health <= 0) {
+            getApp()->isGameOver = true;
+
+
+            std::ifstream file_in(main_menu_scene_path);
+            if(!file_in) {
+                std::cerr << "Couldn't open file: " << main_menu_scene_path << std::endl;
+                return;
+            }
+            nlohmann::json app_config = nlohmann::json::parse(file_in, nullptr, true, true);
+            getApp()->setConfig(app_config);
+            getApp()->changeState("main-menu");
+        }
+
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
@@ -135,14 +170,11 @@ class Playstate : public our::State {
         world.deleteMarkedEntities();
         dt = deltaTime;
 
-
-
         reticleShader->use();
         glActiveTexture(GL_TEXTURE0);
         reticleTexture->bind();
         reticleShader->set("tex", 0);
         reticleMesh->draw();
-
     }
 
     void onDestroy() override {
@@ -156,8 +188,8 @@ class Playstate : public our::State {
     }
 
     void onImmediateGui() override {
+        player->getComponent<our::HealthComponent>()->onImmediateGui(); // print player's health
 
         our::EntityDebugger::update(&world, dt);
-
     }
 };

@@ -405,7 +405,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey"  // "material": "metal"                      
+                        "material": "monkey" // "material": "metal"                      
                     },
                     {
                         "type": "Rigid Body",
@@ -439,7 +439,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey"  // "material": "metal"                      
+                        "material": "monkey" // "material": "metal"                      
                     },
                     {
                         "type": "Rigid Body",
@@ -473,7 +473,7 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
-                        "material": "monkey"  // "material": "metal"                      
+                        "material": "monkey" // "material": "metal"                      
                     },
                     {
                         "type": "Rigid Body",
@@ -507,13 +507,13 @@
                     {
                         "type": "Mesh Renderer",
                         "mesh": "monkey", // "mesh": "cube",
-                        "material": "glass"  // "material": "metal"                      
+                        "material": "glass" // "material": "metal"                      
                     },
                     {
                         "type": "Rigid Body",
                         "useMeshBoundingBox": true,
                         "rigidBodyType": "kinematic"
-                    },  
+                    },
                     {
                         "type": "Targeting Enemy",
                         "projectilesPerEvent": 8,
@@ -522,6 +522,33 @@
                         "rotationSpeed": 3,
                         "projectileSpeed": 20,
                         "spawnDistance": 5
+                    }
+                ]
+            },
+            {
+                "name": "sky_light",
+                "components": [
+                    {
+                        "type": "Light",
+                        "typeLight": "sky",
+                        "enabled": true,
+                        "sky_light": {
+                            "top_color": [
+                                0.5,
+                                0,
+                                0
+                            ],
+                            "middle_color": [
+                                0.25,
+                                0,
+                                0.25
+                            ],
+                            "bottom_color": [
+                                0,
+                                0,
+                                0.5
+                            ]
+                        }
                     }
                 ]
             }

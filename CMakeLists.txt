@@ -110,6 +110,7 @@ set(COMMON_SOURCES
         source/common/systems/targeting-enemy-system.hpp
         
         source/common/util.cpp
+        vendor/miniaudio.h
 )
 
 # Define the directories in which to search for the included headers

@@ -41,14 +41,6 @@ namespace our {
         }
 
         static void update(World* world, float deltaTime) {
-
-            for(auto entity : world->getEntities()) {
-                if(!entity->enabled || entity->getParent() != nullptr) continue;
-                if(entity->getComponent<RigidBody>() && entity->getComponent<RigidBody>()->tag == "player" && entity->getComponent<HealthComponent>()) {
-                    entity->getComponent<HealthComponent>()->onImmediateGui();
-                    break;
-                }
-            }
             if(app->getKeyboard().justPressed(GLFW_KEY_TAB)) {
                 enabled = !enabled;
             }
