@@ -42,7 +42,7 @@ namespace our {
         int projectilesBeforeCooldown = 4;
 
     public:
-        DefaultShootingBehaviour(float ps, float fd, float sd, float pl, float pbcd) : projectileSpeed(ps), firingDelay(fd), spawnDist(sd),projectilesBeforeCooldown(pbcd) {
+        DefaultShootingBehaviour(float ps, float fd, float sd, float pbcd) : projectileSpeed(ps), firingDelay(fd), spawnDist(sd),projectilesBeforeCooldown(pbcd) {
             projectilesLeft = projectilesBeforeCooldown;
             timer           = firingDelay;
         }
@@ -77,6 +77,58 @@ namespace our {
         }
     };
 
+    class RadialShootingBehaviour : public IShootingBehaviour {
+    public:
+        float timer;
+        int projectilesPerEvent  = 4; //  How many projectiles to spawn around the turret
+        float projectileSpeed = 15.0f; // How fast the projectiles go
+        float spawnDist       = 4.0f;  // How far away radially the projectiles spawn
+        float firingDelay = 0.5; // Delay between shooting events
+        float rotationSpeed   = 5;     // How fast the turret rotates, constant regardless of framerate
+
+        RadialShootingBehaviour(float ps, float fd, float sd, float rs, int ppe) : projectileSpeed(ps), firingDelay(fd), spawnDist(sd), rotationSpeed(rs), projectilesPerEvent(ppe) {
+            timer           = firingDelay;
+        }
+
+        virtual void shoot(World* world, PhysicsSystem* physics, Entity* shootingEntity, glm::vec3 spawnPos, glm::vec3 velocity) override {
+            if(canFire) {
+                Entity* turretEntity = shootingEntity;
+                glm::vec3 forward    = turretEntity->getForward();
+                for(int i = 0; i < projectilesPerEvent; i++) {
+                    glm::vec3 spawnPos = shootingEntity->getWorldTranslation() + forward * spawnDist + shootingEntity->getUp();
+                    glm::vec3 velocity = forward *projectileSpeed;
+                    auto projectileEntity = Projectile::spawn(world, physics, spawnPos, velocity, projectileToShoot);
+
+                    auto projectileComponent = projectileEntity->getComponent<Projectile>();
+                    auto projectileRB        = projectileEntity->getComponent<RigidBody>();
+
+                    projectileRB->setOnCollision(std::bind(
+                        &Projectile::onCollision, projectileComponent, std::placeholders::_1));
+
+                    // Rotate the forward vector by 360/numberProjectiles each firing event
+                    forward = toMat4(glm::angleAxis(glm::radians(360.0f / projectilesPerEvent), glm::vec3(0, 1, 0))) * glm::vec4(forward, 1);
+                }
+                canFire = false;
+            } else {
+                canFire = false;
+            }
+        }
+
+        virtual bool canShoot(float dt) override {
+            if(!canFire) {
+                timer -= dt;
+            }
+
+            if(timer < 0) {
+                canFire         = true;
+                timer           = firingDelay - dt;
+            }
+
+            return canFire;
+        }
+    };
+
+
     class PlayerShooter : public Component {
     public:
         IShootingBehaviour* shootingBehaviour;
@@ -87,14 +139,14 @@ namespace our {
             auto playerRB = getOwner()->getComponent<RigidBody>(); // Ignore the ship's collision
 
             float projectileLifetime             = 5;
-            shootingBehaviour                    = new DefaultShootingBehaviour(50, 0.1, 7, projectileLifetime, 3);
+            shootingBehaviour                    = new RadialShootingBehaviour(20, 0.5, 5, 3, 8);
             playerRB->tag = "player";
 
             shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime, playerRB->tag);
 
         }
 
-        virtual void deserialize(const nlohmann::json& data) {
+        virtual void deserialize(const nlohmann::json& data) override {
         }
     };
 } // namespace our
