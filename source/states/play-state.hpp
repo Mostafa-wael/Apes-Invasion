@@ -30,6 +30,7 @@
 #include "shader/shader.hpp"
 #include "texture/texture2d.hpp"
 #include <texture/texture-utils.hpp>
+#include "systems/targeting-enemy-system.hpp"
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -42,6 +43,7 @@ class Playstate : public our::State {
     our::RotatingTurretSystem rotatingTurretSystem;
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
+    our::TargetingEnemySystem targetingEnemySystem;
 
     our::PhysicsSystem physicsSystem;
     float dt;
@@ -100,6 +102,8 @@ class Playstate : public our::State {
 
         playerShooterSystem.init(&world, getApp(), &physicsSystem);
 
+        targetingEnemySystem.init(&world, &physicsSystem);
+
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
 
 
@@ -124,6 +128,7 @@ class Playstate : public our::State {
         playerControllerSystem.update(dt);
         playerShooterSystem.update(dt);
         rotatingTurretSystem.update(&world, dt);
+        targetingEnemySystem.update(&world, dt);
 
         projectileSystem.update(&world, dt);
 

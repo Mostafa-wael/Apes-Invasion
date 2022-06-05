@@ -47,6 +47,8 @@ namespace our {
             timer           = firingDelay;
         }
 
+        float getProjectileSpeed() { return projectileSpeed; }
+
         virtual void shoot(World* world, PhysicsSystem* physics, Entity* shootingEntity, glm::vec3 spawnPos, glm::vec3 velocity) override {
             if(canFire && projectilesLeft-- > 0) {
                 auto projectileEntity = Projectile::spawn(world, physics, spawnPos, velocity, projectileToShoot);

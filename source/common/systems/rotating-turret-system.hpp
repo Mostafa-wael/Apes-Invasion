@@ -12,7 +12,7 @@ namespace our {
 
     public:
         PhysicsSystem* physicsSystem;
-
+        
         void init(World* world, PhysicsSystem* physicsSys) {
             physicsSystem = physicsSys;
             for(auto&& entity : world->getEntities()) {
@@ -26,6 +26,7 @@ namespace our {
                     rb->bulletRB->setGravity({0, 0, 0});
                 }
             }
+            
         }
 
         void update(World* world, float dt) {

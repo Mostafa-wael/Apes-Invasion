@@ -9,6 +9,7 @@
 #include "mesh-renderer.hpp"
 #include "movement.hpp"
 #include "rigidbody.hpp"
+#include "targeting-enemy.hpp"
 #include "rotating-turret.hpp"
 #include "player-controller.hpp"
 #include "light.hpp"
@@ -40,6 +41,10 @@ namespace our {
             component = entity->addComponent<LightComponent>();
         } else if (type == HealthComponent::getID()){
             component = entity->addComponent<HealthComponent>();
+        } else if (type == TargetingEnemy::getID()){
+            component = entity->addComponent<TargetingEnemy>();
+        } else {
+            std::cout << "Could not find component with type: " << type << std::endl;
         }
 
         if(component) component->deserialize(data);
