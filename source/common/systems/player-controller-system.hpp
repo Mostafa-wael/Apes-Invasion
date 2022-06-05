@@ -4,6 +4,7 @@
 #include "components/player-controller.hpp"
 #include "components/rigidbody.hpp"
 #include "ecs/entity.hpp"
+#include "systems/entity-debugger.hpp"
 #include "util.h"
 
 namespace our {
@@ -26,7 +27,7 @@ namespace our {
         }
 
         void update(float dt) {
-            if(!playerController) return;
+            if(!playerController || EntityDebugger::enabled) return;
 
             Entity* playerEntity  = playerController->getOwner();
             RigidBody* playerRB   = playerEntity->getComponent<RigidBody>();
