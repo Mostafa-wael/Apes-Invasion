@@ -1,8 +1,8 @@
 #pragma once
 
+#include "asset-loader.hpp"
 #include "components/light.hpp"
 #include "components/projectile.hpp"
-#include "asset-loader.hpp"
 #include "glad/gl.h"
 #include "glm/ext/scalar_constants.hpp"
 #include "glm/gtc/constants.hpp"
@@ -23,11 +23,11 @@
 #include "components/camera.hpp"
 #include "components/rigidbody.hpp"
 #include "ecs/entity.hpp"
+#include "mesh/mesh.hpp"
+#include "shader/shader.hpp"
 #include "systems/player-shooter-system.hpp"
 #include "systems/projectile-system.hpp"
 #include "systems/rotating-turret-system.hpp"
-#include "mesh/mesh.hpp"
-#include "shader/shader.hpp"
 #include "texture/texture2d.hpp"
 #include <texture/texture-utils.hpp>
 
@@ -42,15 +42,15 @@ class Playstate : public our::State {
     our::RotatingTurretSystem rotatingTurretSystem;
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
+    our::Entity* player;
 
     our::PhysicsSystem physicsSystem;
     float dt;
 
-
     our::ShaderProgram* reticleShader;
     our::Mesh* reticleMesh;
     our::Texture2D* reticleTexture;
-    our:: LightComponent* light;
+    our::LightComponent* light;
 
     void onInitialize() override {
 
@@ -93,7 +93,6 @@ class Playstate : public our::State {
                 break;
         }
 
-
         playerControllerSystem.init(playerController, getApp());
 
         rotatingTurretSystem.init(&world, &physicsSystem);
@@ -102,17 +101,30 @@ class Playstate : public our::State {
 
         our::EntityDebugger::init(cam, getApp(), &physicsSystem);
 
-
         reticleShader = new our::ShaderProgram();
         reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-vs"], GL_VERTEX_SHADER);
         reticleShader->attach(config["assets"]["shaders"]["textured"]["reticle-fs"], GL_FRAGMENT_SHADER);
         reticleShader->link();
 
-        reticleMesh = our::mesh_utils::loadReticle();
+        reticleMesh    = our::mesh_utils::loadReticle();
         reticleTexture = our::texture_utils::loadImage(config["assets"]["textures"]["reticle"]);
+
+        // get the player entity
+        for(auto entity : (&world)->getEntities()) {
+            if(!entity->enabled || entity->getParent() != nullptr) continue;
+            if(entity->getComponent<our::RigidBody>() && entity->getComponent<our::RigidBody>()->tag == "player") {
+                player = entity;
+                break;
+            }
+        }
     }
 
     void onDraw(double deltaTime) override {
+
+        if(player->getComponent<our::HealthComponent>()->current_health <= 0) {
+            getApp()->isGameOver = true;
+        }
+
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
@@ -130,14 +142,11 @@ class Playstate : public our::State {
         world.deleteMarkedEntities();
         dt = deltaTime;
 
-
-
         reticleShader->use();
         glActiveTexture(GL_TEXTURE0);
         reticleTexture->bind();
         reticleShader->set("tex", 0);
         reticleMesh->draw();
-
     }
 
     void onDestroy() override {
@@ -151,8 +160,8 @@ class Playstate : public our::State {
     }
 
     void onImmediateGui() override {
+        player->getComponent<our::HealthComponent>()->onImmediateGui(); // print player's health
 
         our::EntityDebugger::update(&world, dt);
-
     }
 };
