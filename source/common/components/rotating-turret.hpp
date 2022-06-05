@@ -26,13 +26,17 @@
 namespace our {
     class RotatingTurret : public Component {
     public:
-
         IShootingBehaviour* shootingBehaviour;
+        int projectilesPerEvent = 4;     //  How many projectiles to spawn around the turret
+        float projectileSpeed   = 15.0f; // How fast the projectiles go
+        float spawnDist         = 4.0f;  // How far away radially the projectiles spawn
+        float firingDelay       = 0.5;   //
+        float rotationSpeed     = 5;     // How fast the turret rotates, constant regardless of framerate
 
         void init() {
             shootingBehaviour = new RadialShootingBehaviour(20, 0.5, 5, 3, 4);
 
-            float projectileLifetime = 2; // How long each projectile should stay alive before removing itself
+            float projectileLifetime             = 2; // How long each projectile should stay alive before removing itself
             auto turretRB                        = getOwner()->getComponent<RigidBody>();
             turretRB->tag                        = "turret";
             shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("danger"), projectileLifetime, turretRB->tag);
@@ -42,6 +46,11 @@ namespace our {
         virtual std::string getIDPolymorphic() override { return getID(); }
 
         virtual void deserialize(const nlohmann::json& data) override {
+            projectilesPerEvent = data.value("projectilesPerEvent", projectilesPerEvent);
+            projectileSpeed     = data.value("projectileSpeed", projectileSpeed);
+            spawnDist           = data.value("spawnDist", spawnDist);
+            firingDelay         = data.value("firingDelay", firingDelay);
+            rotationSpeed       = data.value("rotationSpeed", rotationSpeed);
         }
     };
 } // namespace our
