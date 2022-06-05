@@ -129,7 +129,6 @@ namespace our {
         }
 
         glActiveTexture(GL_TEXTURE0);
-
     }
 
     
