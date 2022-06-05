@@ -30,12 +30,9 @@
 #include "systems/rotating-turret-system.hpp"
 #include "texture/texture2d.hpp"
 #include <texture/texture-utils.hpp>
-<<<<<<< HEAD
 #include "systems/targeting-enemy-system.hpp"
-=======
 #include <fstream>
 #include <iostream>
->>>>>>> d51948f9ce931fe0c7984e5ed73be49b34ec6d3c
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -48,11 +45,8 @@ class Playstate : public our::State {
     our::RotatingTurretSystem rotatingTurretSystem;
     our::ProjectileSystem projectileSystem;
     our::PlayerShooterSystem playerShooterSystem;
-<<<<<<< HEAD
     our::TargetingEnemySystem targetingEnemySystem;
-=======
     our::Entity* player;
->>>>>>> d51948f9ce931fe0c7984e5ed73be49b34ec6d3c
 
     our::PhysicsSystem physicsSystem;
     float dt;
