@@ -10,7 +10,6 @@
     },
     "scene": {
         "renderer": {
-            "sky": "assets/textures/space-galaxy-background.jpg",
             "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
         "assets": {
@@ -21,7 +20,9 @@
                 },
                 "textured": {
                     "vs": "assets/shaders/textured.vert",
-                    "fs": "assets/shaders/textured.frag"
+                    "fs": "assets/shaders/textured.frag",
+                    "reticle-vs": "assets/shaders/reticle.vert",
+                    "reticle-fs": "assets/shaders/reticle.frag"
                 },
                 "light": {
                     "vs": "assets/shaders/light.vert",
@@ -29,17 +30,16 @@
                 }
             },
             "textures": {
-                "moon": "assets/textures/moon.jpg",
-                "grass": "assets/textures/grass_ground_d.jpg",
-                "wood": "assets/textures/wood.jpg",
-                "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png"
+                "monkey": "assets/textures/monkey.png",
+                "reticle": "assets/textures/reticle.png",
+                "albedo": "assets/textures/asphalt/albedo.jpg",
+                "emissive": "assets/textures/asphalt/emissive.jpg",
+                "roughness": "assets/textures/asphalt/roughness.jpg",
+                "specular": "assets/textures/asphalt/specular.jpg",
+                "ambient_occlusion": "assets/textures/asphalt/ambient_occlusion.jpg"
             },
             "meshes": {
-                "cube": "assets/models/cube.obj",
-                "monkey": "assets/models/monkey.obj",
-                "plane": "assets/models/plane.obj",
-                "sphere": "assets/models/sphere.obj"
+                "monkey": "assets/models/Suzanne.obj"
             },
             "samplers": {
                 "default": {},
@@ -48,74 +48,9 @@
                 }
             },
             "materials": {
-                "metal": {
-                    "type": "tinted",
-                    "shader": "tinted",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        0.45,
-                        0.4,
-                        0.5,
-                        1
-                    ]
-                },
-                "glass": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        },
-                        "blending": {
-                            "enabled": true,
-                            "sourceFactor": "GL_SRC_ALPHA",
-                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-                        },
-                        "depthMask": false
-                    },
-                    "transparent": true,
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "glass",
-                    "sampler": "pixelated"
-                },
-                "grass": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "grass",
-                    "sampler": "default"
-                },
                 "monkey": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lighted", // in the materials.hpp file
+                    "shader": "light",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": false
@@ -130,28 +65,12 @@
                         1,
                         1
                     ],
-                    "texture": "monkey",
-                    "sampler": "default"
-                },
-                "moon": {
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": false
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "moon",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "albedo": "albedo",
+                    "emissive": "emissive",
+                    "roughness": "roughness",
+                    "specular": "specular",
+                    "ambient_occlusion": "ambient_occlusion"
                 }
             }
         },
@@ -161,7 +80,7 @@
                 "position": [
                     0,
                     0,
-                    10
+                    3
                 ],
                 "components": [
                     {
@@ -170,7 +89,6 @@
                     {
                         "type": "Free Camera Controller"
                     }
-        
                 ],
                 "children": [
                     {
@@ -217,7 +135,7 @@
                         "type": "Movement",
                         "linearVelocity": [
                             0,
-                            0.1,
+                            0.0,
                             0
                         ],
                         "angularVelocity": [
@@ -229,234 +147,136 @@
                 ]
             },
             {
-                "name": "ground",
-                "position": [
-                    0,
-                    -1,
-                    0
-                ],
-                "rotation": [
-                    -90,
-                    0,
-                    0
-                ],
-                "scale": [
-                    10,
-                    10,
-                    1
-                ],
+                "name": "sky_light",
                 "components": [
                     {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "grass"
+                        "type": "Light",
+                        "typeLight": "sky",
+                        "enabled": true,
+                        "sky_light": {
+                            "top_color": [
+                                0,
+                                0,
+                                1.0
+                            ],
+                            "middle_color": [
+                                0,
+                                0,
+                                1.0
+                            ],
+                            "bottom_color": [
+                                0,
+                                0,
+                                1.0
+                            ]
+                        }
                     }
                 ]
             },
             {
-                "name": "glass front",
-                "position": [
-                    0,
-                    1,
-                    2
-                ],
-                "rotation": [
-                    0,
-                    0,
-                    0
-                ],
-                "scale": [
-                    2,
-                    2,
-                    2
-                ],
+                "name": "directional_light",
                 "components": [
                     {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "name": "glass back",
-                "position": [
-                    0,
-                    1,
-                    -2
-                ],
-                "rotation": [
-                    0,
-                    0,
-                    0
-                ],
-                "scale": [
-                    2,
-                    2,
-                    2
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "name": "glass left",
-                "position": [
-                    2,
-                    1,
-                    0
-                ],
-                "rotation": [
-                    0,
-                    90,
-                    0
-                ],
-                "scale": [
-                    2,
-                    2,
-                    2
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "name": "glass right",
-                "position": [
-                    -2,
-                    1,
-                    0
-                ],
-                "rotation": [
-                    0,
-                    90,
-                    0
-                ],
-                "scale": [
-                    2,
-                    2,
-                    2
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "name": "glass top",
-                "position": [
-                    0,
-                    3,
-                    0
-                ],
-                "rotation": [
-                    90,
-                    0,
-                    0
-                ],
-                "scale": [
-                    2,
-                    2,
-                    2
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "name": "moon",
-                "position": [
-                    0,
-                    10,
-                    0
-                ],
-                "rotation": [
-                    45,
-                    45,
-                    0
-                ],
-                "scale": [
-                    5,
-                    5,
-                    5
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "sphere",
-                        "material": "moon"
-                    },
-                    {
-                        "type": "Movement",
-                        "angularVelocity": [
+                        "type": "Light",
+                        "typeLight": "directional",
+                        "enabled": false,
+                        "diffuse": [
+                            1,
                             0,
-                            90,
+                            0
+                        ],
+                        "specular": [
+                            1.0,
+                            0,
+                            0
+                        ],
+                        "direction": [
+                            0,
+                            -1,
                             0
                         ]
                     }
                 ]
             },
             {
-            "name": "light",
-            "position": [
-                0,
-                10,
-                0
-            ],
-            "components":
-            [
-                {
-                "type": "Light",
-                "typeLight": "directional",
-                "color": [
-                    1.0,
-                    0.0,
-                    0.0
-                ],
-                "direction": [
-                    -1,
-                    -1,
-                    -1  
-                ],
-                "enabled": true
-                },
+                "name": "point_light",
+                "components": [
+                    {
+                        "type": "Light",
+                        "typeLight": "point",
+                        "enabled": false,
+                        "position": [
+                            0,
+                            0,
+                            1
+                        ],
+                        "diffuse": [
+                            0.0,
+                            1.0,
+                            1.0
+                        ],
+                        "specular": [
+                            0.0,
+                            1.0,
+                            1.0
+                        ],
+                        "attenuation": {
+                            "quadratic": 1.0,
+                            "linear": 0.0,
+                            "constant": 0.0
+                        }
+                    }
+                ]
+            },
             {
-                "type": "sky",
-                "sky_light": {
-                    "top_color": [
-                        1.0,
-                        1.0,
-                        1.0
-                    ],
-                    "bottom_color": [
-                        0.5,
-                        0.2,
-                        0.1
-                    ],
-                    "middle_color": [
-                        0.2,
-                        0.1,
-                        0.7
-                    ]
-                }
-            }
-            ]
+                "name": "spot_light",
+                "rotation": [
+                    90,
+                    180,
+                    0
+                ],
+                "position": [
+                    0,
+                    0,
+                    -5
+                ],
+                "components": [
+                    {
+                        "type": "Light",
+                        "typeLight": "spot",
+                        "enabled": false,
+                        "direction": [
+                            0,
+                            1,
+                            0
+                        ],
+                        "position": [
+                            0,
+                            0,
+                            1
+                        ],
+                        "diffuse": [
+                            1,
+                            1,
+                            0.0
+                        ],
+                        "specular": [
+                            1,
+                            1,
+                            0.0
+                        ],
+                        "attenuation": {
+                            "quadratic": 0.0,
+                            "linear": 0.0,
+                            "constant": 1.0
+                        },
+                        "spot_angle": {
+                            "inner": 0.0,
+                            "outer": 0.2
+                        }
+                    }
+                ]
             }
         ]
-}
+    }
 }

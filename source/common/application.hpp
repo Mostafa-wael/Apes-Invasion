@@ -72,6 +72,11 @@ namespace our {
 
     public:
 
+        bool isGameOver = false;
+        bool isGameWon = false;
+        int score = 0;
+        int max_score = 40;
+
         // Create an application with following configuration
         Application(const nlohmann::json& app_config) : app_config(app_config) {}
         // On destruction, delete all the states

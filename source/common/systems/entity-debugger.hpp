@@ -6,6 +6,7 @@
 #include "ImGuizmo.h"
 #include "application.hpp"
 #include "components/camera.hpp"
+#include "components/health.hpp"
 #include "components/rigidbody.hpp"
 
 #include "ecs/entity.hpp"
@@ -15,7 +16,9 @@
 #include "glm/geometric.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
 #include "imgui.h"
+#include "systems/physics.hpp"
 #include <cstring>
+#include <iostream>
 
 namespace our {
     class EntityDebugger {
@@ -24,20 +27,32 @@ namespace our {
         static inline bool wireframe      = false;
 
     public:
+        static inline bool enabled        = false;
         static inline Application* app;
         static inline Entity* selectedEntity;
         static inline CameraComponent* editorCamera;
+        static inline PhysicsSystem* physicsSystem;
         static inline float objectPickDist = 1000;
 
-        static void init(CameraComponent* camera, Application* a) {
-            editorCamera = camera;
-            app          = a;
+        static void init(CameraComponent* camera, Application* a, PhysicsSystem* phys) {
+            editorCamera  = camera;
+            app           = a;
+            physicsSystem = phys;
         }
 
         static void update(World* world, float deltaTime) {
+            if(app->getKeyboard().justPressed(GLFW_KEY_TAB)) {
+                enabled = !enabled;
+            }
+
+            if(!enabled) {
+                app->getMouse().lockMouse(app->getWindow());
+                return;
+            } else {
+                app->getMouse().unlockMouse(app->getWindow());
+            }
 
             ImGui::Begin("Help", NULL, ImGuiWindowFlags_HorizontalScrollbar);
-
             ImGui::BulletText("Press WASD to move the camera, QE to move down/up");
             ImGui::BulletText("Press and hold the right mouse button to look around");
             ImGui::BulletText("Click on a physics object to select it (you should see axes on the object's pivot)");
@@ -47,8 +62,7 @@ namespace our {
             ImGui::BulletText("Press F to teleport near that object");
             ImGui::Indent(-10);
             ImGui::BulletText("Note that objects with rigidbodies do not support scaling, you'll only scale the mesh, not the collision");
-
-
+            ImGui::BulletText("Press tab to toggle the entity debugger");
             ImGui::End();
 
             ImGui::Begin("Entities");
@@ -128,6 +142,9 @@ namespace our {
             }
 
             ImGui::End();
+
+            if(physicsSystem)
+                physicsSystem->onImmediateGui();
         }
 
         static void addEntity(char* entityName, World* world) {
@@ -263,8 +280,6 @@ namespace our {
             dynamicsWorld->rayTest(from, to, allResults);
 
             if(allResults.hasHit()) {
-                printf("%s", "HIT!\n");
-
                 Entity* closest = nullptr;
                 float minDist   = INFINITY;
 

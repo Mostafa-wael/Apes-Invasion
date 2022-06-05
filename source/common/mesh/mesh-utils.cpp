@@ -121,3 +121,17 @@ our::Mesh* our::mesh_utils::sphere(const glm::ivec2& segments){
 
     return new our::Mesh(vertices, elements);
 }
+
+our::Mesh* our::mesh_utils::loadReticle() {
+    std::vector<our::Vertex> vertices = {
+        { {-0.08, -0.08,  0}, {0, 0, 0, 0}, {0.00, 0.00}, {0, 0, 0} },
+        { { 0.08, -0.08,  0}, {0, 0, 0, 0}, {1.00, 0.00}, {0, 0, 0} },
+        { { 0.08,  0.08,  0}, {0, 0, 0, 0}, {1.00, 1.00}, {0, 0, 0} },
+        { {-0.08,  0.08,  0}, {0, 0, 0, 0}, {0.00, 1.00}, {0, 0, 0} },
+    };
+    std::vector<unsigned int> elements = {
+        0, 1, 2,
+        2, 3, 0,
+    };
+    return new our::Mesh(vertices, elements);
+}
