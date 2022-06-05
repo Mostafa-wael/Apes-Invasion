@@ -357,39 +357,6 @@
                 ]
             },
             {
-                "name": "spaceship01",
-                "position": [
-                    10,
-                    3,
-                    0
-                ],
-                "scale": [
-                    0.25,
-                    0.25,
-                    0.25
-                ],
-                "rotation": [
-                    0,
-                    -90,
-                    0
-                ],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "spaceship01",
-                        "material": "spaceship01"
-                    },
-                    {
-                        "type": "Rigid Body",
-                        "useMeshBoundingBox": true,
-                        "rigidBodyType": "kinematic"
-                    },
-                    {
-                        "type": "Shooter"
-                    }
-                ]
-            },
-            {
                 "name": "moon",
                 "position": [
                     0,
@@ -433,6 +400,74 @@
                     1,
                     1,
                     1
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "monkey", // "mesh": "cube",
+                        "material": "monkey"  // "material": "metal"                      
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "dynamic"
+                    },
+                    {
+                        "type": "Rotating Turret",
+                        "projectilesPerEvent": 8,
+                        "firingDelay": 0.5,
+                        "projetileLifetime": 5,
+                        "rotationSpeed": 3,
+                        "projectileSpeed": 20,
+                        "spawnDistance": 5
+                    }
+                ]
+            },
+            {
+                "name": "Rotating Turret",
+                "rotation": [
+                    45,
+                    0,
+                    0
+                ],
+                "position": [
+                    10,
+                    10,
+                    10
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "monkey", // "mesh": "cube",
+                        "material": "monkey"  // "material": "metal"                      
+                    },
+                    {
+                        "type": "Rigid Body",
+                        "useMeshBoundingBox": true,
+                        "rigidBodyType": "dynamic"
+                    },
+                    {
+                        "type": "Rotating Turret",
+                        "projectilesPerEvent": 8,
+                        "firingDelay": 0.5,
+                        "projetileLifetime": 5,
+                        "rotationSpeed": 3,
+                        "projectileSpeed": 20,
+                        "spawnDistance": 5
+                    }
+                ]
+            },
+            {
+                "name": "Rotating Turret",
+                "rotation": [
+                    0,
+                    0,
+                    45
+                ],
+                "position": [
+                    -10,
+                    -10,
+                    -10
                 ],
                 "components": [
                     {
