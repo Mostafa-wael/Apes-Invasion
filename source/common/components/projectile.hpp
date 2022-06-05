@@ -1,5 +1,6 @@
 #pragma once
 #include "asset-loader.hpp"
+#include "components/light.hpp"
 #include "components/health.hpp"
 #include "ecs/component.hpp"
 #include "ecs/world.hpp"
@@ -64,7 +65,7 @@ namespace our {
             e->name = "sphere##" + std::to_string((long long)e);
 
             auto mR      = e->addComponent<MeshRendererComponent>();
-            mR->mesh     = mesh_utils::sphere({6, 6});
+            mR->mesh     = AssetLoader<Mesh>::get("sphere");
             mR->material = projectile.material;
 
             auto rb = e->addComponent<RigidBody>();
