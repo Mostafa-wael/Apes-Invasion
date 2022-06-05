@@ -35,8 +35,7 @@ namespace our {
             btRigidBody* bulletRB = playerRB->bulletRB;
 
             glm::vec3& position = playerEntity->localTransform.position;
-            glm::vec3 rotation = playerEntity->localTransform.getEulerRotation();
-
+            glm::vec3 rotation  = playerEntity->localTransform.getEulerRotation();
 
             // Rotate camera with mouse movement
             glm::vec2 delta = app->getMouse().getMouseDelta();
@@ -59,6 +58,12 @@ namespace our {
 
             if(app->getKeyboard().isPressed(GLFW_KEY_D) && app->getKeyboard().justPressed(GLFW_KEY_LEFT_SHIFT))
                 bulletRB->applyCentralImpulse(glmToBtVector3(right * speed * playerController->boostImpulseMultiplier));
+
+            if(app->getKeyboard().isPressed(GLFW_KEY_W) && app->getKeyboard().justPressed(GLFW_KEY_LEFT_SHIFT))
+                bulletRB->applyCentralImpulse(glmToBtVector3(front * speed * playerController->boostImpulseMultiplier));
+                
+            if(app->getKeyboard().isPressed(GLFW_KEY_S) && app->getKeyboard().justPressed(GLFW_KEY_LEFT_SHIFT))
+                bulletRB->applyCentralImpulse(glmToBtVector3(-front * speed * playerController->boostImpulseMultiplier));
 
             // Cap speed at the controller's max
             if(bulletRB->getLinearVelocity().norm() < playerController->maxSpeed * speed) {

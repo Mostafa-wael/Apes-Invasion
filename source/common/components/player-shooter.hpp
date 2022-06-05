@@ -141,7 +141,7 @@ namespace our {
             auto playerRB = getOwner()->getComponent<RigidBody>(); // Ignore the ship's collision
 
             float projectileLifetime             = 5;
-            shootingBehaviour                    = new DefaultShootingBehaviour(20, 0.5, 5, 3);
+            shootingBehaviour                    = new DefaultShootingBehaviour(20, 0.3, 5, 2);
             playerRB->tag = "player";
 
             shootingBehaviour->projectileToShoot = Projectile(AssetLoader<Material>::get("playerProjectile"), projectileLifetime, playerRB->tag);
