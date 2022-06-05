@@ -128,6 +128,16 @@ class Playstate : public our::State {
                 break;
             }
         }
+       
+       // get number of monkeys to set the score
+       int count = 0;
+        for(auto entity : (&world)->getEntities()) {
+            if(!entity->enabled || entity->getParent() != nullptr) continue;
+            if(entity->getComponent<our::RotatingTurret>() || entity->getComponent<our::TargetingEnemy>()) {
+                count++;
+            }
+        }
+        getApp()->max_score = count * 10;
     }
 
     void onDraw(double deltaTime) override {
