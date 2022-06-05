@@ -1,6 +1,7 @@
 #include "health.hpp"
 #include "../ecs/entity.hpp"
 #include "../deserialize-utils.hpp"
+#include "components/rigidbody.hpp"
 #include <algorithm>
 #include <iostream>
 
@@ -17,5 +18,8 @@ namespace our {
 
     void HealthComponent::damage(int damage_amout) {
         current_health = std::max(current_health - damage_amout, 0);
+        if(getOwner()->getComponent<RigidBody>()->tag != "player" && current_health <= 0) {
+            delete getOwner();
+        }
     }
 }
