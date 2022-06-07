@@ -36,7 +36,7 @@ Apes are invading the world! Save us!
 
 ## 🎥 Demo <a name = "demo"></a>
 
-[Demo video]()
+[Demo video](https://youtu.be/R9aRxzWgib8)
 
 ## 📷 Screenshots <a name = "Screenshots"></a> 
 ![Intro](assets/textures/start2.png "Intro")
