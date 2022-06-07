@@ -36,7 +36,7 @@ Apes are invading the world! Save us!
 
 ## 🎥 Demo <a name = "demo"></a>
 
-[Demo video](https://youtu.be/R9aRxzWgib8)
+[Youtube](https://youtu.be/R9aRxzWgib8)
 
 
 https://user-images.githubusercontent.com/58189568/172469534-067e9042-5f13-4c73-bd14-5e0fc12ff827.mp4
