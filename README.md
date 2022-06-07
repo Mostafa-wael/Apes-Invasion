@@ -38,10 +38,9 @@ Apes are invading the world! Save us!
 
 [Demo video](https://youtu.be/R9aRxzWgib8)
 
-## 📷 Screenshots <a name = "Screenshots"></a> 
-![Intro](assets/textures/start2.png "Intro")
-![Win](assets/textures/win.png "Win")
-![gameOver](assets/textures/gameOver.png "gameOver")
+
+https://user-images.githubusercontent.com/58189568/172469534-067e9042-5f13-4c73-bd14-5e0fc12ff827.mp4
+
 
 
 ## 🏁 Get Started <a name = "Install"></a>
